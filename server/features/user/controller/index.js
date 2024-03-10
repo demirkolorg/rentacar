@@ -12,10 +12,11 @@ const messages = require("../messages");
 exports.add = async (req, res) => {
   let body = req.body;
   try {
-    let user1 = await Users.findOne({ email: body.email });
-    let user2 = await Users.findOne({ tc: body.tc });
+    let user = await Users.findOne({
+      $or: [{ email: body.email }, { tc: body.tc }],
+    });
 
-    if (user1 || user2) {
+    if (user) {
       return response.error(res, messages.kullanicizatenvar);
     }
     if (body.roller && Array.isArray(body.roller) && body.roller.length > 0) {
@@ -48,6 +49,86 @@ exports.add = async (req, res) => {
       pt.types.create,
       messages.basarili,
       messages.user_create_basarili
+    );
+  } catch (err) {
+    return response.error(res);
+  }
+};
+// Id, tc ya da email bilgileri verilen kullanıcının bilgilerini günceller,
+exports.update = async (req, res) => {
+  let body = req.body;
+  try {
+    let user = await Users.findOne({
+      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+    });
+
+    if (!user) {
+      return response.error(res, messages.kullaniciYok);
+    }
+
+    let updates = {};
+    if (body.password) {
+      updates.password = bcrypt.hashSync(
+        body.password,
+        bcrypt.genSaltSync(8),
+        null
+      );
+    }
+
+    if (body.ad) updates.ad = body.ad;
+    if (body.soyad) updates.soyad = body.soyad;
+    if (body.roller && Array.isArray(body.roller)) updates.roller = body.roller;
+    if (typeof body.is_active === "boolean") updates.is_active = body.is_active;
+
+    await Users.updateOne(
+      {
+        $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+      },
+      updates
+    );
+    user = await Users.findOne({
+      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+    });
+
+    return response.success(
+      res,
+      user,
+      req.user?.email,
+      pt.points.users,
+      pt.types.update,
+      messages.basarili,
+      messages.user_update_basarili
+    );
+  } catch (err) {
+    return response.error(res);
+  }
+};
+
+// Id, tc ya da email bilgileri verilen kullanıcıyı siler,
+exports.delete = async (req, res) => {
+  let body = req.body;
+  try {
+    let user = await Users.findOne({
+      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+    });
+
+    if (!user) {
+      return response.error(res, messages.kullaniciYok);
+    }
+
+    await Users.deleteOne({
+      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+    });
+
+    
+    return response.success(
+      res,
+      user,
+      req.user?.email,
+      pt.points.users,
+      pt.types.delete,
+      messages.basarili,
+      messages.user_delete_basarili
     );
   } catch (err) {
     return response.error(res);
@@ -118,9 +199,6 @@ exports.getUserPermissions = async (req, res) => {
     });
     const UserPermissions = [...permissionsSet];
 
-
-    
-
     return response.success(
       res,
       UserPermissions,
@@ -164,9 +242,6 @@ exports.getUserRolesAndPermissions = async (req, res) => {
     });
     const UserRoles = [...rolsSet];
     const UserPermissions = [...permissionsSet];
-
-
-    
 
     return response.success(
       res,

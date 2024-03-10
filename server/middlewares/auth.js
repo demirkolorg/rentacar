@@ -3,6 +3,7 @@ const pasport = require("passport");
 const { ExtractJwt, Strategy } = require("passport-jwt");
 
 //iç
+const Enum = require("../config/enum.config");
 const config = require("../config/env.config");
 const Users = require("../features/user/model");
 const Roles = require("../features/role/model");
@@ -62,12 +63,20 @@ module.exports = function () {
     },
     cr: (...expectedRoles) => {
       return (req, res, next) => {
+        if (req.user.permissions.includes(Enum.ROLE_SUPER_ADMIN_PERMISSION)) {
+          return next();
+        }
+
         const hasRequiredRole = expectedRoles.some((role) =>
           req.user.permissions.includes(role)
         );
 
         if (!hasRequiredRole) {
-          return response.error(res, message.UNAUTHORIZED_ACCESS_DESC,message.UNAUTHORIZED_ACCESS_TITLE);
+          return response.error(
+            res,
+            message.UNAUTHORIZED_ACCESS_DESC,
+            message.UNAUTHORIZED_ACCESS_TITLE
+          );
         }
 
         return next(); // Auth success

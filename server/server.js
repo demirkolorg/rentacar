@@ -1,5 +1,8 @@
-const dotenv = require('dotenv');
-const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+const dotenv = require("dotenv");
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 dotenv.config({ path: envFile });
 
 const express = require("express");
@@ -10,11 +13,12 @@ const log = console.log;
 const router = require("./routes/routes");
 const morgan = require("morgan");
 const errorMiddleware = require("./middlewares/error");
-
+const Super = require("./lib/super");
 app.use(express.json());
 app.use(morgan("dev"));
 
 configs.dbConfig.DbConfigInstall();
+Super.super();
 
 const _PREFIX = process.env.APP_PREFIX;
 const _PORT = process.env.APP_PORT;

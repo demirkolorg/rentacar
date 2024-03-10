@@ -84,7 +84,97 @@ class validation {
         })
         .validateAsync(req.body);
     } catch (error) {
-    return response.error(res, error.message, messages.dogrulamaHatasiBaslik);
+      return response.error(res, error.message, messages.dogrulamaHatasiBaslik);
+    }
+    next();
+  };
+  static update = async (req, res, next) => {
+    try {
+      await joi
+        .object({
+          tc: joi
+            .string()
+            .pattern(/^[0-9]+$/, { name: "numbers" })
+            .min(11)
+            .max(11)
+            .messages({
+              "string.pattern.name": "tc Alanı Sayısal Değer Olmalıdır",
+              "string.min": "tc Alanı Ez Az 11 Karakter Olmalıdır",
+              "string.max": "tc Alanı En Fazla 11 Karakterden Oluşabilir",
+            }),
+          ad: joi
+            .string()
+            .trim()
+            .min(3)
+            .max(100)
+            .messages({
+              "string.base": "Ad Alanı Normal Metin Olmalıdır",
+              "string.min": `Ad Alanı Ez Az ${3} Karakter Olmalıdır`,
+              "string.max": "Ad Alanı En Fazla 100 Karakterden Oluşabilir",
+            }),
+          soyad: joi.string().trim().min(3).max(100).messages({
+            "string.base": "Soyad Alanı Normal Metin Olmalıdır",
+            "string.min": "Soyad Alanı Ez Az 3 Karakter Olmalıdır",
+            "string.max": "Soyad Alanı En Fazla 100 Karakterden Oluşabilir",
+          }),
+          email: joi.string().email().trim().min(3).max(100).messages({
+            "string.base": "Email Alanı Normal Metin Olmalıdır",
+            "string.min": "Email Alanı Ez Az 3 Karakter Olmalıdır",
+            "string.email": "Lütfen Geçerli Bir Email Giriniz",
+            "string.max": "Email Alanı En Fazla 100 Karakterden Oluşabilir",
+          }),
+          password: joi
+            .string()
+            .trim()
+            .min(6)
+            .max(36)
+            .messages({
+              "string.base": "Şifre Alanı Normal Metin Olmalıdır",
+              "string.min": `Şifre Alanı Ez Az ${66} Karakter Olmalıdır`,
+              "string.max": "Şifre Alanı En Fazla 36 Karakterden Oluşabilir",
+            }),
+          roller: joi.array().items(
+            joi
+              .string()
+              .regex(/^[0-9a-fA-F]{24}$/)
+              .messages({
+                "string.pattern.base":
+                  "Her bir rol geçerli bir ObjectId olmalıdır (24 karakter uzunluğunda hexadecimal).",
+              })
+          ),
+        })
+        .validateAsync(req.body);
+    } catch (error) {
+      return response.error(res, error.message, messages.dogrulamaHatasiBaslik);
+    }
+    next();
+  };
+  static delete = async (req, res, next) => {
+    try {
+      await joi
+        .object({
+          tc: joi
+            .string()
+            .pattern(/^[0-9]+$/, { name: "numbers" })
+            .min(11)
+            .max(11)
+            .messages({
+              "string.pattern.name": "tc Alanı Sayısal Değer Olmalıdır",
+              "string.min": "tc Alanı Ez Az 11 Karakter Olmalıdır",
+              "string.max": "tc Alanı En Fazla 11 Karakterden Oluşabilir",
+            }),
+        
+          email: joi.string().email().trim().min(3).max(100).messages({
+            "string.base": "Email Alanı Normal Metin Olmalıdır",
+            "string.min": "Email Alanı Ez Az 3 Karakter Olmalıdır",
+            "string.email": "Lütfen Geçerli Bir Email Giriniz",
+            "string.max": "Email Alanı En Fazla 100 Karakterden Oluşabilir",
+          }),
+       
+        })
+        .validateAsync(req.body);
+    } catch (error) {
+      return response.error(res, error.message, messages.dogrulamaHatasiBaslik);
     }
     next();
   };

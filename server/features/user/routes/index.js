@@ -15,6 +15,20 @@ router.post(
   validation.add,
   controller.add
 );
+router.post(
+  "/update",
+  auth.cr("user_full", "user_full_update", "user_update"),
+  validation.update,
+  controller.update
+);
+router.post(
+  "/delete",
+  auth.cr("user_full", "user_full_delete", "user_delete"),
+  validation.delete,
+  controller.delete
+);
+
+
 
 router.post(
   "/getUserRoles",

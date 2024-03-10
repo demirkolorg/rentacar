@@ -7,7 +7,10 @@ module.exports = {
   kullanicizatenvar: "Girilen bilgilere sahip bir kullanıcı zaten mevcut",
   dogrulamaHatasiAciklama:
     "Eksik ya da yanlış bilgi girdiniz, lütfen girilen alanların doğruluğunu kontrol ediniz",
+    idkesik:"Kullanıcı Id bilgisi eksik",
   user_create_basarili: "Kullanıcı ekleme işlemi başarılı",
+  user_update_basarili: "Kullanıcı güncelleme işlemi başarılı",
+  user_delete_basarili: "Kullanıcı silme işlemi başarılı",
   getUserRoles: "Kullanıcın rolleri başarıyla getirildi.",
   getUserPermissions: "Kullanıcın izinleri başarıyla getirildi.",
   getUserRolesAndPermissions:

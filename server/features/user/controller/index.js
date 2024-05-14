@@ -135,6 +135,36 @@ exports.delete = async (req, res) => {
   }
 };
 
+exports.getUser = async (req, res) => {
+  let body = req.body;
+  try {
+    const fields = [body.id, body.email, body.tc].filter(Boolean);
+    if (fields.length !== 1) {
+      return response.error(res, messages.birdenfazlakosul);
+    }
+
+    let user = await Users.findOne({
+      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }],
+    });
+
+    if (!user) {
+      return response.error(res, messages.kullaniciYok);
+    }
+
+    return response.success(
+      res,
+      user,
+      req.user?.email,
+      pt.points.users,
+      pt.types.list,
+      messages.basarili,
+      messages.getUser
+    );
+  } catch (err) {
+    return response.error(res);
+  }
+};
+
 exports.getUserRoles = async (req, res) => {
   let body = req.body;
   try {

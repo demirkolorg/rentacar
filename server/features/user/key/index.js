@@ -49,6 +49,13 @@ module.exports = [
   },
 
   {
+    key: "user_getUser",
+    name: "Get User",
+    group: "USERS",
+    description: "Kullanıcıyı listeler",
+  },
+
+  {
     key: "user_getUserRoles",
     name: "Get User Roles",
     group: "USERS",

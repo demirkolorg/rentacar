@@ -18,13 +18,16 @@ module.exports = function () {
     },
     async (payload, done) => {
       try {
+        if (Date.now() / 1000 >= payload.exp) {
+          return done(new Error("Token expired"), null);
+        }
+
         let user = await Users.findOne({ _id: payload.id });
         if (!user) {
-          done(new Error(message.usernotfound));
+          done(new Error(message.usernotfound), null);
         }
 
         let userRoles = await Roles.find({ _id: user.roller });
-
         let rolsSet = new Set();
         let permissionsSet = new Set();
 
@@ -44,7 +47,7 @@ module.exports = function () {
           email: user.email,
           ad: user.ad,
           soyad: user.soyad,
-          exp: parseInt(Date.now() / 1000) * config.JWT.EXPIRE_TIME,
+          exp: Math.floor(Date.now() / 1000) + 86400, // Set token to expire in 1 day
         });
       } catch (error) {
         done(error, null);

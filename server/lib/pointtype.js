@@ -1,11 +1,15 @@
 module.exports = {
   points: {
+    upload: "UPLOAD",
     auth: "AUTH",
     users: "USERS",
     roles: "ROLES",
     user_roles: "USER_ROLES",
     user_permissions: "USER_PERMISSIONS",
     audit_logs: "AUDIT_LOGS",
+    firma: "FIRMA",
+    sube: "SUBE",
+    pozisyon: "POZİSYON",
   },
   types: {
     get: "GET",
@@ -17,6 +21,7 @@ module.exports = {
     print: "PRINT",
     import: "IMPORT",
     export: "EXPORT",
+    upload: "UPLOAD",
     login: "LOGIN",
     logout: "LOGOUT",
     register: "REGISTER",

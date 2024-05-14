@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
 
     let payload = {
       id: user._id,
-      exp: parseInt(Date.now() / 1000) * EnvConfig.JWT.EXPIRE_TIME,
+      exp: Math.floor(Date.now() / 1000) + 86400, // Set token to expire in 1 day
     };
     let token = jwt.encode(payload, EnvConfig.JWT.SECRET);
     let userData = {

@@ -11,6 +11,7 @@ module.exports = {
   user_create_basarili: "Kullanıcı ekleme işlemi başarılı",
   user_update_basarili: "Kullanıcı güncelleme işlemi başarılı",
   user_delete_basarili: "Kullanıcı silme işlemi başarılı",
+  getUser: "Kullanıcı başarıyla getirildi.",
   getUserRoles: "Kullanıcın rolleri başarıyla getirildi.",
   getUserPermissions: "Kullanıcın izinleri başarıyla getirildi.",
   getUserRolesAndPermissions:

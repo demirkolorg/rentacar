@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const controller = require("../controller");
 const validation = require("../validation");
 const auth = require("../../../middlewares/auth")();
@@ -28,8 +29,11 @@ router.post(
   controller.delete
 );
 
-
-
+router.post(
+  "/getUser",
+  auth.cr("user_full", "user_full_list", "user_getUser"),
+  controller.getUser
+);
 router.post(
   "/getUserRoles",
   auth.cr("user_full", "user_full_list", "user_getUserRoles"),

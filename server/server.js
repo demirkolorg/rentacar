@@ -1,3 +1,5 @@
+require("module-alias/register");
+
 const dotenv = require("dotenv");
 const envFile =
   process.env.NODE_ENV === "production"
@@ -8,14 +10,15 @@ dotenv.config({ path: envFile });
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const configs = require("./config");
+const configs = require("@config");
 const chalk = require("chalk");
 const log = console.log;
 const morgan = require("morgan");
-const errorMiddleware = require("./middlewares/error");
-const Super = require("./lib/super");
+const errorMiddleware = require("@middlewares/error");
+const Super = require("@lib/super");
 const path = require("path");
-const routes = require("./routes");
+const routes = require("@routes");
+
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));

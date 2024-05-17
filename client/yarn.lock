@@ -2094,6 +2094,11 @@
   "resolved" "https://registry.npmjs.org/preact/-/preact-10.12.1.tgz"
   "version" "10.12.1"
 
+"prettier@^3.2.5":
+  "integrity" "sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A=="
+  "resolved" "https://registry.npmjs.org/prettier/-/prettier-3.2.5.tgz"
+  "version" "3.2.5"
+
 "prop-types@^15.5.10", "prop-types@^15.5.7", "prop-types@^15.6.0", "prop-types@^15.6.1", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
   "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"

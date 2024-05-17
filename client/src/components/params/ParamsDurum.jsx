@@ -1,15 +1,14 @@
-import Select from "react-select";
-import { optionStyle } from "@/helper/optionStyle";
+import Select from 'react-select';
+import { optionStyle } from '@/helper/optionStyle';
 
-const ParamsDurum = ({setPDurum}) => {
-
+const ParamsDurum = ({ setPDurum }) => {
   const kartDurum = [
-    { value: null, label: "Hepsi" },
-    { value: true, label: "Aktif" },
-    { value: false, label: "Pasif" },
+    { value: null, label: 'Hepsi' },
+    { value: true, label: 'Aktif' },
+    { value: false, label: 'Pasif' }
   ];
 
-  const handleKartDurumChange = (selectedOption) => {
+  const handleKartDurumChange = selectedOption => {
     setPDurum(selectedOption.value);
   };
   return (

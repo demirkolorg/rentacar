@@ -1,6 +1,6 @@
-import React from "react";
-import Chart from "react-apexcharts";
-import useDarkMode from "@/hooks/useDarkMode";
+import React from 'react';
+import Chart from 'react-apexcharts';
+import useDarkMode from '@/hooks/useDarkMode';
 
 const RadarChart = () => {
   const [isDark] = useDarkMode();
@@ -8,8 +8,8 @@ const RadarChart = () => {
   const options = {
     chart: {
       toolbar: {
-        show: false,
-      },
+        show: false
+      }
     },
     plotOptions: {
       radialBar: {
@@ -17,39 +17,39 @@ const RadarChart = () => {
         endAngle: 135,
         dataLabels: {
           name: {
-            fontSize: "22px",
-            color: isDark ? "#E2E8F0" : "#475569",
+            fontSize: '22px',
+            color: isDark ? '#E2E8F0' : '#475569'
           },
           value: {
-            fontSize: "16px",
-            color: isDark ? "#E2E8F0" : "#475569",
+            fontSize: '16px',
+            color: isDark ? '#E2E8F0' : '#475569'
           },
           total: {
             show: true,
-            label: "Total",
-            color: isDark ? "#E2E8F0" : "#475569",
+            label: 'Total',
+            color: isDark ? '#E2E8F0' : '#475569',
             formatter: function () {
               return 249;
-            },
-          },
-        },
-      },
+            }
+          }
+        }
+      }
     },
     fill: {
-      type: "gradient",
+      type: 'gradient',
       gradient: {
-        shade: "dark",
+        shade: 'dark',
         shadeIntensity: 0.15,
         inverseColors: false,
         opacityFrom: 1,
         opacityTo: 1,
-        stops: [0, 50, 65, 91],
-      },
+        stops: [0, 50, 65, 91]
+      }
     },
     stroke: {
-      dashArray: 4,
+      dashArray: 4
     },
-    colors: ["#4669FA"],
+    colors: ['#4669FA']
   };
 
   return (

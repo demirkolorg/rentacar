@@ -6,7 +6,8 @@
   "scripts": {
     "build": "cd server && npm install  && cd ../client && npm install && npm run build",
     "start": "nodemon server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-simple": "^0.5.6",
+    "module-alias": "^2.2.3",
     "moment": "^2.30.1",
     "mongoose": "^8.1.1",
     "morgan": "^1.10.0",
@@ -37,7 +39,18 @@
     "winston": "^3.12.0"
   },
   "devDependencies": {
+    "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.33.2"
+  },
+  "_moduleAliases": {
+    "@": "server",
+    "@config": "server/config",
+    "@routes": "server/routes",
+    "@features": "server/features",
+    "@middlewares": "server/middlewares",
+    "@uploads": "server/uploads",
+    "@log": "server/log",
+    "@lib": "server/lib"
   }
 }

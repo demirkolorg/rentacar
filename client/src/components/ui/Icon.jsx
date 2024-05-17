@@ -1,5 +1,5 @@
-import React from "react";
-import { Icon, enableCache } from "@iconify/react";
+import React from 'react';
+import { Icon, enableCache } from '@iconify/react';
 
 const Icons = ({ icon, className, width, rotate, hFlip, vFlip, onClick }) => {
   return (

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState } from 'react';
+import { useEffect } from 'react';
 
-function VideoPlayer({ url, className = "w-full" }) {
+function VideoPlayer({ url, className = 'w-full' }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const playPause = () => {
     setIsPlaying(!isPlaying);
@@ -9,12 +9,7 @@ function VideoPlayer({ url, className = "w-full" }) {
 
   return (
     <div className="w-full relative">
-      <video
-        src={url}
-        onClick={playPause}
-        controls={true}
-        className={className}
-      />
+      <video src={url} onClick={playPause} controls={true} className={className} />
     </div>
   );
 }

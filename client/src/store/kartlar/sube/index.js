@@ -1,23 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { subeGetAll } from "@/api/sube";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { subeGetAll } from '@/api/kartlar/sube';
 
-export const _fetchSubeler = createAsyncThunk(
-  "firma/fetchSubeler",
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await subeGetAll(params);
-      if (response.data.success) {
-        return response.data.data.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-      } else {
-        return rejectWithValue(response.data.message);
-      }
-    } catch (error) {
-      return rejectWithValue(error.message);
+export const _fetchSubeler = createAsyncThunk('firma/fetchSubeler', async (params, { rejectWithValue }) => {
+  try {
+    const response = await subeGetAll(params);
+    if (response.data.success) {
+      return response.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } else {
+      return rejectWithValue(response.data.message);
     }
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 const initialState = {
   subeler: [],
@@ -27,7 +22,7 @@ const initialState = {
   deleteSubeModalState: false,
   statusSubeModalState: false,
   isLoading: false,
-  error: null,
+  error: null
 };
 
 const reducers = {
@@ -48,12 +43,12 @@ const reducers = {
   },
   _setSube: (state, action) => {
     state.sube = action.payload;
-  },
+  }
 };
 
-const extraReducers = (builder) => {
+const extraReducers = builder => {
   builder
-    .addCase(_fetchSubeler.pending, (state) => {
+    .addCase(_fetchSubeler.pending, state => {
       state.isLoading = true;
     })
     .addCase(_fetchSubeler.fulfilled, (state, action) => {
@@ -67,10 +62,10 @@ const extraReducers = (builder) => {
 };
 
 const slice = createSlice({
-  name: "sube",
+  name: 'sube',
   initialState,
   reducers,
-  extraReducers,
+  extraReducers
 });
 
 export const {
@@ -79,6 +74,6 @@ export const {
   _setDeleteSubeModalState,
   _setStatusSubeModalState,
   _setSubeler,
-  _setSube,
+  _setSube
 } = slice.actions;
 export default slice.reducer;

@@ -1,25 +1,18 @@
-import { useMemo, useEffect, useState } from "react";
-import { toast as message } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import {
-  useTable,
-  useRowSelect,
-  useSortBy,
-  useGlobalFilter,
-  usePagination,
-} from "react-table";
+import { useMemo, useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTable, useRowSelect, useSortBy, useGlobalFilter, usePagination } from 'react-table';
 
-import GlobalFilter from "@/components/app/GlobalFilter";
-import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
-import Loading from "@/components/Loading";
-import SagMenu from "@/components/app/SagMenu";
-import { setLoading, useLoader } from "@/store/loader/hooks";
-import ParamsDurum from "@/components/params/ParamsDurum";
-import Yenile from "@/components/app/Yenile";
-import GosterilecekKayit from "@/components/app/GosterilecekKayit";
-import Sayfalama from "@/components/app/Sayfalama";
-import SayfaKayitSayisi from "@/components/app/SayfaKayitSayisi";
+import GlobalFilter from '@/components/app/GlobalFilter';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Loading from '@/components/Loading';
+import SagMenu from '@/components/app/SagMenu';
+import { setLoading, useLoader } from '@/store/loader/hooks';
+import ParamsDurum from '@/components/params/ParamsDurum';
+import Yenile from '@/components/app/Yenile';
+import GosterilecekKayit from '@/components/app/GosterilecekKayit';
+import Sayfalama from '@/components/app/Sayfalama';
+import SayfaKayitSayisi from '@/components/app/SayfaKayitSayisi';
 
 import {
   useAddFirmaModalState,
@@ -34,19 +27,16 @@ import {
   useFirmalar,
   setFirma,
   useFirma,
-  fetchFirmalar,
-} from "@/store/kartlar/firma/hooks";
+  fetchFirmalar
+} from '@/store/kartlar/firma/hooks';
 
-import {
-  useAddSubeModalState,
-  setAddSubeModalState,
-} from "@/store/kartlar/sube/hooks";
+import { useAddSubeModalState, setAddSubeModalState } from '@/store/kartlar/sube/hooks';
 
-import AddForm from "./AddForm";
-import SubeAddForm from "../sube/AddForm";
-import EditForm from "./EditForm";
-import DeleteForm from "./DeleteForm";
-import StatusForm from "./StatusForm";
+import AddForm from './AddForm';
+import SubeAddForm from '../sube/AddForm';
+import EditForm from './EditForm';
+import DeleteForm from './DeleteForm';
+import StatusForm from './StatusForm';
 
 const Tablo = () => {
   const navigate = useNavigate();
@@ -65,7 +55,7 @@ const Tablo = () => {
       globalFilter,
       setGlobalFilter,
       secilenMetin: window?.getSelection()?.toString(),
-      getData,
+      getData
     });
   };
 
@@ -81,9 +71,9 @@ const Tablo = () => {
 
   const COLUMNS = [
     {
-      Header: "ad",
-      accessor: "ad",
-      Cell: (row) => {
+      Header: 'ad',
+      accessor: 'ad',
+      Cell: row => {
         return (
           <span
             className="cursor-pointer hover:text-primary-400 "
@@ -94,199 +84,180 @@ const Tablo = () => {
             {row?.cell?.value}
           </span>
         );
-      },
+      }
     },
     {
-      Header: "İl",
-      accessor: "adres.il",
-      Cell: (row) => {
+      Header: 'İl',
+      accessor: 'adres.il',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "İlçe",
-      accessor: "adres.ilce",
-      Cell: (row) => {
+      Header: 'İlçe',
+      accessor: 'adres.ilce',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "Açık Adres",
-      accessor: "adres.acikAdres",
-      Cell: (row) => {
+      Header: 'Açık Adres',
+      accessor: 'adres.acikAdres',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "gsm",
-      accessor: "iletisim.gsm",
-      Cell: (row) => {
+      Header: 'gsm',
+      accessor: 'iletisim.gsm',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "gsm ops",
-      accessor: "iletisim.gsmOps",
-      Cell: (row) => {
+      Header: 'gsm ops',
+      accessor: 'iletisim.gsmOps',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "telefon",
-      accessor: "iletisim.telefon",
-      Cell: (row) => {
+      Header: 'telefon',
+      accessor: 'iletisim.telefon',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "eposta",
-      accessor: "iletisim.eposta",
-      Cell: (row) => {
+      Header: 'eposta',
+      accessor: 'iletisim.eposta',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "Kuruluş Yılı",
-      accessor: "ekBilgiler.kurulusYili",
-      Cell: (row) => {
+      Header: 'Kuruluş Yılı',
+      accessor: 'ekBilgiler.kurulusYili',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "Şube Sayısı",
-      accessor: "ekBilgiler.subeSayisi",
-      Cell: (row) => {
+      Header: 'Şube Sayısı',
+      accessor: 'ekBilgiler.subeSayisi',
+      Cell: row => {
         return <span>{row?.cell?.value}</span>;
-      },
+      }
     },
     {
-      Header: "Durum",
-      accessor: "is_active",
-      Cell: (row) => {
+      Header: 'Durum',
+      accessor: 'is_active',
+      Cell: row => {
         return (
           <span className="block w-full">
             <span
               className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
-                row?.cell?.value === true
-                  ? "text-success-500 bg-success-500"
-                  : ""
+                row?.cell?.value === true ? 'text-success-500 bg-success-500' : ''
               }
-              ${
-                row?.cell?.value === false
-                  ? "text-danger-500 bg-danger-500"
-                  : ""
-              }
+              ${row?.cell?.value === false ? 'text-danger-500 bg-danger-500' : ''}
   
                `}
             >
-              {row?.cell?.value ? "Aktif" : "Pasif"}
+              {row?.cell?.value ? 'Aktif' : 'Pasif'}
             </span>
           </span>
         );
-      },
-    },
+      }
+    }
   ];
 
   const actions = [
     {
       id: 1,
       show: true,
-      name: "Görüntüle",
-      icon: "heroicons-outline:eye",
-      action: (data) => {
+      name: 'Görüntüle',
+      icon: 'heroicons-outline:eye',
+      action: data => {
         navigate(`/firma/${data._id}`);
-      },
+      }
     },
     {
       id: 2,
       show: true,
-      name: "Yeni Ekle",
-      icon: "heroicons-outline:plus",
-      action: (data) => {
+      name: 'Yeni Ekle',
+      icon: 'heroicons-outline:plus',
+      action: data => {
         setFirma(null);
         setAddFirmaModalState(true);
         setMenuAyar({
-          visible: false,
+          visible: false
         });
-      },
+      }
     },
     {
       id: 3,
       show: true,
-      name: "Düzenle",
-      icon: "heroicons:pencil-square",
-      action: (data) => {
+      name: 'Düzenle',
+      icon: 'heroicons:pencil-square',
+      action: data => {
         setFirma(null);
         setFirma(data);
         setEditFirmaModalState(true);
         setMenuAyar({
-          visible: false,
+          visible: false
         });
-      },
+      }
     },
     {
       id: 4,
       show: true,
-      name: "Durum Değiştir",
-      icon: "fluent:status-12-filled",
-      action: (data) => {
+      name: 'Durum Değiştir',
+      icon: 'fluent:status-12-filled',
+      action: data => {
         setFirma(null);
         setFirma(data);
         setStatusFirmaModalState(true);
         setMenuAyar({
-          visible: false,
+          visible: false
         });
-      },
+      }
     },
     {
       id: 5,
       hasSubMenu: true,
       show: true,
-      name: "Şube İşlemleri",
-      icon: "mdi:office-chair",
+      name: 'Şube İşlemleri',
+      icon: 'mdi:office-chair',
       subMenu: [
         {
           id: 51,
           show: true,
-          name: "Yeni Şube Ekle",
-          action: (data) => {
+          name: 'Yeni Şube Ekle',
+          action: data => {
             setFirma(null);
             setFirma(data);
             setAddSubeModalState(true);
             setMenuAyar({
-              visible: false,
+              visible: false
             });
-          },
-        },
-        {
-          id: 52,
-          show: true,
-          name: "Şube İşlemleri",
-          action: (data) => {
-            setFirma(null);
-            setFirma(data);
-            setDeleteFirmaModalState(true);
-            setMenuAyar({
-              visible: false,
-            });
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
     {
       id: 6,
       show: true,
-      name: "Sil",
-      icon: "heroicons-outline:trash",
-      action: (data) => {
+      name: 'Sil',
+      icon: 'heroicons-outline:trash',
+      action: data => {
         setFirma(null);
         setFirma(data);
         setDeleteFirmaModalState(true);
         setMenuAyar({
-          visible: false,
+          visible: false
         });
-      },
-    },
+      }
+    }
   ];
 
   const loading = useLoader();
@@ -297,7 +268,7 @@ const Tablo = () => {
     {
       columns,
       data,
-      initialState: { pageSize: 15 },
+      initialState: { pageSize: 15 }
     },
     useGlobalFilter,
     useSortBy,
@@ -322,7 +293,7 @@ const Tablo = () => {
     setGlobalFilter,
     prepareRow,
     rows,
-    filteredRows = rows.length,
+    filteredRows = rows.length
   } = tableInstance;
 
   return (
@@ -358,24 +329,16 @@ const Tablo = () => {
               {...getTableProps}
             >
               <thead className="sticky top-0 bg-white dark:bg-slate-800 z-10">
-                {headerGroups.map((headerGroup) => (
+                {headerGroups.map(headerGroup => (
                   <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
+                    {headerGroup.headers.map(column => (
                       <th
-                        {...column.getHeaderProps(
-                          column.getSortByToggleProps()
-                        )}
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
                         scope="col"
                         className=" text-sm table-th  "
                       >
-                        {column.render("Header")}
-                        <span>
-                          {column.isSorted
-                            ? column.isSortedDesc
-                              ? " 🔽"
-                              : " 🔼"
-                            : ""}
-                        </span>
+                        {column.render('Header')}
+                        <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                       </th>
                     ))}
                   </tr>
@@ -385,7 +348,7 @@ const Tablo = () => {
                 className="overflow-y-scroll bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700"
                 {...getTableBodyProps}
               >
-                {page.map((row) => {
+                {page.map(row => {
                   prepareRow(row);
                   return (
                     <tr
@@ -394,12 +357,10 @@ const Tablo = () => {
                         setMenuAyar({ visible: false });
                       }}
                       className={`${
-                        menuAyar?.rowIndex === row.index
-                          ? "bg-slate-100 dark:bg-slate-900"
-                          : ""
+                        menuAyar?.rowIndex === row.index ? 'bg-slate-100 dark:bg-slate-900' : ''
                       } hover:bg-slate-100 dark:hover:bg-slate-900`}
                     >
-                      {row.cells.map((cell) => {
+                      {row.cells.map(cell => {
                         return (
                           <td
                             {...cell.getCellProps()}
@@ -411,23 +372,17 @@ const Tablo = () => {
                             //     actionToExecute.action(cell.row.original);
                             //   }
                             // }}
-                            onContextMenu={(e) => handleContextMenu(e, cell)}
-                            className={`${
-                              menuAyar?.cell?.value === cell.value
-                                ? "bg-slate-200 dark:bg-slate-900"
-                                : ""
-                            }
+                            onContextMenu={e => handleContextMenu(e, cell)}
+                            className={`${menuAyar?.cell?.value === cell.value ? 'bg-slate-200 dark:bg-slate-900' : ''}
                           
                             h-12 px-6 `}
                           >
                             <p
                               className={`m-0 p-0 inline  ${
-                                String(cell.value).includes(globalFilter)
-                                  ? "bg-yellow-300 text-lg"
-                                  : ""
+                                String(cell.value).includes(globalFilter) ? 'bg-yellow-300 text-lg' : ''
                               }`}
                             >
-                              {cell.render("Cell")}
+                              {cell.render('Cell')}
                             </p>
 
                             {/* <p className="m-0 p-0 inline">                             
@@ -441,22 +396,15 @@ const Tablo = () => {
                 })}
               </tbody>
             </table>
-            {menuAyar?.visible && (
-              <SagMenu
-                actions={actions}
-                menuAyar={menuAyar}
-                setMenuAyar={setMenuAyar}
-              />
-            )}
+
+            {menuAyar?.visible && <SagMenu actions={actions} menuAyar={menuAyar} setMenuAyar={setMenuAyar} />}
           </>
         )}
       </Card>
 
       <Card>
         <div className="flex justify-between items-center">
-          <SayfaKayitSayisi
-            props={{ pageIndex, gotoPage, pageOptions, filteredRows }}
-          />
+          <SayfaKayitSayisi props={{ pageIndex, gotoPage, pageOptions, filteredRows }} />
 
           <Sayfalama
             props={{
@@ -467,7 +415,7 @@ const Tablo = () => {
               pageOptions,
               pageIndex,
               canNextPage,
-              pageCount,
+              pageCount
             }}
           />
 

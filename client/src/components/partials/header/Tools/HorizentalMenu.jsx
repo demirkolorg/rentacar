@@ -1,8 +1,8 @@
-import React from "react";
-import { topMenu } from "@/constant/data";
-import Icon from "@/components/ui/Icon";
-import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { topMenu } from '@/constant/data';
+import Icon from '@/components/ui/Icon';
+import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const HorizentalMenu = () => {
   return (
@@ -12,11 +12,7 @@ const HorizentalMenu = () => {
           <li
             key={i}
             className={
-              item.child
-                ? "menu-item-has-children"
-                : "" || item.megamenu
-                ? "menu-item-has-children has-megamenu"
-                : ""
+              item.child ? 'menu-item-has-children' : '' || item.megamenu ? 'menu-item-has-children has-megamenu' : ''
             }
           >
             {/* Single menu*/}
@@ -51,13 +47,8 @@ const HorizentalMenu = () => {
                   <li key={index}>
                     <Link to={childitem.link}>
                       <div className="flex space-x-2 items-start rtl:space-x-reverse">
-                        <Icon
-                          icon={childitem.childicon}
-                          className="leading-[1] text-base"
-                        />
-                        <span className="leading-[1]">
-                          {childitem.childtitle}
-                        </span>
+                        <Icon icon={childitem.childicon} className="leading-[1] text-base" />
+                        <span className="leading-[1]">{childitem.childtitle}</span>
                       </div>
                     </Link>
                   </li>
@@ -82,14 +73,14 @@ const HorizentalMenu = () => {
                             <div className="flex items-center space-x-2 text-[15px] leading-6 rtl:space-x-reverse">
                               <span
                                 className={`h-[6px] w-[6px] rounded-full border border-slate-600 dark:border-white inline-block flex-none ${
-                                  isActive ? " bg-slate-900 dark:bg-white" : ""
+                                  isActive ? ' bg-slate-900 dark:bg-white' : ''
                                 }`}
                               ></span>
                               <span
                                 className={`capitalize ${
                                   isActive
-                                    ? " text-slate-900 dark:text-white font-medium"
-                                    : "text-slate-600 dark:text-slate-300"
+                                    ? ' text-slate-900 dark:text-white font-medium'
+                                    : 'text-slate-600 dark:text-slate-300'
                                 }`}
                               >
                                 {ms_item.m_childtitle}

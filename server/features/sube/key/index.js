@@ -55,4 +55,22 @@ module.exports = [
     group: "SUBE",
     description: "Sube durumunu değiştir",
   },
+  {
+    key: "sube_get",
+    name: "Şube Getir",
+    group: "SUBE",
+    description: "Şube getir",
+  },
+  {
+    key: "sube_getIds",
+    name: "Şube Getir",
+    group: "SUBE",
+    description: "Şube getir",
+  },
+  {
+    key: "sube_getall",
+    name: "Şubelerin Tamamın Getir",
+    group: "SUBE",
+    description: "Şubelerin tamamını getir",
+  },
 ];

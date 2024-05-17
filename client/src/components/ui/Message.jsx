@@ -1,18 +1,18 @@
-import { message } from "antd";
+import { message } from 'antd';
 
 const Message = ({ type, text }) => {
   message.config({
     top: 100,
     duration: 2,
     maxCount: 3,
-    zIndex: 100000, // Modalınızın z-index'inden daha yüksek
+    zIndex: 100000 // Modalınızın z-index'inden daha yüksek
   });
 
-  if (type === "success") {
+  if (type === 'success') {
     return message.success(text);
   }
 
-  if (type === "error") {
+  if (type === 'error') {
     return message.error(text);
   }
 };

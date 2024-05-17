@@ -1,11 +1,11 @@
-import { useSelector, useDispatch } from "react-redux";
-import { handleType } from "@/store/layout";
+import { useSelector, useDispatch } from 'react-redux';
+import { handleType } from '@/store/layout';
 
 const useMenuLayout = () => {
   const dispatch = useDispatch();
-  const menuType = useSelector((state) => state.layout.type);
+  const menuType = useSelector(state => state.layout.type);
 
-  const setMenuLayout = (value) => {
+  const setMenuLayout = value => {
     dispatch(handleType(value));
   };
 

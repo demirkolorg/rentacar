@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { message } from "@/constant/data";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { message } from '@/constant/data';
 
 const MessageList = () => {
   const newMessage = message.slice(0, 5);
@@ -18,7 +18,7 @@ const MessageList = () => {
                   <div className="h-8 w-8 bg-white dark:bg-slate-700 rounded-full relative">
                     <span
                       className={`${
-                        item.active ? "bg-secondary-500" : "bg-success-500"
+                        item.active ? 'bg-secondary-500' : 'bg-success-500'
                       } w-[10px] h-[10px] rounded-full border border-white dark:border-slate-700  inline-block absolute right-0 top-0`}
                     ></span>
                     <img
@@ -29,15 +29,11 @@ const MessageList = () => {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <div className="text-slate-800 dark:text-slate-300 text-sm font-medium mb-1`">
-                    {item.title}
-                  </div>
+                  <div className="text-slate-800 dark:text-slate-300 text-sm font-medium mb-1`">{item.title}</div>
                   <div className="text-xs hover:text-[#68768A] font-normal text-slate-600 dark:text-slate-300">
                     {item.desc}
                   </div>
-                  <div className="text-slate-400 dark:text-slate-400 text-xs mt-1">
-                    3 min ago
-                  </div>
+                  <div className="text-slate-400 dark:text-slate-400 text-xs mt-1">3 min ago</div>
                 </div>
                 {item.hasnotifaction && (
                   <div className="flex-0">

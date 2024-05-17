@@ -6,7 +6,7 @@ export function isoToLocalDate(isoDateString) {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-    timeZone: timeZone,
+    timeZone: timeZone
   };
 
   // İstanbul zaman dilimine göre formatlanmış tarih ve saati elde et
@@ -24,7 +24,7 @@ export function isoToLocalDateTime(isoDateString) {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: timeZone,
+    timeZone: timeZone
   };
 
   // İstanbul zaman dilimine göre formatlanmış tarih ve saati elde et

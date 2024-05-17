@@ -1,8 +1,8 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import Icon from "@/components/ui/Icon";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import Icon from '@/components/ui/Icon';
 
-import FooterAvatar from "@/assets/images/users/user-1.jpg";
+import FooterAvatar from '@/assets/images/users/user-1.jpg';
 const MobileFooter = () => {
   return (
     <div className="bg-white bg-no-repeat custom-dropshadow footer-bg dark:bg-slate-700 flex justify-around items-center backdrop-filter backdrop-blur-[40px] fixed left-0 w-full z-[9999] bottom-0 py-[12px] px-4">
@@ -11,7 +11,7 @@ const MobileFooter = () => {
           <div>
             <span
               className={` relative cursor-pointer rounded-full text-[20px] flex flex-col items-center justify-center mb-1
-         ${isActive ? "text-primary-500" : "dark:text-white text-slate-900"}
+         ${isActive ? 'text-primary-500' : 'dark:text-white text-slate-900'}
           `}
             >
               <Icon icon="heroicons-outline:mail" />
@@ -21,9 +21,7 @@ const MobileFooter = () => {
             </span>
             <span
               className={` block text-[11px]
-          ${
-            isActive ? "text-primary-500" : "text-slate-600 dark:text-slate-300"
-          }
+          ${isActive ? 'text-primary-500' : 'text-slate-600 dark:text-slate-300'}
           `}
             >
               Messages
@@ -41,11 +39,7 @@ const MobileFooter = () => {
               src={FooterAvatar}
               alt=""
               className={` w-full h-full rounded-full
-          ${
-            isActive
-              ? "border-2 border-primary-500"
-              : "border-2 border-slate-100"
-          }
+          ${isActive ? 'border-2 border-primary-500' : 'border-2 border-slate-100'}
               `}
             />
           </div>
@@ -56,7 +50,7 @@ const MobileFooter = () => {
           <div>
             <span
               className={` relative cursor-pointer rounded-full text-[20px] flex flex-col items-center justify-center mb-1
-      ${isActive ? "text-primary-500" : "dark:text-white text-slate-900"}
+      ${isActive ? 'text-primary-500' : 'dark:text-white text-slate-900'}
           `}
             >
               <Icon icon="heroicons-outline:bell" />
@@ -66,7 +60,7 @@ const MobileFooter = () => {
             </span>
             <span
               className={` block text-[11px]
-         ${isActive ? "text-primary-500" : "text-slate-600 dark:text-slate-300"}
+         ${isActive ? 'text-primary-500' : 'text-slate-600 dark:text-slate-300'}
         `}
             >
               Notifications

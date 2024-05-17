@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Card from "@/components/ui/Card";
+import React, { useState } from 'react';
+import Card from '@/components/ui/Card';
 
 const Dashboard = () => {
   return (

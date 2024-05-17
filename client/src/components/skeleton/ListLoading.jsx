@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const ListLoading = ({ items, count }) => {
   items = items || Array.from({ length: count });

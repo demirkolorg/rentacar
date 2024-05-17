@@ -1,12 +1,7 @@
-import React from "react";
-import Icon from "@/components/ui/Icon";
+import React from 'react';
+import Icon from '@/components/ui/Icon';
 
-const Badge = ({
-  className = "bg-danger-500 text-white",
-  label,
-  icon,
-  children,
-}) => {
+const Badge = ({ className = 'bg-danger-500 text-white', label, icon, children }) => {
   return (
     <span className={`badge ${className}`}>
       {!children && (

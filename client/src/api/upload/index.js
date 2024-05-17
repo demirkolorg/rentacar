@@ -1,8 +1,8 @@
-import { axiosInstance } from "@/api";
+import { axiosInstance } from '@/api';
 
-const _prefix = "/upload";
+const _prefix = '/upload';
 
-export const imageUpload = async (payload) => {
-  const response = await axiosInstance("post", `${_prefix}/image`, payload);
+export const imageUpload = async payload => {
+  const response = await axiosInstance('post', `${_prefix}/image`, payload);
   return response;
 };

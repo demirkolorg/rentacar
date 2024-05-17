@@ -1,13 +1,14 @@
-const mongoose = require("mongoose");
-const Firmalar=require("../../firma/model")
-const subeSema = new mongoose.Schema(
+const mongoose = require('mongoose');
+const Firmalar = require('../../firma/model');
+const  base = require('@features/base/model/base.js');
+
+const schema = new mongoose.Schema(
   {
     firmaId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: Firmalar,
       required: true
     },
-    is_active: { type: Boolean, default: true },
     ad: { type: String, required: true },
     logoUrl: { type: String },
     adres: {
@@ -26,10 +27,8 @@ const subeSema = new mongoose.Schema(
       calisanSayisi: { type: Number }
     }
   },
-  {
-    collection: "Subeler",
-    timestamps: true
-  }
+  { collection: 'Subeler' }
 );
 
-module.exports = mongoose.model("Subeler", subeSema);
+schema.add(base);
+module.exports = mongoose.model('Subeler', schema);

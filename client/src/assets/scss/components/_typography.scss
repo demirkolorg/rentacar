@@ -73,7 +73,7 @@ ul.custom-list ul {
     @apply ltr:pl-[1.3em] rtl:pr-[1.3em] relative -mx-1;
     &::before {
       counter-increment: listitem;
-      content: counters(listitem, ".") ".";
+      content: counters(listitem, '.') '.';
     }
   }
 }
@@ -82,7 +82,7 @@ ul.custom-list ul {
     @apply pl-4 relative;
     &::before {
       left: 6px;
-      content: "-";
+      content: '-';
     }
   }
 }

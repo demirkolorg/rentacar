@@ -55,4 +55,22 @@ module.exports = [
     group: "FIRMA",
     description: "Firma durumunu değiştir",
   },
+  {
+    key: "firma_get",
+    name: "Firma Getir",
+    group: "FIRMA",
+    description: "Firma getir",
+  },
+  {
+    key: "firma_getIds",
+    name: "Firma Getir",
+    group: "FIRMA",
+    description: "Firma getir",
+  },
+  {
+    key: "firma_getall",
+    name: "Firmaların Tamamın Getir",
+    group: "FIRMA",
+    description: "Firmaların tamamını getir",
+  },
 ];

@@ -1,19 +1,14 @@
-import { useState } from "react";
-import { toast as message} from "react-toastify";
+import { useState } from 'react';
+import { toast as message } from 'react-toastify';
 
-import Modal from "@/components/ui/Modal";
-import Button from "@/components/ui/Button";
+import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
 
-import {
-  useDeleteSubeModalState,
-  setDeleteSubeModalState,
-  useSube,
-  fetchSubeler
-} from "@/store/kartlar/sube/hooks";
-import { useUser } from "@/store/auth/hooks";
-import { subeDelete } from "@/api/sube";
+import { useDeleteSubeModalState, setDeleteSubeModalState, useSube, fetchSubeler } from '@/store/kartlar/sube/hooks';
+import { useUser } from '@/store/auth/hooks';
+import { subeDelete } from '@/api/kartlar/sube';
 
-const DeleteForm = ({getData}) => {
+const DeleteForm = ({ getData }) => {
   const subeData = useSube();
   const user = useUser();
   const [btnLoading, setBtnLoading] = useState(false);
@@ -68,13 +63,13 @@ const DeleteForm = ({getData}) => {
         }
       >
         <p>
-          Merhaba {user.ad} {user.soyad}, <strong>{subeData.ad}</strong> isimli{" "}
+          Merhaba {user.ad} {user.soyad}, <strong>{subeData.ad}</strong> isimli{' '}
           <strong>
             {subeData.adres.acikAdres}
-            {" - "}
+            {' - '}
             {subeData.adres.ilce}
-            {"/"}
-            {subeData.adres.il}{" "}
+            {'/'}
+            {subeData.adres.il}{' '}
           </strong>
           adresli subeyı silmek istediğinize emin misiniz?
         </p>

@@ -1,35 +1,32 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { imageUpload } from "@/api/upload";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { imageUpload } from '@/api/upload';
 
-export const _imageUpload = createAsyncThunk(
-  "upload/imageUpload",
-  async (fileData, { rejectWithValue }) => {
-    try {
-      const formData = new FormData();
-      formData.append("file", fileData);
-      const response = await imageUpload(formData);
-      if (response.data.success) {
-        return response.data.data;
-      } else {
-        return rejectWithValue(response.data.message);
-      }
-    } catch (error) {
-      return rejectWithValue(error.message);
+export const _imageUpload = createAsyncThunk('upload/imageUpload', async (fileData, { rejectWithValue }) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', fileData);
+    const response = await imageUpload(formData);
+    if (response.data.success) {
+      return response.data.data;
+    } else {
+      return rejectWithValue(response.data.message);
     }
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 const initialState = {
   lastUploadedImage: null,
   isLoading: false,
-  error: null,
+  error: null
 };
 
 const reducers = {};
 
-const extraReducers = (builder) => {
+const extraReducers = builder => {
   builder
-    .addCase(_imageUpload.pending, (state) => {
+    .addCase(_imageUpload.pending, state => {
       state.isLoading = true;
     })
     .addCase(_imageUpload.fulfilled, (state, action) => {
@@ -43,10 +40,10 @@ const extraReducers = (builder) => {
 };
 
 const slice = createSlice({
-  name: "upload",
+  name: 'upload',
   initialState,
   reducers,
-  extraReducers,
+  extraReducers
 });
 
 export const {} = slice.actions;

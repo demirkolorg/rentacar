@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { handleDarkMode } from "@/store/layout";
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { handleDarkMode } from '@/store/layout';
 
 const useDarkmode = () => {
   const dispatch = useDispatch();
-  const isDark = useSelector((state) => state.layout.darkMode);
+  const isDark = useSelector(state => state.layout.darkMode);
 
   // ** Return a wrapped version of useState's setter function
-  const setDarkMode = (mode) => {
+  const setDarkMode = mode => {
     dispatch(handleDarkMode(mode));
   };
 
@@ -16,8 +16,8 @@ const useDarkmode = () => {
     const body = window.document.body;
     // define classNames
     const classNames = {
-      dark: "dark",
-      light: "light",
+      dark: 'dark',
+      light: 'light'
     };
     // ** Check if dark mode is enabled
     if (isDark) {

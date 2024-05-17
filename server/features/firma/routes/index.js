@@ -15,6 +15,11 @@ router.post(
   controller.get
 );
 router.post(
+  "/getIds",
+  auth.cr("firma_full", "firma_full_list", "firma_getIds"),
+  controller.getIds
+);
+router.post(
   "/getAll",
   auth.cr("firma_full", "firma_full_list", "firma_getall"),
   controller.getAll

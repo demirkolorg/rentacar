@@ -15,6 +15,11 @@ router.post(
   controller.get
 );
 router.post(
+  "/getIds",
+  auth.cr("sube_full", "sube_full_list", "sube_getIds"),
+  controller.getIds
+);
+router.post(
   "/getAll",
   auth.cr("sube_full", "sube_full_list", "sube_getall"),
   controller.getAll

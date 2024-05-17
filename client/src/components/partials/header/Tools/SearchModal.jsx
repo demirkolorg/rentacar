@@ -1,6 +1,6 @@
-import { Dialog, Transition, Combobox } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import Icon from "@/components/ui/Icon";
+import { Dialog, Transition, Combobox } from '@headlessui/react';
+import { Fragment, useState } from 'react';
+import Icon from '@/components/ui/Icon';
 const SearchModal = () => {
   let [isOpen, setIsOpen] = useState(false);
 
@@ -11,42 +11,40 @@ const SearchModal = () => {
   function openModal() {
     setIsOpen(true);
   }
-  const [query, setQuery] = useState(" ");
+  const [query, setQuery] = useState(' ');
 
   const searchList = [
     {
       id: 1,
-      name: "What is Dashcode ?",
+      name: 'What is Dashcode ?'
     },
     {
       id: 2,
-      name: "Our Services",
+      name: 'Our Services'
     },
     {
       id: 3,
-      name: "Our Team",
+      name: 'Our Team'
     },
     {
       id: 4,
-      name: "Our Clients",
+      name: 'Our Clients'
     },
     {
       id: 5,
-      name: "Our Partners",
+      name: 'Our Partners'
     },
     {
       id: 6,
-      name: "Our Blog",
+      name: 'Our Blog'
     },
     {
       id: 7,
-      name: "Our Contact",
-    },
+      name: 'Our Contact'
+    }
   ];
-  
-  const filteredsearchList = searchList.filter((item) =>
-    item.name.toLowerCase().includes(query.toLowerCase())
-  );
+
+  const filteredsearchList = searchList.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <>
@@ -61,11 +59,7 @@ const SearchModal = () => {
       </div>
 
       <Transition show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-[9999] overflow-y-auto p-4 md:pt-[25vh] pt-20"
-          onClose={closeModal}
-        >
+        <Dialog as="div" className="fixed inset-0 z-[9999] overflow-y-auto p-4 md:pt-[25vh] pt-20" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -98,21 +92,15 @@ const SearchModal = () => {
                       <Combobox.Input
                         className="bg-transparent outline-none focus:outline-none border-none w-full flex-1 dark:placeholder:text-slate-300 dark:text-slate-200"
                         placeholder="Ara ..."
-                        onChange={(event) => setQuery(event.target.value)}
+                        onChange={event => setQuery(event.target.value)}
                       />
                     </div>
-                    <Transition
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
+                    <Transition leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
                       <Combobox.Options className="max-h-40 overflow-y-auto text-sm py-2">
-                        {filteredsearchList.length === 0 && query !== "" && (
+                        {filteredsearchList.length === 0 && query !== '' && (
                           <div>
                             <div className=" text-base py-2 px-4">
-                              <p className="text-slate-500 text-base dark:text-white">
-                                No result found
-                              </p>
+                              <p className="text-slate-500 text-base dark:text-white">No result found</p>
                             </div>
                           </div>
                         )}
@@ -123,8 +111,8 @@ const SearchModal = () => {
                               <div
                                 className={`px-4 text-[15px] font-normal capitalize py-2 ${
                                   active
-                                    ? "bg-slate-900 dark:bg-slate-600 dark:bg-opacity-60 text-white"
-                                    : "text-slate-900 dark:text-white"
+                                    ? 'bg-slate-900 dark:bg-slate-600 dark:bg-opacity-60 text-white'
+                                    : 'text-slate-900 dark:text-white'
                                 }`}
                               >
                                 <span>{item.name}</span>

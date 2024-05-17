@@ -8,7 +8,7 @@ exports.get = async (req, res) => {
   try {
     let sube = await Subeler.findOne({ _id: body._id }).populate("firmaId");
     if (!sube) {
-      return response.error(res, messages.subeYok);
+      return response.error(res, messages.Yok);
     }
 
     return response.success(
@@ -18,9 +18,38 @@ exports.get = async (req, res) => {
       pt.points.sube,
       pt.types.get,
       messages.basarili,
-      messages.sube_get_basarili
+      messages.get_basarili
     );
   } catch (err) {
+    return response.error(res);
+  }
+};
+
+exports.getIds = async (req, res) => {
+  let body = req.body;
+  try {
+    const ids = body.ids;
+    let subeler = await Subeler.find({ _id: { $in: ids } });
+
+    if (!subeler || subeler.length === 0) {
+      console.log('====================================');
+      console.log("Yok");
+      console.log('====================================');
+      return response.error(res, messages.Yok);
+    }
+    return response.success(
+      res,
+      subeler,
+      req.user?.email,
+      pt.points.firma,
+      pt.types.get,
+      messages.basarili,
+      messages.get_basarili
+    );
+  } catch (err) {
+    console.log('====================================');
+    console.log("err",err);
+    console.log('====================================');
     return response.error(res);
   }
 };
@@ -38,7 +67,7 @@ exports.getAll = async (req, res) => {
       pt.points.sube,
       pt.types.get,
       messages.basarili,
-      messages.sube_getall_basarili
+      messages.getall_basarili
     );
   } catch (err) {
     return response.error(res);
@@ -65,7 +94,7 @@ exports.add = async (req, res) => {
       pt.points.sube,
       pt.types.create,
       messages.basarili,
-      messages.sube_create_basarili
+      messages.create_basarili
     );
   } catch (err) {
     return response.error(res);
@@ -77,7 +106,7 @@ exports.update = async (req, res) => {
     let sube = await Subeler.findOne({ _id: body._id });
 
     if (!sube) {
-      return response.error(res, messages.subeYok);
+      return response.error(res, messages.Yok);
     }
 
     let updates = {};
@@ -100,7 +129,7 @@ exports.update = async (req, res) => {
       pt.points.sube,
       pt.types.update,
       messages.basarili,
-      messages.sube_update_basarili
+      messages.update_basarili
     );
   } catch (err) {
     return response.error(res);
@@ -112,7 +141,7 @@ exports.delete = async (req, res) => {
     let sube = await Subeler.findOne({ _id: body._id });
 
     if (!sube) {
-      return response.error(res, messages.subeYok);
+      return response.error(res, messages.Yok);
     }
 
     await Subeler.deleteOne({ _id: body._id });
@@ -124,7 +153,7 @@ exports.delete = async (req, res) => {
       pt.points.sube,
       pt.types.delete,
       messages.basarili,
-      messages.sube_delete_basarili
+      messages.delete_basarili
     );
   } catch (err) {
     return response.error(res);
@@ -136,7 +165,7 @@ exports.durumDegistir = async (req, res) => {
     let sube = await Subeler.findOne({ _id: body._id });
 
     if (!sube) {
-      return response.error(res, messages.subeYok);
+      return response.error(res, messages.Yok);
     }
 
     let updates = {};
@@ -153,7 +182,7 @@ exports.durumDegistir = async (req, res) => {
       pt.points.sube,
       pt.types.update,
       messages.basarili,
-      messages.sube_durum_basarili
+      messages.durum_basarili
     );
   } catch (err) {
     return response.error(res);

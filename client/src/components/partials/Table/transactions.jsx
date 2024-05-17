@@ -1,32 +1,22 @@
-import React, { useState, useMemo } from "react";
-import { advancedTable } from "@/constant/table-data";
-import Card from "@/components/ui/Card";
-import Icon from "@/components/ui/Icon";
-import Dropdown from "@/components/ui/Dropdown";
-import { Menu } from "@headlessui/react";
-import {
-  useTable,
-  useRowSelect,
-  useSortBy,
-  useGlobalFilter,
-  usePagination,
-} from "react-table";
-import GlobalFilter from "../../../pages/table/react-tables/GlobalFilter";
+import React, { useState, useMemo } from 'react';
+import { advancedTable } from '@/constant/table-data';
+import Card from '@/components/ui/Card';
+import Icon from '@/components/ui/Icon';
+import Dropdown from '@/components/ui/Dropdown';
+import { Menu } from '@headlessui/react';
+import { useTable, useRowSelect, useSortBy, useGlobalFilter, usePagination } from 'react-table';
+import GlobalFilter from '../../../pages/table/react-tables/GlobalFilter';
 
 const COLUMNS = [
   {
-    Header: "customer",
-    accessor: "customer",
-    Cell: (row) => {
+    Header: 'customer',
+    accessor: 'customer',
+    Cell: row => {
       return (
         <div>
           <span className="inline-flex items-center">
             <span className="w-7 h-7 rounded-full ltr:mr-3 rtl:ml-3 flex-none bg-slate-600">
-              <img
-                src={row?.cell?.value.image}
-                alt=""
-                className="object-cover w-full h-full rounded-full"
-              />
+              <img src={row?.cell?.value.image} alt="" className="object-cover w-full h-full rounded-full" />
             </span>
             <span className="text-sm text-slate-600 dark:text-slate-300 capitalize font-medium">
               {row?.cell?.value.name}
@@ -34,67 +24,60 @@ const COLUMNS = [
           </span>
         </div>
       );
-    },
+    }
   },
   {
-    Header: "date",
-    accessor: "date",
-    Cell: (row) => {
+    Header: 'date',
+    accessor: 'date',
+    Cell: row => {
       return (
         <span className="text-slate-500 dark:text-slate-400">
           {row?.cell?.value}
           <span className="inline-block ml-1">
-            {Math.floor(Math.random() * 12) + 1}:
-            {Math.floor(Math.random() * 60) + 1}
+            {Math.floor(Math.random() * 12) + 1}:{Math.floor(Math.random() * 60) + 1}
           </span>
         </span>
       );
-    },
+    }
   },
   {
-    Header: "HISTORY",
-    accessor: "quantity",
-    Cell: (row) => {
+    Header: 'HISTORY',
+    accessor: 'quantity',
+    Cell: row => {
       return (
         <span className="text-slate-500 dark:text-slate-400">
-          <span className="block text-slate-600 dark:text-slate-300">
-            Transfer
-          </span>
-          <span className="block text-slate-500 text-xs">
-            Trans ID: 8HG654Pk32
-          </span>
+          <span className="block text-slate-600 dark:text-slate-300">Transfer</span>
+          <span className="block text-slate-500 text-xs">Trans ID: 8HG654Pk32</span>
         </span>
       );
-    },
+    }
   },
 
   {
-    Header: "amount",
-    accessor: "status",
-    Cell: (row) => {
+    Header: 'amount',
+    accessor: 'status',
+    Cell: row => {
       return (
         <span className="block w-full">
           <span
-            className={`${
-              row?.cell?.value === "paid" ? "text-success-500 " : ""
-            } 
-            ${row?.cell?.value === "due" ? "text-warning-500 " : ""}
-            ${row?.cell?.value === "cancled" ? "text-danger-500" : ""}
+            className={`${row?.cell?.value === 'paid' ? 'text-success-500 ' : ''} 
+            ${row?.cell?.value === 'due' ? 'text-warning-500 ' : ''}
+            ${row?.cell?.value === 'cancled' ? 'text-danger-500' : ''}
             
              `}
           >
-            {row?.cell?.value === "due" && <span>+$ 1,200.00</span>}
-            {row?.cell?.value === "paid" && <span>+$ 200.00</span>}
-            {row?.cell?.value === "cancled" && <span>+$ 1400.00</span>}
+            {row?.cell?.value === 'due' && <span>+$ 1,200.00</span>}
+            {row?.cell?.value === 'paid' && <span>+$ 200.00</span>}
+            {row?.cell?.value === 'cancled' && <span>+$ 1400.00</span>}
           </span>
         </span>
       );
-    },
+    }
   },
   {
-    Header: "action",
-    accessor: "action",
-    Cell: (row) => {
+    Header: 'action',
+    accessor: 'action',
+    Cell: row => {
       return (
         <div className=" text-center">
           <Dropdown
@@ -112,9 +95,9 @@ const COLUMNS = [
                     className={`
                 
                   ${
-                    item.name === "delete"
-                      ? "bg-danger-500 text-danger-500 bg-opacity-30   hover:bg-opacity-100 hover:text-white"
-                      : "hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 dark:hover:bg-opacity-50"
+                    item.name === 'delete'
+                      ? 'bg-danger-500 text-danger-500 bg-opacity-30   hover:bg-opacity-100 hover:text-white'
+                      : 'hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 dark:hover:bg-opacity-50'
                   }
                    w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer 
                    first:rounded-t last:rounded-b flex  space-x-2 items-center rtl:space-x-reverse `}
@@ -130,23 +113,23 @@ const COLUMNS = [
           </Dropdown>
         </div>
       );
-    },
-  },
+    }
+  }
 ];
 
 const actions = [
   {
-    name: "view",
-    icon: "heroicons-outline:eye",
+    name: 'view',
+    icon: 'heroicons-outline:eye'
   },
   {
-    name: "edit",
-    icon: "heroicons:pencil-square",
+    name: 'edit',
+    icon: 'heroicons:pencil-square'
   },
   {
-    name: "delete",
-    icon: "heroicons-outline:trash",
-  },
+    name: 'delete',
+    icon: 'heroicons-outline:trash'
+  }
 ];
 
 const TransactionsTable = () => {
@@ -158,8 +141,8 @@ const TransactionsTable = () => {
       columns,
       data,
       initialState: {
-        pageSize: 4,
-      },
+        pageSize: 4
+      }
     },
 
     useGlobalFilter,
@@ -183,7 +166,7 @@ const TransactionsTable = () => {
     pageCount,
     setPageSize,
     setGlobalFilter,
-    prepareRow,
+    prepareRow
   } = tableInstance;
 
   const { globalFilter, pageIndex, pageSize } = state;
@@ -204,24 +187,16 @@ const TransactionsTable = () => {
                 {...getTableProps}
               >
                 <thead className=" border-t border-slate-100 dark:border-slate-800">
-                  {headerGroups.map((headerGroup) => (
+                  {headerGroups.map(headerGroup => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
+                      {headerGroup.headers.map(column => (
                         <th
-                          {...column.getHeaderProps(
-                            column.getSortByToggleProps()
-                          )}
+                          {...column.getHeaderProps(column.getSortByToggleProps())}
                           scope="col"
                           className=" table-th "
                         >
-                          {column.render("Header")}
-                          <span>
-                            {column.isSorted
-                              ? column.isSortedDesc
-                                ? " 🔽"
-                                : " 🔼"
-                              : ""}
-                          </span>
+                          {column.render('Header')}
+                          <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                         </th>
                       ))}
                     </tr>
@@ -231,17 +206,14 @@ const TransactionsTable = () => {
                   className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700"
                   {...getTableBodyProps}
                 >
-                  {page.map((row) => {
+                  {page.map(row => {
                     prepareRow(row);
                     return (
                       <tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => {
+                        {row.cells.map(cell => {
                           return (
-                            <td
-                              {...cell.getCellProps()}
-                              className="table-td py-2"
-                            >
-                              {cell.render("Cell")}
+                            <td {...cell.getCellProps()} className="table-td py-2">
+                              {cell.render('Cell')}
                             </td>
                           );
                         })}

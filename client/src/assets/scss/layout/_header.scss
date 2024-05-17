@@ -7,12 +7,10 @@
     position: absolute;
     z-index: -10;
     --tw-backdrop-blur: blur(12px);
-    backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
-      var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale)
-      var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert)
-      var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
-      var(--tw-backdrop-sepia);
-    --tw-content: "";
+    backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast)
+      var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity)
+      var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+    --tw-content: '';
     content: var(--tw-content);
     background: linear-gradient(
       180deg,
@@ -29,4 +27,4 @@
     mask: linear-gradient(black, black 18%, transparent 100%);
   }
 }
-@import "menu";
+@import 'menu';

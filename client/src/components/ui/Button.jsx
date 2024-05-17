@@ -1,20 +1,20 @@
-import React from "react";
-import Icon from "@/components/ui/Icon";
-import { Link } from "react-router-dom";
+import React from 'react';
+import Icon from '@/components/ui/Icon';
+import { Link } from 'react-router-dom';
 function Button({
   text,
-  type = "button",
+  type = 'button',
   isLoading,
   disabled,
-  className = "bg-primary-500 text-white",
+  className = 'bg-primary-500 text-white',
   children,
   icon,
-  loadingClass = "unset-classname",
-  iconPosition = "left",
-  iconClass = "text-[20px]",
+  loadingClass = 'unset-classname',
+  iconPosition = 'left',
+  iconClass = 'text-[20px]',
   link,
   onClick,
-  div,
+  div
 }) {
   return (
     <>
@@ -22,10 +22,8 @@ function Button({
         <button
           type={type}
           onClick={onClick}
-          className={`btn btn inline-flex justify-center   ${
-            isLoading ? " pointer-events-none" : ""
-          }
-        ${disabled ? " opacity-40 cursor-not-allowed" : ""}
+          className={`btn btn inline-flex justify-center   ${isLoading ? ' pointer-events-none' : ''}
+        ${disabled ? ' opacity-40 cursor-not-allowed' : ''}
         ${className}`}
         >
           {/* if has children and not loading*/}
@@ -38,8 +36,8 @@ function Button({
               {icon && (
                 <span
                   className={`
-          ${iconPosition === "right" ? "order-1 ltr:ml-2 rtl:mr-2" : " "}
-          ${text && iconPosition === "left" ? "ltr:mr-2 rtl:ml-2" : ""}
+          ${iconPosition === 'right' ? 'order-1 ltr:ml-2 rtl:mr-2' : ' '}
+          ${text && iconPosition === 'left' ? 'ltr:mr-2 rtl:ml-2' : ''}
           
           ${iconClass}
           
@@ -61,14 +59,7 @@ function Button({
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path
                   className="opacity-75"
                   fill="currentColor"
@@ -83,10 +74,8 @@ function Button({
       {!link && div && (
         <div
           onClick={onClick}
-          className={`btn btn inline-flex justify-center   ${
-            isLoading ? " pointer-events-none" : ""
-          }
-        ${disabled ? " opacity-40 cursor-not-allowed" : ""}
+          className={`btn btn inline-flex justify-center   ${isLoading ? ' pointer-events-none' : ''}
+        ${disabled ? ' opacity-40 cursor-not-allowed' : ''}
         ${className}`}
         >
           {/* if has children and not loading*/}
@@ -99,8 +88,8 @@ function Button({
               {icon && (
                 <span
                   className={`
-          ${iconPosition === "right" ? "order-1 ltr:ml-2 rtl:mr-2" : " "}
-          ${text && iconPosition === "left" ? "ltr:mr-2 rtl:ml-2" : ""}
+          ${iconPosition === 'right' ? 'order-1 ltr:ml-2 rtl:mr-2' : ' '}
+          ${text && iconPosition === 'left' ? 'ltr:mr-2 rtl:ml-2' : ''}
           
           ${iconClass}
           
@@ -122,14 +111,7 @@ function Button({
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path
                   className="opacity-75"
                   fill="currentColor"
@@ -144,10 +126,8 @@ function Button({
       {link && !div && (
         <Link
           to={link}
-          className={`btn btn inline-flex justify-center   ${
-            isLoading ? " pointer-events-none" : ""
-          }
-        ${disabled ? " opacity-40 cursor-not-allowed" : ""}
+          className={`btn btn inline-flex justify-center   ${isLoading ? ' pointer-events-none' : ''}
+        ${disabled ? ' opacity-40 cursor-not-allowed' : ''}
         ${className}`}
         >
           {/* if has children and not loading*/}
@@ -160,8 +140,8 @@ function Button({
               {icon && (
                 <span
                   className={`
-          ${iconPosition === "right" ? "order-1 ltr:ml-2 rtl:mr-2" : " "}
-          ${text && iconPosition === "left" ? "ltr:mr-2 rtl:ml-2" : ""}
+          ${iconPosition === 'right' ? 'order-1 ltr:ml-2 rtl:mr-2' : ' '}
+          ${text && iconPosition === 'left' ? 'ltr:mr-2 rtl:ml-2' : ''}
           
           ${iconClass}
           
@@ -183,14 +163,7 @@ function Button({
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path
                   className="opacity-75"
                   fill="currentColor"

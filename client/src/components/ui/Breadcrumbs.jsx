@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, NavLink } from "react-router-dom";
-import { leftMenu } from "@/routes/menu";
-import Icon from "@/components/ui/Icon";
+import React, { useState, useEffect } from 'react';
+import { useLocation, NavLink } from 'react-router-dom';
+import { leftMenu } from '@/routes/menu';
+import Icon from '@/components/ui/Icon';
 
 const Breadcrumbs = () => {
   const location = useLocation();
-  const locationName = location.pathname.replace("/", "");
-
+  const locationName = location.pathname.replace('/', '');
 
   const [isHide, setIsHide] = useState(null);
-  const [groupTitle, setGroupTitle] = useState("");
+  const [groupTitle, setGroupTitle] = useState('');
 
   useEffect(() => {
-    const currentMenuItem = leftMenu.find(
-      (item) => item.link === locationName
-    );
-  
-    const currentChild = leftMenu.find((item) =>
-      item.child?.find((child) => child.childlink === locationName)
-    );
+    const currentMenuItem = leftMenu.find(item => item.link === locationName);
+
+    const currentChild = leftMenu.find(item => item.child?.find(child => child.childlink === locationName));
 
     if (currentMenuItem) {
       setIsHide(currentMenuItem.isHide);
@@ -51,9 +46,7 @@ const Breadcrumbs = () => {
                 </span>
               </li>
             )}
-            <li className="capitalize text-slate-500 dark:text-slate-400">
-              {locationName}
-            </li>
+            <li className="capitalize text-slate-500 dark:text-slate-400">{locationName}</li>
           </ul>
         </div>
       ) : null}

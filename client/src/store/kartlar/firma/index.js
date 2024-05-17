@@ -1,23 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { firmaGetAll, firmaAdd } from "@/api/firma";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { firmaGetAll, firmaAdd } from '@/api/kartlar/firma';
 
-export const _fetchFirmalar = createAsyncThunk(
-  "firma/fetchFirmalar",
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await firmaGetAll(params);
-      if (response.data.success) {
-        return response.data.data.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-      } else {
-        return rejectWithValue(response.data.message);
-      }
-    } catch (error) {
-      return rejectWithValue(error.message);
+export const _fetchFirmalar = createAsyncThunk('firma/fetchFirmalar', async (params, { rejectWithValue }) => {
+  try {
+    const response = await firmaGetAll(params);
+    if (response.data.success) {
+      return response.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } else {
+      return rejectWithValue(response.data.message);
     }
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 const initialState = {
   firmalar: [],
@@ -27,7 +22,7 @@ const initialState = {
   deleteFirmaModalState: false,
   statusFirmaModalState: false,
   isLoading: false,
-  error: null,
+  error: null
 };
 
 const reducers = {
@@ -48,12 +43,12 @@ const reducers = {
   },
   _setFirma: (state, action) => {
     state.firma = action.payload;
-  },
+  }
 };
 
-const extraReducers = (builder) => {
+const extraReducers = builder => {
   builder
-    .addCase(_fetchFirmalar.pending, (state) => {
+    .addCase(_fetchFirmalar.pending, state => {
       state.isLoading = true;
     })
     .addCase(_fetchFirmalar.fulfilled, (state, action) => {
@@ -67,10 +62,10 @@ const extraReducers = (builder) => {
 };
 
 const slice = createSlice({
-  name: "firma",
+  name: 'firma',
   initialState,
   reducers,
-  extraReducers,
+  extraReducers
 });
 
 export const {
@@ -79,6 +74,6 @@ export const {
   _setDeleteFirmaModalState,
   _setStatusFirmaModalState,
   _setFirmalar,
-  _setFirma,
+  _setFirma
 } = slice.actions;
 export default slice.reducer;

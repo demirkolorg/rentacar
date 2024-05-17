@@ -1,7 +1,7 @@
-const Pozisyonlar = require("../model");
-const response = require("../../../lib/response");
-const pt = require("../../../lib/pointtype");
-const messages = require("../messages");
+const Pozisyonlar = require('../model');
+const response = require('../../../lib/response');
+const pt = require('../../../lib/pointtype');
+const messages = require('../messages');
 
 exports.get = async (req, res) => {
   let body = req.body;
@@ -51,12 +51,14 @@ exports.add = async (req, res) => {
   try {
     let createdPozisyon = await Pozisyonlar.create({
       ad: body.ad,
+      created_by: req?.user?.id,
+      sube: body.sube
     });
 
     return response.success(
       res,
       createdPozisyon,
-      req.user.email,
+      req?.user?.email,
       pt.points.pozisyon,
       pt.types.create,
       messages.basarili,
@@ -64,12 +66,7 @@ exports.add = async (req, res) => {
     );
   } catch (err) {
     if (err.code === 11000) {
-      return response.error(
-        res,
-        "Bu pozisyon adı zaten kullanılmakta.",
-        "Veri Hatası",
-        409
-      );
+      return response.error(res, 'Bu pozisyon adı zaten kullanılmakta.', 'Veri Hatası', 409);
     }
 
     return response.error(res);
@@ -86,7 +83,7 @@ exports.update = async (req, res) => {
 
     let updates = {};
     if (body.ad) updates.ad = body.ad;
-    if (typeof body.is_active === "boolean") updates.is_active = body.is_active;
+    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
 
     await Pozisyonlar.updateOne({ _id: body._id }, updates);
 
@@ -103,12 +100,7 @@ exports.update = async (req, res) => {
     );
   } catch (err) {
     if (err.code === 11000) {
-      return response.error(
-        res,
-        "Bu pozisyon adı zaten kullanılmakta.",
-        "Veri Hatası",
-        409
-      );
+      return response.error(res, 'Bu pozisyon adı zaten kullanılmakta.', 'Veri Hatası', 409);
     }
 
     return response.error(res);
@@ -148,7 +140,7 @@ exports.durumDegistir = async (req, res) => {
     }
 
     let updates = {};
-    if (typeof body.is_active === "boolean") updates.is_active = body.is_active;
+    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
 
     await Pozisyonlar.updateOne({ _id: body._id }, updates);
 

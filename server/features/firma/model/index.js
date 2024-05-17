@@ -1,30 +1,28 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const base = require('@features/base/model/base.js');
 
-const firmaSema = new mongoose.Schema(
+const schema = new mongoose.Schema(
   {
-    is_active: { type: Boolean, default: true },
     ad: { type: String, required: true },
     logoUrl: { type: String },
     adres: {
       il: { type: String, required: true },
       ilce: { type: String, required: true },
-      acikAdres: { type: String, required: true },
+      acikAdres: { type: String, required: true }
     },
     iletisim: {
       gsm: { type: String, required: true },
-      gsmOps: { type: String},
+      gsmOps: { type: String },
       telefon: { type: String, required: true },
-      eposta: { type: String, required: true },
+      eposta: { type: String, required: true }
     },
     ekBilgiler: {
       kurulusYili: { type: Number },
-      subeSayisi: { type: Number },
-    },
+      subeSayisi: { type: Number }
+    }
   },
-  {
-    collection: "Firmalar",
-    timestamps: true,
-  }
+  { collection: 'Firmalar' }
 );
 
-module.exports = mongoose.model("Firmalar", firmaSema);
+schema.add(base);
+module.exports = mongoose.model('Firmalar', schema);

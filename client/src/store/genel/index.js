@@ -1,29 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  onayModalState: false,
-  onayDurumu: false,
-  onayFonksiyonu: null,
+  aktifSube: null
 };
 
 const reducers = {
-  _setOnayModalState: (state, action) => {
-    state.onayModalState = action.payload;
-  },
-  _setOnayDurumu: (state, action) => {
-    state.onayDurumu = action.payload;
-  },
-  _setOnayFonksiyonu: (state, action) => {
-    state.onayFonksiyonu = action.payload;
-  },
+  _setAktifSube: (state, action) => {
+    state.aktifSube = action.payload;
+  }
 };
 
-const loaderSlice = createSlice({
-  name: "genel",
+const slice = createSlice({
+  name: 'genel',
   initialState,
-  reducers,
+  reducers
 });
 
-export const { _setOnayModalState, _setOnayDurumu, _setOnayFonksiyonu } =
-  loaderSlice.actions;
-export default loaderSlice.reducer;
+export const { _setAktifSube } = slice.actions;
+export default slice.reducer;

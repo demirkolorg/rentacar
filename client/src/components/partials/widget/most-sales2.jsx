@@ -1,33 +1,33 @@
-import React from "react";
-import world from "@/constant/world-map.json";
-import { VectorMap } from "@south-paw/react-vector-maps";
+import React from 'react';
+import world from '@/constant/world-map.json';
+import { VectorMap } from '@south-paw/react-vector-maps';
 
 const sales = [
   {
-    title: "Nevada",
-    amount: "(80%)",
-    cls: "bg-primary-500 ring-primary-500",
+    title: 'Nevada',
+    amount: '(80%)',
+    cls: 'bg-primary-500 ring-primary-500'
   },
   {
-    title: "Ohio",
-    amount: "(75%)",
-    cls: "bg-success-500 ring-success-500",
+    title: 'Ohio',
+    amount: '(75%)',
+    cls: 'bg-success-500 ring-success-500'
   },
   {
-    title: "Montana",
-    amount: "(65%)",
-    cls: "bg-info-500 ring-info-500",
+    title: 'Montana',
+    amount: '(65%)',
+    cls: 'bg-info-500 ring-info-500'
   },
   {
-    title: "Iowa",
-    amount: "(85%)",
-    cls: "bg-warning-500 ring-warning-500",
+    title: 'Iowa',
+    amount: '(85%)',
+    cls: 'bg-warning-500 ring-warning-500'
   },
   {
-    title: "Arkansas",
-    amount: "(90%)",
-    cls: "bg-success-500 ring-success-500",
-  },
+    title: 'Arkansas',
+    amount: '(90%)',
+    cls: 'bg-success-500 ring-success-500'
+  }
 ];
 
 const MostSales2 = ({ filterMap }) => {

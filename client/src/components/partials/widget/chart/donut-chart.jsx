@@ -1,7 +1,7 @@
-import React from "react";
-import Chart from "react-apexcharts";
-import useDarkMode from "@/hooks/useDarkMode";
-import { colors } from "@/constant/data";
+import React from 'react';
+import Chart from 'react-apexcharts';
+import useDarkMode from '@/hooks/useDarkMode';
+import { colors } from '@/constant/data';
 
 const DonutChart = ({ height = 113 }) => {
   const [isDark] = useDarkMode();
@@ -15,56 +15,56 @@ const DonutChart = ({ height = 113 }) => {
   const series = [70, 30];
 
   const options = {
-    labels: ["Complete", "Left"],
+    labels: ['Complete', 'Left'],
     dataLabels: {
-      enabled: false,
+      enabled: false
     },
 
     colors: [colors.info, colorOpacity(colors.info, 0.16)],
     legend: {
-      position: "bottom",
-      fontSize: "12px",
-      fontFamily: "Inter",
+      position: 'bottom',
+      fontSize: '12px',
+      fontFamily: 'Inter',
       fontWeight: 400,
-      show: false,
+      show: false
     },
 
     plotOptions: {
       pie: {
         donut: {
-          size: "40%",
+          size: '40%',
           labels: {
             show: true,
             name: {
               show: false,
-              fontSize: "14px",
-              fontWeight: "bold",
-              fontFamily: "Inter",
-              color: isDark ? "#cbd5e1" : "#475569",
+              fontSize: '14px',
+              fontWeight: 'bold',
+              fontFamily: 'Inter',
+              color: isDark ? '#cbd5e1' : '#475569'
             },
             value: {
               show: true,
-              fontSize: "16px",
-              fontFamily: "Inter",
-              color: isDark ? "#cbd5e1" : "#475569",
+              fontSize: '16px',
+              fontFamily: 'Inter',
+              color: isDark ? '#cbd5e1' : '#475569',
               formatter(val) {
                 // eslint-disable-next-line radix
                 return `${parseInt(val)}%`;
-              },
+              }
             },
             total: {
               show: true,
-              fontSize: "10px",
-              label: "",
-              color: isDark ? "#cbd5e1" : "#475569",
+              fontSize: '10px',
+              label: '',
+              color: isDark ? '#cbd5e1' : '#475569',
               formatter() {
-                return "70";
-              },
-            },
-          },
-        },
-      },
-    },
+                return '70';
+              }
+            }
+          }
+        }
+      }
+    }
   };
 
   return (

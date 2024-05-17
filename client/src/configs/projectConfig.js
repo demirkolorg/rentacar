@@ -1,8 +1,9 @@
 const projectConfig = {
   app: {
-    name: "Asya Rent A Car",
-    logoText: "Asya rentAcar",
-  },
+    name: 'Grifin Rental',
+    logoText: 'Grifin Rental',
+    slogan: "Grifin'in Gücüyle Rent a Car İşlemlerinde Mükemmel Yönetim"
+  }
 };
 
 export default projectConfig;

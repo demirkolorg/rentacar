@@ -21,7 +21,6 @@
   html,
   body {
     @apply h-full;
-
   }
 
   .dashcode-app-wrapper {
@@ -49,7 +48,7 @@
     }
   }
 
-  html[dir="rtl"] {
+  html[dir='rtl'] {
     .recharts-wrapper {
       direction: rtl;
     }
@@ -88,32 +87,32 @@
   }
 }
 @layer components {
-  @import "components/table.scss";
-  @import "components/map.scss";
-  @import "components/progress";
-  @import "components/tippy";
-  @import "components/swiper";
-  @import "components/alert";
-  @import "components/card";
-  @import "components/auth";
-  @import "components/button";
-  @import "components/badge";
-  @import "components/typography";
-  @import "components/form";
-  @import "components/input-group";
-  @import "components/react-select";
-  @import "components/pagination";
-  @import "components/breadcrumbs";
-  @import "layout/header";
-  @import "layout/footer";
-  @import "layout/sidebar";
-  @import "layout/settings";
-  @import "utility/mix";
-  @import "utility/loading";
-  @import "utility/css-animation";
-  @import "utility/calander";
-  @import "utility/full-calender";
-  @import "components/print.scss";
+  @import 'components/table.scss';
+  @import 'components/map.scss';
+  @import 'components/progress';
+  @import 'components/tippy';
+  @import 'components/swiper';
+  @import 'components/alert';
+  @import 'components/card';
+  @import 'components/auth';
+  @import 'components/button';
+  @import 'components/badge';
+  @import 'components/typography';
+  @import 'components/form';
+  @import 'components/input-group';
+  @import 'components/react-select';
+  @import 'components/pagination';
+  @import 'components/breadcrumbs';
+  @import 'layout/header';
+  @import 'layout/footer';
+  @import 'layout/sidebar';
+  @import 'layout/settings';
+  @import 'utility/mix';
+  @import 'utility/loading';
+  @import 'utility/css-animation';
+  @import 'utility/calander';
+  @import 'utility/full-calender';
+  @import 'components/print.scss';
 }
 @layer utilities {
 }

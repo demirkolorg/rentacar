@@ -1,11 +1,6 @@
-//dış
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const is = require("is_js");
-//kök
-const Enum = require("../../../config/enum.config");
-//iç
-const messages = require("../messages");
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const baseSube = require('@features/base/model/baseSube.js');
 
 const schema = new mongoose.Schema(
   {
@@ -14,11 +9,12 @@ const schema = new mongoose.Schema(
     soyad: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    roller: [{ type: mongoose.SchemaTypes.ObjectId, required: true }],
-    is_active: { type: Boolean, default: true },
+    roller: [{ type: mongoose.SchemaTypes.ObjectId, required: true }]
   },
-  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+  { collection: 'Kullanicilar' }
 );
+
+schema.add(baseSube);
 
 class Users extends mongoose.Model {
   validPassword(password) {
@@ -27,4 +23,4 @@ class Users extends mongoose.Model {
 }
 
 schema.loadClass(Users);
-module.exports = mongoose.model("users", schema);
+module.exports = mongoose.model('Kullanicilar', schema);

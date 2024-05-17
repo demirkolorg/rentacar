@@ -1,8 +1,8 @@
-import Tablo from "./Tablo";
+import Tablo from './Tablo';
 
 const Sube = () => {
   return (
-    <div className="flex flex-col h-screen-144">
+    <div className="flex flex-col h-screen-147">
       <Tablo />
     </div>
   );

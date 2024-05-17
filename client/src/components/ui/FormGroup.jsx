@@ -1,10 +1,10 @@
-import React, { Children } from "react";
-import Icon from "@/components/ui/Icon";
+import React, { Children } from 'react';
+import Icon from '@/components/ui/Icon';
 
 const FormGroup = ({
   label,
-  classLabel = "form-label",
-  className = "",
+  classLabel = 'form-label',
+  className = '',
   error,
   id,
   horizontal,
@@ -12,25 +12,25 @@ const FormGroup = ({
   msgTooltip,
   description,
 
-  children,
+  children
 }) => {
   return (
     <div
-      className={`fromGroup  ${error ? "has-error" : ""}  ${
-        horizontal ? "flex" : ""
-      }  ${validate ? "is-valid" : ""} ${className} `}
+      className={`fromGroup  ${error ? 'has-error' : ''}  ${
+        horizontal ? 'flex' : ''
+      }  ${validate ? 'is-valid' : ''} ${className} `}
     >
       {label && (
         <label
           htmlFor={id}
           className={`block capitalize ${classLabel}  ${
-            horizontal ? "flex-0 mr-6 md:w-[100px] w-[60px] break-words" : ""
+            horizontal ? 'flex-0 mr-6 md:w-[100px] w-[60px] break-words' : ''
           }`}
         >
           {label}
         </label>
       )}
-      <div className={`relative ${horizontal ? "flex-1" : ""}`}>
+      <div className={`relative ${horizontal ? 'flex-1' : ''}`}>
         {children}
 
         {/* icon */}
@@ -53,8 +53,8 @@ const FormGroup = ({
         <div
           className={` mt-2 ${
             msgTooltip
-              ? " inline-block bg-danger-500 text-white text-[10px] px-2 py-1 rounded"
-              : " text-danger-500 block text-sm"
+              ? ' inline-block bg-danger-500 text-white text-[10px] px-2 py-1 rounded'
+              : ' text-danger-500 block text-sm'
           }`}
         >
           {error.message}
@@ -65,8 +65,8 @@ const FormGroup = ({
         <div
           className={` mt-2 ${
             msgTooltip
-              ? " inline-block bg-success-500 text-white text-[10px] px-2 py-1 rounded"
-              : " text-success-500 block text-sm"
+              ? ' inline-block bg-success-500 text-white text-[10px] px-2 py-1 rounded'
+              : ' text-success-500 block text-sm'
           }`}
         >
           {validate}

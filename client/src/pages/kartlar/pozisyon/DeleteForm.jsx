@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { toast as message} from "react-toastify";
+import { useState } from 'react';
+import { toast as message } from 'react-toastify';
 
-import Modal from "@/components/ui/Modal";
-import Button from "@/components/ui/Button";
+import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
 
 import {
   useDeletePozisyonModalState,
   setDeletePozisyonModalState,
   usePozisyon,
   fetchPozisyonlar
-} from "@/store/kartlar/pozisyon/hooks";
-import { useUser } from "@/store/auth/hooks";
-import { pozisyonDelete } from "@/api/pozisyon";
+} from '@/store/kartlar/pozisyon/hooks';
+import { useUser } from '@/store/auth/hooks';
+import { pozisyonDelete } from '@/api/kartlar/pozisyon';
 
-const DeleteForm = ({getData}) => {
+const DeleteForm = ({ getData }) => {
   const pozisyonData = usePozisyon();
   const user = useUser();
   const [btnLoading, setBtnLoading] = useState(false);
@@ -68,7 +68,8 @@ const DeleteForm = ({getData}) => {
         }
       >
         <p>
-          Merhaba {user.ad} {user.soyad}, <strong>{pozisyonData.ad}</strong> isimli pozisyonu silmek istediğinize emin misiniz?
+          Merhaba {user.ad} {user.soyad}, <strong>{pozisyonData.ad}</strong> isimli pozisyonu silmek istediğinize emin
+          misiniz?
         </p>
       </Modal>
     </div>

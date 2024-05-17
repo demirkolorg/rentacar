@@ -1,15 +1,15 @@
-import Modal from "@/components/ui/Modal";
-import Button from "@/components/ui/Button";
+import Modal from '@/components/ui/Modal';
+import Button from '@/components/ui/Button';
 import {
   setDeleteFirmaModalState,
   useDeleteFirmaModalState,
   useFirma,
-  fetchFirmalar,
-} from "@/store/kartlar/firma/hooks";
-import { useUser } from "@/store/auth/hooks";
-import { firmaDelete } from "@/api/firma";
-import { useState } from "react";
-import { toast as message } from "react-toastify";
+  fetchFirmalar
+} from '@/store/kartlar/firma/hooks';
+import { useUser } from '@/store/auth/hooks';
+import { firmaDelete } from '@/api/kartlar/firma';
+import { useState } from 'react';
+import { toast as message } from 'react-toastify';
 
 const DeleteForm = ({ getData }) => {
   const firmaData = useFirma();
@@ -66,13 +66,13 @@ const DeleteForm = ({ getData }) => {
         }
       >
         <p>
-          Merhaba {user.ad} {user.soyad}, <strong>{firmaData.ad}</strong> isimli{" "}
+          Merhaba {user.ad} {user.soyad}, <strong>{firmaData.ad}</strong> isimli{' '}
           <strong>
             {firmaData.adres.acikAdres}
-            {" - "}
+            {' - '}
             {firmaData.adres.ilce}
-            {"/"}
-            {firmaData.adres.il}{" "}
+            {'/'}
+            {firmaData.adres.il}{' '}
           </strong>
           adresli firmayı silmek istediğinize emin misiniz?
         </p>

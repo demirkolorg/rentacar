@@ -1,29 +1,22 @@
-import { useRef, useState } from "react";
-import Select from "react-select";
-import * as yup from "yup";
-import { toast as message } from "react-toastify";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useRef, useState } from 'react';
+import Select from 'react-select';
+import * as yup from 'yup';
+import { toast as message } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
-import Modal from "@/components/ui/Modal";
-import Textinput from "@/components/ui/Textinput";
-import Textarea from "@/components/ui/Textarea";
-import Button from "@/components/ui/Button";
-import { firmaAdd } from "@/api/firma";
-import {
-  useAddFirmaModalState,
-  setAddFirmaModalState,
-  fetchFirmalar,
-} from "@/store/kartlar/firma/hooks";
-import {
-  ilSecenekleriData,
-  ilceSecenekleriData,
-} from "@/constant/ililcelistesi";
-import Logo from "@/assets/images/logo/logo-c.svg";
-import { optionStyle } from "@/helper/optionStyle";
-import { imageUpload } from "@/store/upload/hooks";
+import Modal from '@/components/ui/Modal';
+import Textinput from '@/components/ui/Textinput';
+import Textarea from '@/components/ui/Textarea';
+import Button from '@/components/ui/Button';
+import { firmaAdd } from '@/api/kartlar/firma';
+import { useAddFirmaModalState, setAddFirmaModalState, fetchFirmalar } from '@/store/kartlar/firma/hooks';
+import { ilSecenekleriData, ilceSecenekleriData } from '@/constant/ililcelistesi';
+import Logo from '@/assets/images/logo/logo-c.svg';
+import { optionStyle } from '@/helper/optionStyle';
+import { imageUpload } from '@/store/upload/hooks';
 
-const AddForm = ({getData}) => {
+const AddForm = ({ getData }) => {
   const hiddenFileInput = useRef(null);
   const [logoFile, setLogoFile] = useState(null);
   const [logoSrc, setLogoSrc] = useState();
@@ -32,50 +25,46 @@ const AddForm = ({getData}) => {
   const ilSecenekleri = ilSecenekleriData;
   const ilceSecenekleri = ilceSecenekleriData(secilenIl);
 
-  const handleLogoClick = (event) => {
+  const handleLogoClick = event => {
     hiddenFileInput.current.click();
   };
-  const handleLogoRemoveClick = (event) => {
+  const handleLogoRemoveClick = event => {
     setLogoFile(null);
   };
-  const handleLogoChange = (event) => {
+  const handleLogoChange = event => {
     const fileUploaded = event.target.files[0];
     setLogoFile(fileUploaded);
     setLogoSrc(URL.createObjectURL(fileUploaded));
   };
-  const handleIlChange = (selectedOption) => {
+  const handleIlChange = selectedOption => {
     setSecilenIl(selectedOption.label);
     setSecilenIlce(null);
   };
-  const handleIlceChange = (selectedOption) => {
+  const handleIlceChange = selectedOption => {
     setSecilenIlce(selectedOption.label);
   };
 
   const FormValidationSchema = yup
     .object({
-      ad: yup.string().required("Firma adı alanı boş geçilemez."),
+      ad: yup.string().required('Firma adı alanı boş geçilemez.'),
       kurulusYili: yup
         .number()
-        .positive("Firma kuruluş yılı alanı pozitif bir sayı olmalıdır.")
-        .integer("Firma kuruluş yılı alanı tam sayı olmalıdır.")
-        .typeError(
-          "Firma kuruluş yılı alanına yalnızca sayısal değerler girilmelidir."
-        )
-        .required("Firma kuruluş yılı alanı boş geçilemez."),
+        .positive('Firma kuruluş yılı alanı pozitif bir sayı olmalıdır.')
+        .integer('Firma kuruluş yılı alanı tam sayı olmalıdır.')
+        .typeError('Firma kuruluş yılı alanına yalnızca sayısal değerler girilmelidir.')
+        .required('Firma kuruluş yılı alanı boş geçilemez.'),
       subeSayisi: yup
         .number()
-        .positive("Firma çalışan sayısı alanı pozitif bir sayı olmalıdır.")
-        .integer("Firma çalışan sayısı alanı tam sayı olmalıdır.")
-        .typeError(
-          "Firma çalışan sayısı alanına yalnızca sayısal değerler girilmelidir."
-        )
-        .required("Firma çalışan sayısı alanı boş geçilemez."),
-      gsm: yup.string().required("Firma gsm alanı boş geçilemez."),
-      telefon: yup.string().required("Firma telefon alanı boş geçilemez."),
-      eposta: yup.string().required("Firma eposta alanı boş geçilemez."),
+        .positive('Firma çalışan sayısı alanı pozitif bir sayı olmalıdır.')
+        .integer('Firma çalışan sayısı alanı tam sayı olmalıdır.')
+        .typeError('Firma çalışan sayısı alanına yalnızca sayısal değerler girilmelidir.')
+        .required('Firma çalışan sayısı alanı boş geçilemez.'),
+      gsm: yup.string().required('Firma gsm alanı boş geçilemez.'),
+      telefon: yup.string().required('Firma telefon alanı boş geçilemez.'),
+      eposta: yup.string().required('Firma eposta alanı boş geçilemez.'),
       // secilenIl: yup.string().required("İl alanı boş geçilemez."),
       // secilenIlce: yup.mixed().required("İlçe alanı boş geçilemez."),
-      acikAdres: yup.mixed().required("Açık adres alanı boş geçilemez."),
+      acikAdres: yup.mixed().required('Açık adres alanı boş geçilemez.')
     })
     .required();
 
@@ -84,32 +73,32 @@ const AddForm = ({getData}) => {
     control,
     reset,
     formState: { errors, isValid },
-    handleSubmit,
+    handleSubmit
   } = useForm({
     resolver: yupResolver(FormValidationSchema),
-    mode: "all",
+    mode: 'onChange'
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     try {
       const newFirma = {
         ad: data.ad,
-        logoUrl: "",
+        logoUrl: '',
         adres: {
           il: secilenIl,
           ilce: secilenIlce,
-          acikAdres: data.acikAdres,
+          acikAdres: data.acikAdres
         },
         iletisim: {
           gsm: data.gsm,
           gsmOps: data.gsmOps,
           telefon: data.telefon,
-          eposta: data.eposta,
+          eposta: data.eposta
         },
         ekBilgiler: {
           kurulusYili: data.kurulusYili,
-          subeSayisi: data.subeSayisi,
-        },
+          subeSayisi: data.subeSayisi
+        }
       };
       const url = await imageUpload(logoFile);
       newFirma.logoUrl = url.payload;
@@ -125,7 +114,7 @@ const AddForm = ({getData}) => {
         setSecilenIlce(null);
       }
     } catch (error) {
-      message.error("Hatalı bir durum var, girilen bilgileri kontrol ediniz.");
+      message.error('Hatalı bir durum var, girilen bilgileri kontrol ediniz.');
     }
   };
 
@@ -133,7 +122,7 @@ const AddForm = ({getData}) => {
     <div>
       <Modal
         className="max-w-xl"
-        title={"Yeni Firma Ekle"}
+        title={'Yeni Firma Ekle'}
         labelclassName="btn-outline-dark"
         activeModal={useAddFirmaModalState()}
         onClose={() => {
@@ -158,7 +147,7 @@ const AddForm = ({getData}) => {
               <Button
                 onClick={handleLogoRemoveClick}
                 className={`${
-                  !logoFile && "hidden"
+                  !logoFile && 'hidden'
                 } p-1.5 ring-2 ring-white absolute right-2 h-8 w-8 text-white   bg-red-600 rounded-full shadow-sm flex flex-col items-center justify-center top-24 left-0`}
                 icon="heroicons:trash"
               />
@@ -166,17 +155,11 @@ const AddForm = ({getData}) => {
                 type="file"
                 onChange={handleLogoChange}
                 ref={hiddenFileInput}
-                style={{ display: "none" }} // Make the file input element invisible
+                style={{ display: 'none' }} // Make the file input element invisible
               />
             </div>
 
-            <Textinput
-              name="ad"
-              label="Firma Adı"
-              placeholder="Firma Adı"
-              register={register}
-              error={errors.ad}
-            />
+            <Textinput name="ad" label="Firma Adı" placeholder="Firma Adı" register={register} error={errors.ad} />
 
             <Textinput
               name="kurulusYili"
@@ -184,7 +167,7 @@ const AddForm = ({getData}) => {
               placeholder="Kuruluş Yılı"
               register={register}
               error={errors.kurulusYili}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
               maxLength="4"
             />
             <Textinput
@@ -193,7 +176,7 @@ const AddForm = ({getData}) => {
               placeholder="Şube Sayısı"
               register={register}
               error={errors.subeSayisi}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
             />
 
             <Textinput
@@ -202,7 +185,7 @@ const AddForm = ({getData}) => {
               placeholder="Gsm"
               register={register}
               error={errors.gsm}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
             />
 
             <Textinput
@@ -210,7 +193,7 @@ const AddForm = ({getData}) => {
               label="Gsm 2 (Opsiyonel)"
               placeholder="Gsm"
               register={register}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
             />
 
             <Textinput
@@ -219,17 +202,11 @@ const AddForm = ({getData}) => {
               placeholder="Telefon"
               register={register}
               error={errors.telefon}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
             />
-            <Textinput
-              name="eposta"
-              label="E-Posta"
-              placeholder="E-Posta"
-              register={register}
-              error={errors.eposta}
-            />
+            <Textinput name="eposta" label="E-Posta" placeholder="E-Posta" register={register} error={errors.eposta} />
 
-            <div className={errors.secilenIl ? "has-error" : ""}>
+            <div className={errors.secilenIl ? 'has-error' : ''}>
               <label htmlFor="secilenIl" className="form-label ">
                 İl
               </label>
@@ -255,7 +232,7 @@ const AddForm = ({getData}) => {
               )}
             </div>
 
-            <div className={errors.secilenIlce ? "has-error" : ""}>
+            <div className={errors.secilenIlce ? 'has-error' : ''}>
               <label htmlFor="secilenIlce" className="form-label ">
                 İlçe
               </label>
@@ -275,8 +252,7 @@ const AddForm = ({getData}) => {
               />
               {errors.secilenIlce && (
                 <div className=" mt-2  text-danger-500 block text-sm">
-                  {errors.secilenIlce?.message ||
-                    errors.secilenIlce?.label.message}
+                  {errors.secilenIlce?.message || errors.secilenIlce?.label.message}
                 </div>
               )}
             </div>
@@ -291,12 +267,7 @@ const AddForm = ({getData}) => {
           />
 
           <div className="ltr:text-right rtl:text-left">
-            <Button
-              type="submit"
-              text="Kaydet"
-              className=" btn-dark"
-              disabled={!isValid}
-            />
+            <Button type="submit" text="Kaydet" className=" btn-dark" disabled={!isValid} />
           </div>
         </form>
       </Modal>

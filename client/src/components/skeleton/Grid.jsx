@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Grid = ({ items, count = 6 }) => {
   // set items length by count
@@ -6,10 +6,7 @@ const Grid = ({ items, count = 6 }) => {
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
       {items.map((item, i) => (
-        <div
-          className="rounded-md bg-white dark:bg-slate-700 h-full p-6 shadow-base"
-          key={i}
-        >
+        <div className="rounded-md bg-white dark:bg-slate-700 h-full p-6 shadow-base" key={i}>
           <div className="animate-pulse">
             <header className="flex justify-between items-center space-x-6">
               <div className="flex-1 flex items-center space-x-4">

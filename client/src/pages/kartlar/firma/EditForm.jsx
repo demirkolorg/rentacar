@@ -1,33 +1,29 @@
-import { useRef, useState } from "react";
-import Select from "react-select";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { toast as message } from "react-toastify";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useRef, useState } from 'react';
+import Select from 'react-select';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { toast as message } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import Modal from "@/components/ui/Modal";
-import Textinput from "@/components/ui/Textinput";
-import Textarea from "@/components/ui/Textarea";
-import Button from "@/components/ui/Button";
-import { firmaUpdate } from "@/api/firma";
+import Modal from '@/components/ui/Modal';
+import Textinput from '@/components/ui/Textinput';
+import Textarea from '@/components/ui/Textarea';
+import Button from '@/components/ui/Button';
+import { firmaUpdate } from '@/api/kartlar/firma';
 import {
   useEditFirmaModalState,
   useFirma,
   useFirmalar,
   setEditFirmaModalState,
-  fetchFirmalar,
-} from "@/store/kartlar/firma/hooks";
+  fetchFirmalar
+} from '@/store/kartlar/firma/hooks';
 
-import Logo from "@/assets/images/logo/logo-c.svg";
-import {
-  ilveilceler,
-  ilSecenekleriData,
-  ilceSecenekleriData,
-} from "@/constant/ililcelistesi";
-import { optionStyle } from "@/helper/optionStyle";
-import { imageUpload } from "@/store/upload/hooks";
+import Logo from '@/assets/images/logo/logo-c.svg';
+import { ilveilceler, ilSecenekleriData, ilceSecenekleriData } from '@/constant/ililcelistesi';
+import { optionStyle } from '@/helper/optionStyle';
+import { imageUpload } from '@/store/upload/hooks';
 
-const EditForm = ({getData}) => {
+const EditForm = ({ getData }) => {
   const firmaData = useFirma();
   const hiddenFileInput = useRef(null);
   const [btnLoading, setBtnLoading] = useState(false);
@@ -39,76 +35,64 @@ const EditForm = ({getData}) => {
   const [secilenIlce, setSecilenIlce] = useState(null);
   const ilSecenekleri = ilSecenekleriData;
   const ilceSecenekleri = ilceSecenekleriData(secilenIl);
-  const secilenIlData = ilSecenekleri.filter(
-    (il) => il.label === firmaData?.adres?.il
-  );
+  const secilenIlData = ilSecenekleri.filter(il => il.label === firmaData?.adres?.il);
 
   const secilenIlceData = () => {
-    const il = ilveilceler.find(
-      (province) => province.text === secilenIlData[0]?.label
-    );
+    const il = ilveilceler.find(province => province.text === secilenIlData[0]?.label);
     const ilDistricts = il
-      ? il.districts.map((district) => ({
+      ? il.districts.map(district => ({
           value: district.value,
-          label: district.text,
+          label: district.text
         }))
       : [];
 
-    const ilceDistrict = ilDistricts.find(
-      (district) => district.label === firmaData?.adres?.ilce
-    );
+    const ilceDistrict = ilDistricts.find(district => district.label === firmaData?.adres?.ilce);
 
-    const ilceResult = ilceDistrict
-      ? [{ value: ilceDistrict.value, label: ilceDistrict.label }]
-      : [];
+    const ilceResult = ilceDistrict ? [{ value: ilceDistrict.value, label: ilceDistrict.label }] : [];
     return ilceResult;
   };
 
-  const handleClick = (event) => {
+  const handleClick = event => {
     hiddenFileInput.current.click();
   };
-  const handleLogoRemoveClick = (event) => {
+  const handleLogoRemoveClick = event => {
     setLogoFile(null);
     setLogoSrc(Logo);
   };
-  const handleChange = (event) => {
+  const handleChange = event => {
     const fileUploaded = event.target.files[0];
     setLogoFile(fileUploaded);
     setLogoSrc(URL.createObjectURL(fileUploaded));
   };
-  const handleIlChange = (selectedOption) => {
+  const handleIlChange = selectedOption => {
     setSecilenIl(selectedOption.label);
     setSecilenIlce(null);
   };
-  const handleIlceChange = (selectedOption) => {
+  const handleIlceChange = selectedOption => {
     setSecilenIlce(selectedOption.label);
   };
 
   const FormValidationSchema = yup
     .object({
-      ad: yup.string().required("Firma adı alanı boş geçilemez."),
+      ad: yup.string().required('Firma adı alanı boş geçilemez.'),
       kurulusYili: yup
         .number()
-        .positive("Firma kuruluş yılı alanı pozitif bir sayı olmalıdır.")
-        .integer("Firma kuruluş yılı alanı tam sayı olmalıdır.")
-        .typeError(
-          "Firma kuruluş yılı alanına yalnızca sayısal değerler girilmelidir."
-        )
-        .required("Firma kuruluş yılı alanı boş geçilemez."),
+        .positive('Firma kuruluş yılı alanı pozitif bir sayı olmalıdır.')
+        .integer('Firma kuruluş yılı alanı tam sayı olmalıdır.')
+        .typeError('Firma kuruluş yılı alanına yalnızca sayısal değerler girilmelidir.')
+        .required('Firma kuruluş yılı alanı boş geçilemez.'),
       subeSayisi: yup
         .number()
-        .positive("Firma çalışan sayısı alanı pozitif bir sayı olmalıdır.")
-        .integer("Firma çalışan sayısı alanı tam sayı olmalıdır.")
-        .typeError(
-          "Firma çalışan sayısı alanına yalnızca sayısal değerler girilmelidir."
-        )
-        .required("Firma çalışan sayısı alanı boş geçilemez."),
-      gsm: yup.string().required("Firma gsm alanı boş geçilemez."),
-      telefon: yup.string().required("Firma telefon alanı boş geçilemez."),
-      eposta: yup.string().required("Firma eposta alanı boş geçilemez."),
+        .positive('Firma çalışan sayısı alanı pozitif bir sayı olmalıdır.')
+        .integer('Firma çalışan sayısı alanı tam sayı olmalıdır.')
+        .typeError('Firma çalışan sayısı alanına yalnızca sayısal değerler girilmelidir.')
+        .required('Firma çalışan sayısı alanı boş geçilemez.'),
+      gsm: yup.string().required('Firma gsm alanı boş geçilemez.'),
+      telefon: yup.string().required('Firma telefon alanı boş geçilemez.'),
+      eposta: yup.string().required('Firma eposta alanı boş geçilemez.'),
       // secilenIl: yup.string().required("İl alanı boş geçilemez."),
       // secilenIlce: yup.string().required("İlçe alanı boş geçilemez."),
-      acikAdres: yup.string().required("Açık adres alanı boş geçilemez."),
+      acikAdres: yup.string().required('Açık adres alanı boş geçilemez.')
     })
     .required();
 
@@ -117,13 +101,13 @@ const EditForm = ({getData}) => {
     control,
     reset,
     formState: { errors, isValid },
-    handleSubmit,
+    handleSubmit
   } = useForm({
     resolver: yupResolver(FormValidationSchema),
-    mode: "all",
+    mode: 'all'
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     setBtnLoading(true);
     try {
       const updateFirma = {
@@ -132,18 +116,18 @@ const EditForm = ({getData}) => {
         adres: {
           il: secilenIl ? secilenIl : secilenIlData[0].label,
           ilce: secilenIlce ? secilenIlce : secilenIlceData()[0].label,
-          acikAdres: data.acikAdres,
+          acikAdres: data.acikAdres
         },
         iletisim: {
           gsm: data.gsm,
           gsmOps: data.gsmOps,
           telefon: data.telefon,
-          eposta: data.eposta,
+          eposta: data.eposta
         },
         ekBilgiler: {
           kurulusYili: data.kurulusYili,
-          subeSayisi: data.subeSayisi,
-        },
+          subeSayisi: data.subeSayisi
+        }
       };
 
       if (logoFile) {
@@ -161,7 +145,7 @@ const EditForm = ({getData}) => {
         setSecilenIlce(null);
       }
     } catch (error) {
-      message.error("Hatalı bir durum var, girilen bilgileri kontrol ediniz.");
+      message.error('Hatalı bir durum var, girilen bilgileri kontrol ediniz.');
     }
     setBtnLoading(false);
   };
@@ -182,12 +166,7 @@ const EditForm = ({getData}) => {
             <div className="h-32 w-32 ml-auto mr-auto rounded-full ring-4 ring-black-800 relative">
               <img
                 onClick={handleClick}
-                src={
-                  !logoSrc
-                    ? "http://localhost:5777/uploads/images/" +
-                      firmaData?.logoUrl
-                    : logoSrc
-                }
+                src={!logoSrc ? 'http://localhost:5777/uploads/images/' + firmaData?.logoUrl : logoSrc}
                 className="w-full h-full object-cover rounded-full"
               />
 
@@ -199,7 +178,7 @@ const EditForm = ({getData}) => {
               <Button
                 onClick={handleLogoRemoveClick}
                 className={`${
-                  logoFile === null && "hidden"
+                  logoFile === null && 'hidden'
                 } p-1.5 ring-2 ring-white absolute right-2 h-8 w-8 text-white   bg-red-600 rounded-full shadow-sm flex flex-col items-center justify-center top-24 left-0`}
                 icon="heroicons:trash"
               />
@@ -207,7 +186,7 @@ const EditForm = ({getData}) => {
                 type="file"
                 onChange={handleChange}
                 ref={hiddenFileInput}
-                style={{ display: "none" }} // Make the file input element invisible
+                style={{ display: 'none' }} // Make the file input element invisible
               />
             </div>
 
@@ -226,7 +205,7 @@ const EditForm = ({getData}) => {
               placeholder="Kuruluş Yılı"
               register={register}
               error={errors.kurulusYili}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
               maxLength="4"
               defaultValue={firmaData?.ekBilgiler?.kurulusYili}
             />
@@ -236,7 +215,7 @@ const EditForm = ({getData}) => {
               placeholder="Şube Sayısı"
               register={register}
               error={errors.subeSayisi}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
               defaultValue={firmaData?.ekBilgiler?.subeSayisi}
             />
 
@@ -246,7 +225,7 @@ const EditForm = ({getData}) => {
               placeholder="Gsm"
               register={register}
               error={errors.gsm}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
               defaultValue={firmaData?.iletisim?.gsm}
             />
 
@@ -255,7 +234,7 @@ const EditForm = ({getData}) => {
               label="Gsm 2 (Opsiyonel)"
               placeholder="Gsm"
               register={register}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
               defaultValue={firmaData?.iletisim?.gsmOps}
             />
 
@@ -265,7 +244,7 @@ const EditForm = ({getData}) => {
               placeholder="Telefon"
               register={register}
               error={errors.telefon}
-              options={{ numeral: true, numeralThousandsGroupStyle: "none" }}
+              options={{ numeral: true, numeralThousandsGroupStyle: 'none' }}
               defaultValue={firmaData?.iletisim?.telefon}
             />
             <Textinput
@@ -277,7 +256,7 @@ const EditForm = ({getData}) => {
               defaultValue={firmaData?.iletisim?.eposta}
             />
 
-            <div className={errors.secilenIl ? "has-error" : ""}>
+            <div className={errors.secilenIl ? 'has-error' : ''}>
               <label htmlFor="il" className="form-label ">
                 İl
               </label>
@@ -304,7 +283,7 @@ const EditForm = ({getData}) => {
               )}
             </div>
 
-            <div className={errors.secilenIlce ? "has-error" : ""}>
+            <div className={errors.secilenIlce ? 'has-error' : ''}>
               <label htmlFor="ilce" className="form-label ">
                 İlçe
               </label>
@@ -325,8 +304,7 @@ const EditForm = ({getData}) => {
               />
               {errors.ilce && (
                 <div className=" mt-2  text-danger-500 block text-sm">
-                  {errors.secilenIlce?.message ||
-                    errors.secilenIlce?.label.message}
+                  {errors.secilenIlce?.message || errors.secilenIlce?.label.message}
                 </div>
               )}
             </div>

@@ -1,87 +1,80 @@
-import React from "react";
-import Chart from "react-apexcharts";
-import { colors } from "@/constant/data";
+import React from 'react';
+import Chart from 'react-apexcharts';
+import { colors } from '@/constant/data';
 
-const OrderChart = ({
-  className = "bg-slate-50 dark:bg-slate-900 rounded pt-3 px-4",
-  barColor = colors.warning,
-}) => {
+const OrderChart = ({ className = 'bg-slate-50 dark:bg-slate-900 rounded pt-3 px-4', barColor = colors.warning }) => {
   const series = [
     {
-      name: "Revenue",
-      data: [40, 70, 45, 100, 75, 40, 80, 90],
-    },
+      name: 'Revenue',
+      data: [40, 70, 45, 100, 75, 40, 80, 90]
+    }
   ];
   const options = {
     chart: {
       toolbar: {
-        show: false,
+        show: false
       },
       offsetX: 0,
       offsetY: 0,
       zoom: {
-        enabled: false,
+        enabled: false
       },
       sparkline: {
-        enabled: true,
-      },
+        enabled: true
+      }
     },
     plotOptions: {
       bar: {
-        columnWidth: "60px",
-        barHeight: "100%",
-      },
+        columnWidth: '60px',
+        barHeight: '100%'
+      }
     },
     legend: {
-      show: false,
+      show: false
     },
 
     dataLabels: {
-      enabled: false,
+      enabled: false
     },
     stroke: {
-      curve: "smooth",
-      width: 2,
+      curve: 'smooth',
+      width: 2
     },
 
     fill: {
-      opacity: 1,
+      opacity: 1
     },
     tooltip: {
       y: {
         formatter: function (val) {
-          return "$ " + val + "k";
-        },
-      },
+          return '$ ' + val + 'k';
+        }
+      }
     },
     yaxis: {
-      show: false,
+      show: false
     },
     xaxis: {
       show: false,
       labels: {
-        show: false,
+        show: false
       },
       axisBorder: {
-        show: false,
+        show: false
       },
       axisTicks: {
-        show: false,
-      },
+        show: false
+      }
     },
     colors: barColor,
     grid: {
-      show: false,
-    },
+      show: false
+    }
   };
   return (
     <div className={className}>
-      <div className="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-        Orders
-      </div>
-      <div className="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
-        123k
-      </div>
+      <div className="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">Orders</div>
+      <div className="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">123k</div>
       <div className="font-normal text-xs text-slate-600 dark:text-slate-300">
         <span className="text-warning-500">-60% </span>
         From last Week

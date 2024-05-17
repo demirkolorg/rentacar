@@ -9,7 +9,8 @@ module.exports = {
     audit_logs: "AUDIT_LOGS",
     firma: "FIRMA",
     sube: "SUBE",
-    pozisyon: "POZİSYON",
+    pozisyon: "POZISYON",
+    firmaPersonel: "FIRMA_PERSONEL",
   },
   types: {
     get: "GET",

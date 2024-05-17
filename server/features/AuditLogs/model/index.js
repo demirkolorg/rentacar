@@ -9,6 +9,7 @@ const schema = mongoose.Schema(
     log: mongoose.SchemaTypes.Mixed,
   },
   {
+    collection: "DenetimLoglari",
     versionKey: false,
     timestamps: {
       createdAt: "created_at",
@@ -20,4 +21,4 @@ const schema = mongoose.Schema(
 class AuditLogs extends mongoose.Model {}
 
 schema.loadClass(AuditLogs);
-module.exports = mongoose.model("audit_logs", schema);
+module.exports = mongoose.model("DenetimLoglari", schema);

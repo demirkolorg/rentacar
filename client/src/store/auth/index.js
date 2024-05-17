@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { initialCurrentUserJWT } from "../../helper/initialCurrentUser";
+import { createSlice } from '@reduxjs/toolkit';
+import { initialCurrentUserJWT } from '../../helper/initialCurrentUser';
 
 const initialToken = () => {
-  const item = window.localStorage.getItem("token");
+  const item = window.localStorage.getItem('token');
   return item ? item : null;
 };
 
 const initialUser = async () => {
-  const token = window.localStorage.getItem("token");
+  const token = window.localStorage.getItem('token');
   if (!token) {
     return null;
   }
@@ -17,7 +17,7 @@ const initialUser = async () => {
 
 const initialState = {
   token: initialToken(),
-  user: null,
+  user: null
 };
 
 const reducers = {
@@ -25,20 +25,20 @@ const reducers = {
     state.user = action.payload;
   },
   _login: (state, action) => {
-    localStorage.setItem("token", action.payload);
+    localStorage.setItem('token', action.payload);
     state.token = action.payload;
   },
-  _logout: (state) => {
-    localStorage.removeItem("token");
+  _logout: state => {
+    localStorage.removeItem('token');
     state.token = null;
     state.user = null;
-  },
+  }
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
-  reducers,
+  reducers
 });
 
 export const { _logout, _login, _setCurrentUser } = authSlice.actions;

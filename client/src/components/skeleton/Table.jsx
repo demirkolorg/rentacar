@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const SkeletionTable = ({ items, count }) => {
   items = items || Array.from({ length: count });

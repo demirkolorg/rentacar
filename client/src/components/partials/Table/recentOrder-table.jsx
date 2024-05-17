@@ -1,89 +1,61 @@
-import React, { useState, useMemo } from "react";
-import { recentOrder } from "@/constant/table-data";
+import React, { useState, useMemo } from 'react';
+import { recentOrder } from '@/constant/table-data';
 
-import Icon from "@/components/ui/Icon";
+import Icon from '@/components/ui/Icon';
 
-import {
-  useTable,
-  useRowSelect,
-  useSortBy,
-  useGlobalFilter,
-  usePagination,
-} from "react-table";
+import { useTable, useRowSelect, useSortBy, useGlobalFilter, usePagination } from 'react-table';
 
 const COLUMNS = [
   {
-    Header: "user",
-    accessor: "user",
-    Cell: (row) => {
+    Header: 'user',
+    accessor: 'user',
+    Cell: row => {
       return (
         <div>
           <div className="flex items-center">
             <div className="flex-none">
               <div className="w-8 h-8 rounded-[100%] ltr:mr-2 rtl:ml-2">
-                <img
-                  src={row?.cell?.value.image}
-                  alt=""
-                  className="w-full h-full rounded-[100%] object-cover"
-                />
+                <img src={row?.cell?.value.image} alt="" className="w-full h-full rounded-[100%] object-cover" />
               </div>
             </div>
             <div className="flex-1 text-start">
-              <h4 className="text-sm font-medium text-slate-600">
-                {row?.cell?.value.name}
-              </h4>
+              <h4 className="text-sm font-medium text-slate-600">{row?.cell?.value.name}</h4>
             </div>
           </div>
         </div>
       );
-    },
+    }
   },
 
   {
-    Header: "invoice",
-    accessor: "invoice",
-    Cell: (row) => {
+    Header: 'invoice',
+    accessor: 'invoice',
+    Cell: row => {
       return <span>{row?.cell?.value}</span>;
-    },
+    }
   },
   {
-    Header: "price",
-    accessor: "price",
-    Cell: (row) => {
+    Header: 'price',
+    accessor: 'price',
+    Cell: row => {
       return <span>{row?.cell?.value}</span>;
-    },
+    }
   },
   {
-    Header: "status",
-    accessor: "status",
-    Cell: (row) => {
+    Header: 'status',
+    accessor: 'status',
+    Cell: row => {
       return (
         <span className="block w-full">
           <span
             className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
-              row?.cell?.value === "paid"
-                ? "text-success-500 bg-success-500"
-                : ""
+              row?.cell?.value === 'paid' ? 'text-success-500 bg-success-500' : ''
             } 
-            ${
-              row?.cell?.value === "due"
-                ? "text-warning-500 bg-warning-500"
-                : ""
-            }
-            ${
-              row?.cell?.value === "cancled"
-                ? "text-danger-500 bg-danger-500"
-                : ""
-            }
-                ${
-                  row?.cell?.value === "pending"
-                    ? "text-danger-500 bg-danger-500"
-                    : ""
-                } ${
-              row?.cell?.value === "shipped"
-                ? "text-primary-500 bg-primary-500"
-                : ""
-            }
+            ${row?.cell?.value === 'due' ? 'text-warning-500 bg-warning-500' : ''}
+            ${row?.cell?.value === 'cancled' ? 'text-danger-500 bg-danger-500' : ''}
+                ${row?.cell?.value === 'pending' ? 'text-danger-500 bg-danger-500' : ''} ${
+                  row?.cell?.value === 'shipped' ? 'text-primary-500 bg-primary-500' : ''
+                }
             
              `}
           >
@@ -91,8 +63,8 @@ const COLUMNS = [
           </span>
         </span>
       );
-    },
-  },
+    }
+  }
 ];
 
 const RecentOrderTable = () => {
@@ -104,8 +76,8 @@ const RecentOrderTable = () => {
       columns,
       data,
       initialState: {
-        pageSize: 6,
-      },
+        pageSize: 6
+      }
     },
 
     useGlobalFilter,
@@ -129,7 +101,7 @@ const RecentOrderTable = () => {
     pageCount,
     setPageSize,
     setGlobalFilter,
-    prepareRow,
+    prepareRow
   } = tableInstance;
 
   const { pageIndex, pageSize } = state;
@@ -145,24 +117,16 @@ const RecentOrderTable = () => {
                 {...getTableProps}
               >
                 <thead className="bg-slate-200 dark:bg-slate-700">
-                  {headerGroups.map((headerGroup) => (
+                  {headerGroups.map(headerGroup => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
+                      {headerGroup.headers.map(column => (
                         <th
-                          {...column.getHeaderProps(
-                            column.getSortByToggleProps()
-                          )}
+                          {...column.getHeaderProps(column.getSortByToggleProps())}
                           scope="col"
                           className=" table-th "
                         >
-                          {column.render("Header")}
-                          <span>
-                            {column.isSorted
-                              ? column.isSortedDesc
-                                ? " 🔽"
-                                : " 🔼"
-                              : ""}
-                          </span>
+                          {column.render('Header')}
+                          <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                         </th>
                       ))}
                     </tr>
@@ -172,14 +136,14 @@ const RecentOrderTable = () => {
                   className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700"
                   {...getTableBodyProps}
                 >
-                  {page.map((row) => {
+                  {page.map(row => {
                     prepareRow(row);
                     return (
                       <tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => {
+                        {row.cells.map(cell => {
                           return (
                             <td {...cell.getCellProps()} className="table-td">
-                              {cell.render("Cell")}
+                              {cell.render('Cell')}
                             </td>
                           );
                         })}
@@ -195,9 +159,7 @@ const RecentOrderTable = () => {
           <ul className="flex items-center  space-x-3  rtl:space-x-reverse">
             <li className="text-xl leading-4 text-slate-900 dark:text-white rtl:rotate-180">
               <button
-                className={` ${
-                  !canPreviousPage ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={` ${!canPreviousPage ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={() => previousPage()}
                 disabled={!canPreviousPage}
               >
@@ -211,8 +173,8 @@ const RecentOrderTable = () => {
                   aria-current="page"
                   className={` ${
                     pageIdx === pageIndex
-                      ? "bg-slate-900 dark:bg-slate-600  dark:text-slate-200 text-white font-medium "
-                      : "bg-slate-100 dark:bg-slate-700 dark:text-slate-400 text-slate-900  font-normal  "
+                      ? 'bg-slate-900 dark:bg-slate-600  dark:text-slate-200 text-white font-medium '
+                      : 'bg-slate-100 dark:bg-slate-700 dark:text-slate-400 text-slate-900  font-normal  '
                   }    text-sm rounded leading-[16px] flex h-6 w-6 items-center justify-center transition-all duration-150`}
                   onClick={() => gotoPage(pageIdx)}
                 >
@@ -222,9 +184,7 @@ const RecentOrderTable = () => {
             ))}
             <li className="text-xl leading-4 text-slate-900 dark:text-white rtl:rotate-180">
               <button
-                className={` ${
-                  !canNextPage ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={` ${!canNextPage ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={() => nextPage()}
                 disabled={!canNextPage}
               >

@@ -1,14 +1,7 @@
-import React, { useState } from "react";
-import Icon from "@/components/ui/Icon";
+import React, { useState } from 'react';
+import Icon from '@/components/ui/Icon';
 
-const Alert = ({
-  children,
-  className = "alert-dark",
-  icon,
-  toggle,
-  dismissible,
-  label,
-}) => {
+const Alert = ({ children, className = 'alert-dark', icon, toggle, dismissible, label }) => {
   const [isShow, setIsShow] = useState(true);
 
   const handleDestroy = () => {
@@ -27,10 +20,7 @@ const Alert = ({
             )}
             <div className="flex-1">{children ? children : label}</div>
             {dismissible && (
-              <div
-                className="flex-0 text-2xl cursor-pointer"
-                onClick={handleDestroy}
-              >
+              <div className="flex-0 text-2xl cursor-pointer" onClick={handleDestroy}>
                 <Icon icon="heroicons-outline:x" />
               </div>
             )}

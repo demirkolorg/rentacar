@@ -1,18 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { pozisyonGetAll } from '@/api/kartlar/pozisyon';
 
-export const _fetchPozisyonlar = createAsyncThunk('firma/fetchPozisyonlar', async (params, { rejectWithValue }) => {
-  try {
-    const response = await pozisyonGetAll(params);
-    if (response.data.success) {
-      return response.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    } else {
-      return rejectWithValue(response.data.message);
+export const _fetchPozisyonlar = createAsyncThunk(
+  'firma/fetchPozisyonlar',
+  async ({ data, params }, { rejectWithValue }) => {
+    try {
+      const response = await pozisyonGetAll(data, params);
+      if (response.data.success) {
+        return response.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      } else {
+        return rejectWithValue(response.data.message);
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    return rejectWithValue(error.message);
   }
-});
+);
 
 const initialState = {
   pozisyonlar: [],

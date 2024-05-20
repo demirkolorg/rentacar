@@ -1,31 +1,76 @@
-import { Form, Input, Button, Radio, message } from 'antd';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-// import { getAntdInputValidation } from "../../utils/helpers";
-import { setLoading } from '@/store/loader/hooks';
-import { setCurrentUser, setLogin } from '../../../store/auth/actions';
-import { login } from '../../../api/auth';
+import React, { useEffect, useState } from 'react';
+import Textinput from '@/components/ui/Textinput';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import Checkbox from '@/components/ui/Checkbox';
+import Button from '@/components/ui/Button';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-export default function LoginForm() {
+import { useLoader, setLoading } from '@/store/loader/hooks';
+import { setCurrentUser, setLogin } from '@/store/auth/actions';
+import { login } from '@/api/auth';
+
+const LoginForm = () => {
   const navigate = useNavigate();
+  const isLoading = useLoader();
+  const [checked, setChecked] = useState(false);
 
-  const onFinish = async values => {
+  const schema = yup
+    .object({
+      email: yup.string().email('Geçersiz email').required('Email gerekli'),
+      password: yup.string().required('Parola gerekli')
+    })
+    .required();
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit
+  } = useForm({
+    resolver: yupResolver(schema),
+    //
+    mode: 'all'
+  });
+
+  const onSubmit = async data => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await login({ ...values });
+      const response = await login(data);
       setLoading(false);
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        toast.success(response.data.message.desc);
         setLogin(response.data.data.token);
         // setCurrentUser(response.data.data.user);
         navigate('/');
       } else {
         throw new Error(response.data.message);
       }
+
+      // const response = await login(data);
+
+      // if (response.error) {
+      //   throw new Error(response.error.message);
+      // }
+
+      // if (response.data.error) {
+      //   throw new Error(response.data.error);
+      // }
+
+      // if (!response.data.token) {
+      //   throw new Error("Invalid credentials");
+      // }
+
+      // dispatch(setUser(data));
+      // navigate("/dashboard");
+      // localStorage.setItem("user", JSON.stringify(response.data.user));
+      // toast.success("Login Successful");
     } catch (error) {
-      message.error(error.message);
-      setLoading(false);
+      toast.error(error.message);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -35,23 +80,38 @@ export default function LoginForm() {
   }, []);
 
   return (
-    <Form layout="vertical" className="dark:bg-dark dark:text-slate-200" onFinish={onFinish}>
-      <Form.Item
-        className="font-white text-white "
-        label="Email"
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
+      <Textinput
         name="email"
-        initialValue={'SUPER_ADMIN@EMAIL.COM.TR'}
-      >
-        <Input className="text-base h-12 rounded-sm" />
-      </Form.Item>
-
-      <Form.Item label="Parola" name="password" initialValue={'SUPER_ADMIN_PASSWORD_172729'}>
-        <Input className="text-base h-12 rounded-sm" type="password" />
-      </Form.Item>
-
-      <Button block className="h-12 my-10 btn-dark text-base" htmlType="submit">
-        Giriş yap
-      </Button>
-    </Form>
+        label="email"
+        defaultValue="SUPER_ADMIN@EMAIL.COM.TR"
+        type="email"
+        register={register}
+        error={errors.email}
+        className="h-[48px]"
+      />
+      <Textinput
+        name="password"
+        label="passwrod"
+        type="password"
+        defaultValue="SUPER_ADMIN_PASSWORD_172729"
+        register={register}
+        error={errors.password}
+        className="h-[48px]"
+      />
+      <div className="flex justify-between">
+      <Checkbox
+          value={checked}
+          onChange={() => setChecked(!checked)}
+          label="Oturumumu açık tut"
+        />
+        <Link to="/forgot-password" className="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium">
+          Parolamı unuttum
+        </Link>
+      </div>
+      <Button type="submit" text="Giriş Yap" className="btn btn-dark block w-full text-center " isLoading={isLoading} />
+    </form>
   );
-}
+};
+
+export default LoginForm;

@@ -2,8 +2,9 @@ import { axiosInstance } from '@/api';
 
 const _prefix = '/pozisyon';
 
-export const pozisyonGetAll = async params => {
-  const response = await axiosInstance('post', `${_prefix}/getAll`, {}, params);
+
+export const pozisyonGetAll = async ( data, params) => {
+  const response = await axiosInstance('post', `${_prefix}/getAll`, data, {params});
   return response;
 };
 export const pozisyonGet = async data => {

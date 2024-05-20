@@ -27,9 +27,8 @@ exports.get = async (req, res) => {
 exports.getAll = async (req, res) => {
   let body = req.body;
   let query = req.query;
-
   try {
-    let pozisyonlar = await Pozisyonlar.find(query);
+    let pozisyonlar = await Pozisyonlar.find({ sube: body.sube }).find(query);
 
     return response.success(
       res,

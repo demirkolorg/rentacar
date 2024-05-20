@@ -67,7 +67,8 @@ const Tablo = () => {
 
   const getData = async () => {
     setLoading(true);
-    await fetchPozisyonlar({ is_active: pDurum });
+
+    await fetchPozisyonlar({ sube: aktifSube?.value }, { is_active: pDurum });
     setLoading(false);
   };
 

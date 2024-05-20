@@ -10,7 +10,9 @@ import {
   _fetchPozisyonlar
 } from '.';
 
-export const fetchPozisyonlar = params => store.dispatch(_fetchPozisyonlar(params));
+export const fetchPozisyonlar = (data, params) => {
+  store.dispatch(_fetchPozisyonlar({data, params}));
+};
 
 export const usePozisyonlar = () => useSelector(state => state.pozisyon.pozisyonlar);
 export const setPozisyonlar = data => store.dispatch(_setPozisyonlar(data));

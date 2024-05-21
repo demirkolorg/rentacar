@@ -89,7 +89,7 @@ const Sube = () => {
   return (
     <Select
       maxMenuHeight={200}
-      className="react-select w-44 font-medium"
+      className="w-44 font-medium "
       classNamePrefix="select"
       placeholder="Şube Seçiniz ..."
       value={selectedSube}
@@ -97,6 +97,7 @@ const Sube = () => {
       styles={optionStyle}
       onChange={subeChange}
       components={{ MenuList }}
+      // menuPlacement="top"
     />
   );
 };

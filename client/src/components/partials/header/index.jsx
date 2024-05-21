@@ -56,7 +56,7 @@ const Header = ({ className = 'custom-class' }) => {
     }
   };
   return (
-    <header className={className + ' ' + navbarTypeClass()}>
+    <header className={ className + ' ' + navbarTypeClass()}>
       <div
         className={` app-header md:px-6 px-[15px]  dark:bg-slate-800 shadow-base dark:shadow-base3 bg-white
         ${borderSwicthClass()}
@@ -80,7 +80,6 @@ const Header = ({ className = 'custom-class' }) => {
                   <Icon icon="heroicons-outline:menu-alt-3" />
                 </div>
               )}
-              <Sube />
               <SearchModal />
             </div>
           )}
@@ -101,11 +100,11 @@ const Header = ({ className = 'custom-class' }) => {
           {/* Nav Tools  */}
           <div className="nav-tools flex items-center lg:space-x-6 space-x-3 rtl:space-x-reverse">
             {/* <Language /> */}
+            <Sube />
             <SwitchDark />
             <MonoChrome />
             {width >= breakpoints.md && <Message />}
             {width >= breakpoints.md && <Notification />}
-            {/* {width >= breakpoints.md && <Sube />} */}
             {width >= breakpoints.md && <Profile />}
             {width <= breakpoints.md && (
               <div className="cursor-pointer text-slate-900 dark:text-white text-2xl" onClick={handleOpenMobileMenu}>

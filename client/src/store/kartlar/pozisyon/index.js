@@ -1,21 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { pozisyonGetAll } from '@/api/kartlar/pozisyon';
 
-export const _fetchPozisyonlar = createAsyncThunk(
-  'firma/fetchPozisyonlar',
-  async ({ data, params }, { rejectWithValue }) => {
-    try {
-      const response = await pozisyonGetAll(data, params);
-      if (response.data.success) {
-        return response.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      } else {
-        return rejectWithValue(response.data.message);
-      }
-    } catch (error) {
-      return rejectWithValue(error.message);
+export const _fetchPozisyonlar = createAsyncThunk('firma/fetchPozisyonlar', async ({ data, params }, { rejectWithValue }) => {
+  try {
+    const response = await pozisyonGetAll(data, params);
+    if (response.data.success) {
+      return response.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } else {
+      return rejectWithValue(response.data.message);
     }
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 const initialState = {
   pozisyonlar: [],
@@ -32,6 +29,7 @@ const reducers = {
   _setAddPozisyonModalState: (state, action) => {
     state.addPozisyonModalState = action.payload;
   },
+
   _setEditPozisyonModalState: (state, action) => {
     state.editPozisyonModalState = action.payload;
   },
@@ -71,12 +69,5 @@ const slice = createSlice({
   extraReducers
 });
 
-export const {
-  _setAddPozisyonModalState,
-  _setEditPozisyonModalState,
-  _setDeletePozisyonModalState,
-  _setStatusPozisyonModalState,
-  _setPozisyonlar,
-  _setPozisyon
-} = slice.actions;
+export const { _setAddPozisyonModalState, _setEditPozisyonModalState, _setDeletePozisyonModalState, _setStatusPozisyonModalState, _setPozisyonlar, _setPozisyon } = slice.actions;
 export default slice.reducer;

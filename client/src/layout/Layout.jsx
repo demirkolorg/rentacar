@@ -103,7 +103,7 @@ const Layout = () => {
         {/* <Settings /> */}
         <div className={`content-wrapper transition-all duration-150 ${width > 1280 ? switchHeaderClass() : ''}`}>
           {/* md:min-h-screen will h-full*/}
-          <div className="page-content   page-min-height  ">
+          <div className="p-5">
             <div className={contentWidth === 'boxed' ? 'container mx-auto' : 'container-fluid'}>
               <Suspense fallback={<Loading />}>
                 <motion.div

@@ -1,18 +1,8 @@
 import store from '../../index';
 import { useSelector } from 'react-redux';
-import {
-  _setAddPozisyonModalState,
-  _setEditPozisyonModalState,
-  _setDeletePozisyonModalState,
-  _setStatusPozisyonModalState,
-  _setPozisyonlar,
-  _setPozisyon,
-  _fetchPozisyonlar
-} from '.';
+import { _setAddPozisyonModalState, _setEditPozisyonModalState, _setDeletePozisyonModalState, _setStatusPozisyonModalState, _setPozisyonlar, _setPozisyon, _fetchPozisyonlar } from '.';
 
-export const fetchPozisyonlar = (data, params) => {
-  store.dispatch(_fetchPozisyonlar({data, params}));
-};
+export const fetchPozisyonlar = (data, params) => store.dispatch(_fetchPozisyonlar({ data, params }));
 
 export const usePozisyonlar = () => useSelector(state => state.pozisyon.pozisyonlar);
 export const setPozisyonlar = data => store.dispatch(_setPozisyonlar(data));

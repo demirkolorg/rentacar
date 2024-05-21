@@ -30,9 +30,9 @@ const SidebarLogo = ({ menuHover }) => {
         <div className="flex items-center  space-x-2">
           <div className="logo-icon">
             {!isDark && !isSemiDark ? (
-              <img src={MobileLogo} className="h-8 w-8 m-0 p-0 " alt="" />
+              <img src={MobileLogo} className="h-10 w-10 m-0 p-0 " alt="" />
             ) : (
-              <img src={MobileLogoWhite} alt="" />
+              <img src={MobileLogoWhite} className="h-10 w-10 m-0 p-0 "  alt="" />
             )}
           </div>
 

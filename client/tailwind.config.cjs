@@ -27,7 +27,7 @@ module.exports = {
     },
     extend: {
       height: {
-        'screen-147': 'calc(100vh - 148px)',
+        'screen-147': 'calc(100vh - 127px)',
         'screen-400': 'calc(100vh - 400px)'
       },
       colors: {

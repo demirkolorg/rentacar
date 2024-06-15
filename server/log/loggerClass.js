@@ -9,47 +9,36 @@ class LoggerClass {
     return instance;
   }
 
-  #createLogObject(email, location, proc_type, log) {
-    return { email, location, proc_type, log };
+  #createLogObject(user_id, location, proc_type, log) {
+    return { user_id, location, proc_type, log };
   }
 
-  info(email, location, proc_type, log) {
-    console.log(
-      "email",
-      email,
-      "location",
-      location,
-      "proc_type",
-      proc_type,
-      " log",
-      log
-    );
-    
-    let logs = this.#createLogObject(email, location, proc_type, log);
+  info(user_id, location, proc_type, log) {
+    let logs = this.#createLogObject(user_id, location, proc_type, log);
     logger.info(logs);
   }
-  warn(email, location, proc_type, log) {
-    let logs = this.#createLogObject(email, location, proc_type, log);
+  warn(user_id, location, proc_type, log) {
+    let logs = this.#createLogObject(user_id, location, proc_type, log);
     logger.warn(logs);
   }
-  error(email, location, proc_type, log) {
-    let logs = this.#createLogObject(email, location, proc_type, log);
+  error(user_id, location, proc_type, log) {
+    let logs = this.#createLogObject(user_id, location, proc_type, log);
     logger.error(logs);
   }
-  verbose(email, location, proc_type, log) {
-    let logs = this.#createLogObject(email, location, proc_type, log);
+  verbose(user_id, location, proc_type, log) {
+    let logs = this.#createLogObject(user_id, location, proc_type, log);
     logger.verbose(logs);
   }
-  silly(email, location, proc_type, log) {
-    let logs = this.#createLogObject(email, location, proc_type, log);
+  silly(user_id, location, proc_type, log) {
+    let logs = this.#createLogObject(user_id, location, proc_type, log);
     logger.silly(logs);
   }
-  http(email, location, proc_type, log) {
-    let logs = this.#createLogObject(email, location, proc_type, log);
+  http(user_id, location, proc_type, log) {
+    let logs = this.#createLogObject(user_id, location, proc_type, log);
     logger.http(logs);
   }
-  debug(email, location, proc_type, log) {
-    let logs = this.#createLogObject(email, location, proc_type, log);
+  debug(user_id, location, proc_type, log) {
+    let logs = this.#createLogObject(user_id, location, proc_type, log);
     logger.debug(logs);
   }
 }

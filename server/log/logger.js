@@ -7,8 +7,8 @@ const formats = format.combine(
   format.splat(),
   format.printf(
     (info) =>
-      `${info.timestamp} ${info.level.toUpperCase()} [email:${
-        info.message.email
+      `${info.timestamp} ${info.level.toUpperCase()} [user_id:${
+        info.message.user_id
       }] [location:${info.message.location}] [procType:${
         info.message.proc_type
       }] [log:${info.message.log}]`
@@ -19,4 +19,5 @@ const logger = createLogger({
   level: LOG_LEVELS,
   transports: [new transports.Console({ format: formats })],
 });
+
 module.exports = logger;

@@ -8,10 +8,13 @@ import { eventBus } from '@/api/eventBus';
 
 const Login = lazy(() => import('../pages/auth/login'));
 const Dashboard = lazy(() => import('../pages/dashboard'));
-const Crm = lazy(() => import('../pages/crm'));
-const Banking = lazy(() => import('../pages/banking'));
 
-//KARTLAR
+//! - SUBEYONETIMI
+const FirmaYonetimi = lazy(() => import('../pages/firmaYonetimi'));
+const SubeYonetimi = lazy(() => import('../pages/subeYonetimi'));
+const GrifinYonetimi = lazy(() => import('../pages/grifinYonetimi'));
+
+//? - KARTLAR -----------------------------------------------------------
 const Kartlar = lazy(() => import('../pages/kartlar'));
 const Firma = lazy(() => import('../pages/kartlar/firma'));
 const FirmaProfile = lazy(() => import('../pages/kartlar/firma/Profile'));
@@ -35,16 +38,31 @@ const MainRoutes = () => {
   return (
     <Routes>
       <Route path="/*" element={<Layout />}>
-        <Route path="kartlar" element={<Kartlar />} />
-        <Route path="firma" element={<Firma />} />
-        <Route path="firma/:id" element={<FirmaProfile />} />
-        <Route path="sube" element={<Sube />} />
-        <Route path="sube/:id" element={<SubeProfile />} />
-        <Route path="pozisyon" element={<Pozisyon />} />
+        //? - DASHBOARD -------------------------------------------------
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="crm" element={<Crm />} />
-        <Route path="banking" element={<Banking />} />
         <Route path="*" element={<Navigate to="/" />} />
+        //! - GRIFINYONETIMI ---------------------------------------------
+        <Route path="grifinyonetimi" element={<GrifinYonetimi />} />
+        <Route path="firma" element={<Firma />} />
+        <Route path="sube" element={<Sube />} />
+        <Route path="kullanici" element={<Firma />} />
+        <Route path="pozisyon" element={<Pozisyon />} />
+        //? - FIRMAYONETIMI ----------------------------------------------
+        <Route path="firmayonetimi" element={<FirmaYonetimi />} />
+        <Route path="sube" element={<Sube />} />
+        <Route path="kullanici" element={<Firma />} />
+        <Route path="pozisyon" element={<Pozisyon />} />
+        //? - SUBEYONETIMI -----------------------------------------------
+        <Route path="subeyonetimi" element={<SubeYonetimi />} />
+        <Route path="kullanici" element={<Firma />} />
+        <Route path="pozisyon" element={<Pozisyon />} />
+        //? - KARTLAR ----------------------------------------------------
+        <Route path="kartlar" element={<Kartlar />} />
+        <Route path="pozisyon" element={<Pozisyon />} />
+        //* - DETAYSAYFALARI ---------------------------------------------
+        <Route path="firma/:id" element={<FirmaProfile />} />
+        <Route path="sube/:id" element={<SubeProfile />} />
+        <Route path="kullanici/:id" element={<FirmaProfile />} />
       </Route>
 
       <Route

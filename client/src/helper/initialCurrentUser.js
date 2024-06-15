@@ -1,4 +1,4 @@
-import { getUser } from '../api/user';
+import { XgetUser } from '@/api/user';
 
 async function initialCurrentUserJWT(token) {
   function parseJwt(token) {
@@ -25,7 +25,7 @@ async function initialCurrentUserJWT(token) {
     return null;
   }
   const data = { id: decodedToken.id };
-  const response = await getUser(data);
+  const response = await XgetUser(data);
 
   if (!response.data.success) {
     return null;

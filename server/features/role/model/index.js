@@ -24,3 +24,4 @@ const schema = mongoose.Schema(
 
 schema.add(baseSube);
 module.exports = mongoose.model("Roller", schema);
+module.exports.pointname = 'Roller';

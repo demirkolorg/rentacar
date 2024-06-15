@@ -18,7 +18,7 @@ const DeleteForm = ({ getData }) => {
     try {
       const response = await subeDelete({ _id: subeData._id });
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
 
         getData();
         setDeleteSubeModalState(false);

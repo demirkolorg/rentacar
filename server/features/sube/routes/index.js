@@ -1,51 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const auth = require('@middlewares/auth');
+const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@lib/defineRoute');
+const controller = require('../controller');
+const role = require('../key');
 
-const controller = require("../controller");
-const auth = require("../../../middlewares/auth")();
-
-
-router.use(auth.initialize());
-router.use(auth.auth()); 
-
-
-router.post(
-  "/get",
-  auth.cr("sube_full", "sube_full_list", "sube_get"),
-  controller.get
-);
-router.post(
-  "/getIds",
-  auth.cr("sube_full", "sube_full_list", "sube_getIds"),
-  controller.getIds
-);
-router.post(
-  "/getAll",
-  auth.cr("sube_full", "sube_full_list", "sube_getall"),
-  controller.getAll
-);
-
-router.post(
-  "/add",
-  auth.cr("sube_full", "sube_full_add", "sube_add"),
-  controller.add
-);
-router.post(
-  "/update",
-  auth.cr("sube_full", "sube_full_update", "sube_update"),
-  controller.update
-);
-router.post(
-  "/delete",
-  auth.cr("sube_full", "sube_full_delete", "sube_delete"),
-  controller.delete
-);
-
-
-router.post(
-  "/durumDegistir",
-  auth.cr("sube_full", "sube_full_update", "sube_durumDegistir"),
-  controller.durumDegistir
-);
+TokenRoleRoute(router, auth, 'post', '/get', controller.get, role.get);
+TokenRoleRoute(router, auth, 'post', '/getIds', controller.getIds, role.list);
+TokenRoleRoute(router, auth, 'post', '/getAll', controller.getAll, role.list);
+TokenRoleRoute(router, auth, 'post', '/add', controller.add, role.add);
+TokenRoleRoute(router, auth, 'post', '/update', controller.update, role.update);
+TokenRoleRoute(router, auth, 'post', '/delete', controller.delete, role.hardDelete);
+TokenRoleRoute(router, auth, 'post', '/durumDegistir', controller.durumDegistir, role.update);
 
 module.exports = router;

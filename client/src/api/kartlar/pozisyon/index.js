@@ -19,11 +19,23 @@ export const pozisyonUpdate = async data => {
   return response;
 };
 
-export const pozisyonDelete = async data => {
-  const response = await axiosInstance('post', `${_prefix}/delete`, data);
+export const pozisyonHardDelete = async data => {
+  const response = await axiosInstance('post', `${_prefix}/hardDelete`, data);
   return response;
 };
-export const pozisyonDurumDegistir = async data => {
-  const response = await axiosInstance('post', `${_prefix}/durumDegistir`, data);
+export const pozisyonSoftDelete = async data => {
+  const response = await axiosInstance('post', `${_prefix}/softDelete`, data);
+  return response;
+};
+export const pozisyonActive = async data => {
+  const response = await axiosInstance('post', `${_prefix}/active`, data);
+  return response;
+};
+export const pozisyonPassive = async data => {
+  const response = await axiosInstance('post', `${_prefix}/passive`, data);
+  return response;
+};
+export const pozisyonRestore = async data => {
+  const response = await axiosInstance('post', `${_prefix}/restore`, data);
   return response;
 };

@@ -21,7 +21,7 @@ const DeleteForm = ({ getData }) => {
     try {
       const response = await firmaDelete({ _id: firmaData._id });
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
 
         getData();
         setDeleteFirmaModalState(false);

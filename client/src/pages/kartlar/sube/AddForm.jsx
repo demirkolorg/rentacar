@@ -113,7 +113,7 @@ const AddForm = ({ getData }) => {
 
       const response = await subeAdd(newSube);
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
         setAddSubeModalState(false);
         getData();
         reset();

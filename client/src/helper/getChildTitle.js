@@ -10,6 +10,6 @@ function getChildTitle(locationName) {
       }
     }
   }
-  return null; // Eşleşme bulunamazsa null döner
+  return "Grifin"; // Eşleşme bulunamazsa null döner
 }
 export { getChildTitle };

@@ -1,112 +1,54 @@
+const { add, update, get, getAll, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
+const response = require('@lib/response');
+const { messages } = require('../messages');
 const Pozisyonlar = require('../model');
-const response = require('../../../lib/response');
-const pt = require('../../../lib/pointtype');
-const messages = require('../messages');
+const { pointname } = require('../model');
 
-exports.get = async (req, res) => {
-  let body = req.body;
-  try {
-    let pozisyon = await Pozisyonlar.findOne({ _id: body._id });
-    if (!pozisyon) {
-      return response.error(res, messages.pozisyonYok);
-    }
-
-    return response.success(res, pozisyon, req.user?.email, pt.points.pozisyon, pt.types.get, messages.basarili, messages.pozisyon_get_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
-};
-exports.getAll = async (req, res) => {
-  let body = req.body;
-  let query = req.query;
-  try {
-    let pozisyonlar = await Pozisyonlar.find({ sube: body.sube }).find(query);
-
-    return response.success(res, pozisyonlar, req.user?.email, pt.points.pozisyon, pt.types.get, messages.basarili, messages.pozisyon_getall_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
-};
+const props = (req, res) => ({ Model: Pozisyonlar, req, res, messages, pointname });
 
 exports.add = async (req, res) => {
   let body = req.body;
-
-  try {
-    let createdPozisyon = await Pozisyonlar.create({
-      ad: body.ad,
-      created_by: req?.user?.id,
-      sube: body.sube
-    });
-
-    return response.success(res, createdPozisyon, req?.user?.email, pt.points.pozisyon, pt.types.create, messages.basarili, messages.pozisyon_create_basarili);
-  } catch (err) {
-    if (err.code === 11000) {
-      return response.error(res, 'Bu pozisyon adı zaten kullanılmakta.', 'Veri Hatası', 409);
-    }
-
-    return response.error(res);
-  }
+  let data = {
+    ad: body.ad,
+    created_by: req?.user?.id,
+    sube: body.sube
+  };
+  return add(data, props(req, res));
 };
 exports.update = async (req, res) => {
   let body = req.body;
-  try {
-    let pozisyon = await Pozisyonlar.findOne({ _id: body._id });
-
-    if (!pozisyon) {
-      return response.error(res, messages.pozisyonYok);
-    }
-
-    let updates = {};
-    if (body.ad) updates.ad = body.ad;
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-
-    await Pozisyonlar.updateOne({ _id: body._id }, updates);
-
-    pozisyon = await Pozisyonlar.findOne({ _id: body._id });
-
-    return response.success(res, pozisyon, req.user?.email, pt.points.pozisyon, pt.types.update, messages.basarili, messages.pozisyon_update_basarili);
-  } catch (err) {
-    if (err.code === 11000) {
-      return response.error(res, 'Bu pozisyon adı zaten kullanılmakta.', 'Veri Hatası', 409);
-    }
-
-    return response.error(res);
-  }
+  let data = {};
+  if (body.ad) data.ad = body.ad;
+  if (typeof body.is_active === 'boolean') data.is_active = body.is_active;
+  return update(data, props(req, res));
 };
-exports.delete = async (req, res) => {
-  let body = req.body;
-  try {
-    let pozisyon = await Pozisyonlar.findOne({ _id: body._id });
 
-    if (!pozisyon) {
-      return response.error(res, messages.pozisyonYok);
-    }
-
-    await Pozisyonlar.deleteOne({ _id: body._id });
-
-    return response.success(res, {}, req.user?.email, pt.points.pozisyon, pt.types.delete, messages.basarili, messages.pozisyon_delete_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+exports.get = async (req, res) => {
+  return get(props(req, res));
 };
-exports.durumDegistir = async (req, res) => {
-  let body = req.body;
-  try {
-    let pozisyon = await Pozisyonlar.findOne({ _id: body._id });
+exports.getAll = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return getAll(filter, props(req, res));
+};
 
-    if (!pozisyon) {
-      return response.error(res, messages.pozisyonYok);
-    }
-
-    let updates = {};
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-
-    await Pozisyonlar.updateOne({ _id: body._id }, updates);
-
-    pozisyon = await Pozisyonlar.findOne({ _id: body._id });
-
-    return response.success(res, pozisyon, req.user?.email, pt.points.pozisyon, pt.types.update, messages.basarili, messages.pozisyon_durum_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+exports.active = async (req, res) => {
+  return active(props(req, res));
+};
+exports.passive = async (req, res) => {
+  return passive(props(req, res));
+};
+exports.archive = async (req, res) => {
+  return archive(props(req, res));
+};
+exports.unarchive = async (req, res) => {
+  return unarchive(props(req, res));
+};
+exports.softDelete = async (req, res) => {
+  return softDelete(props(req, res));
+};
+exports.restore = async (req, res) => {
+  return restore(props(req, res));
+};
+exports.hardDelete = async (req, res) => {
+  return hardDelete(props(req, res));
 };

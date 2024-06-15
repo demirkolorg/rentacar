@@ -106,7 +106,7 @@ const AddForm = ({ getData }) => {
       const response = await firmaAdd(newFirma);
 
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
         setAddFirmaModalState(false);
         getData();
         reset();

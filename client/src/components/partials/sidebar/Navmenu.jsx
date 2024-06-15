@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Collapse } from 'react-collapse';
-import Icon from '@/components/ui/Icon';
 import { useDispatch } from 'react-redux';
+import { Collapse } from 'react-collapse';
+
+import Icon from '@/components/ui/Icon';
 import projectConfig from '@/configs/projectConfig';
 import { getChildTitle } from '@/helper/getChildTitle';
 

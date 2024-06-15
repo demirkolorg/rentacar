@@ -1,8 +1,9 @@
-module.exports = {
-  basarili: "İşlem Başarılı",
-  dogrulamaHatasiBaslik: "Doğrulama Hatası",
-  dosyaYok: "Dosya Bulunamadı",
-  image_basarili: "Resim yükleme İşlemi Başarılı",
-  document_basarili: "Döküman yükleme İşlemi Başarılı",
-  other_basarili: "Dosya yükleme İşlemi Başarılı",
+const baseMessages = require('@base/messages');
+
+const name = 'Dosya';
+
+const messages = {
+  ...baseMessages(name)
 };
+
+module.exports = messages;

@@ -1,46 +1,25 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const auth = require('@middlewares/auth');
+const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@lib/defineRoute');
+const controller = require('../controller');
+const role = require('../key');
 
-const controller = require("../controller");
-const auth = require("../../../middlewares/auth")();
+TokenRoleRoute(router, auth, 'post', '/add', controller.add, role.add);
+TokenRoleRoute(router, auth, 'post', '/update', controller.update, role.update);
 
+//HAZIR
+TokenRoleRoute(router, auth, 'post', '/get', controller.get, role.get);
+TokenRoleRoute(router, auth, 'post', '/getAll', controller.getAll, role.list);
+TokenRoleRoute(router, auth, 'post', '/active', controller.active, role.active);
+TokenRoleRoute(router, auth, 'post', '/passive', controller.passive, role.passive);
+TokenRoleRoute(router, auth, 'post', '/archive', controller.archive, role.archive);
+TokenRoleRoute(router, auth, 'post', '/unarchive', controller.unarchive, role.unarchive);
+TokenRoleRoute(router, auth, 'post', '/softDelete', controller.softDelete, role.softDelete);
+TokenRoleRoute(router, auth, 'post', '/restore', controller.restore, role.restore);
+TokenRoleRoute(router, auth, 'post', '/hardDelete', controller.hardDelete, role.hardDelete);
 
-router.use(auth.initialize());
-router.use(auth.auth()); 
-
-
-router.post(
-  "/get",
-  auth.cr("pozisyon_full", "pozisyon_full_list", "pozisyon_get"),
-  controller.get
-);
-router.post(
-  "/getAll",
-  auth.cr("pozisyon_full", "pozisyon_full_list", "pozisyon_getall"),
-  controller.getAll
-);
-
-router.post(
-  "/add",
-  auth.cr("pozisyon_full", "pozisyon_full_add", "pozisyon_add"),
-  controller.add
-);
-router.post(
-  "/update",
-  auth.cr("pozisyon_full", "pozisyon_full_update", "pozisyon_update"),
-  controller.update
-);
-router.post(
-  "/delete",
-  auth.cr("pozisyon_full", "pozisyon_full_delete", "pozisyon_delete"),
-  controller.delete
-);
-
-
-router.post(
-  "/durumDegistir",
-  auth.cr("pozisyon_full", "pozisyon_full_update", "pozisyon_durumDegistir"),
-  controller.durumDegistir
-);
+// TokenRoute(router, auth, 'post', '/getAll', controller.getAll);
+// PublicRoute(router, 'post', '/getAll', controller.getAll);
 
 module.exports = router;

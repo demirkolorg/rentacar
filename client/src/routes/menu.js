@@ -1,44 +1,74 @@
+import projectConfig from '@/configs/projectConfig';
+
 export const leftMenu = [
   {
     isHeadr: true,
     title: 'menu'
   },
   {
-    title: 'Kartlar',
-    icon: 'mdi:cards',
-    link: 'kartlar',
+    title: 'Grifin Yönetimi',
+    icon: 'game-icons:griffin-symbol',
+    link: 'grifinyonetimi',
+    access: projectConfig.menuAccess.Grifin,
     child: [
       {
-        childtitle: 'Firma Kartları',
+        childtitle: 'Firma Yönetimi',
         childlink: 'firma',
         childicon: 'mdi:company'
       },
       {
-        childtitle: 'Şube Kartları',
+        childtitle: 'Şube Yönetimi',
         childlink: 'sube',
         childicon: 'mdi:office-chair'
       },
       {
-        childtitle: 'Pozisyon Kartları',
-        childlink: 'pozisyon',
-        childicon: 'gis:position-man'
-      }
+        childtitle: 'Kullanıcı Yönetimi',
+        childlink: 'kullanici',
+        childicon: 'clarity:users-solid'
+      },
     ]
   },
   {
-    title: 'Dashboard',
-    icon: 'heroicons-outline:home',
-    link: 'dashboard',
+    title: 'Firma Yönetimi',
+    icon: 'mingcute:building-6-fill',
+    link: 'firmayonetimi',
+    access: projectConfig.menuAccess.Firma,
     child: [
       {
-        childtitle: 'CRM Dashboard',
-        childlink: 'crm',
-        childicon: 'ri:customer-service-2-fill'
+        childtitle: 'Şube Yönetimi',
+        childlink: 'sube',
+        childicon: 'mdi:office-chair'
       },
       {
-        childtitle: 'Banking Dashboard',
-        childlink: 'banking',
-        childicon: 'heroicons:wrench-screwdriver'
+        childtitle: 'Kullanıcı Yönetimi',
+        childlink: 'kullanici',
+        childicon: 'clarity:users-solid'
+      },
+    ]
+  },
+  {
+    title: 'Şube Yönetimi',
+    icon: 'heroicons-solid:office-building',
+    link: 'subeyonetimi',
+    access: projectConfig.menuAccess.Sube,
+    child: [
+      {
+        childtitle: 'Kullanıcı Yönetimi',
+        childlink: 'kullanici',
+        childicon: 'clarity:users-solid'
+      },
+    ]
+  },
+  {
+    title: 'Kartlar',
+    icon: 'mdi:cards',
+    link: 'kartlar',
+    access: projectConfig.menuAccess.All,
+    child: [
+      {
+        childtitle: 'Pozisyon Kartları',
+        childlink: 'pozisyon',
+        childicon: 'gis:position-man'
       }
     ]
   }

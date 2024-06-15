@@ -1,15 +1,7 @@
-const Logger = require("./loggerClass");
-const AuditLogs = require("./AuditLogs");
+const AuditLogs = require('./AuditLogs');
 
-function logger(email, location, proc_type, data) {
-  AuditLogs.info({
-    email: email,
-    location: location,
-    proc_type: proc_type,
-    log: { ...data },
-  });
-
-//   Logger.info(email, location, proc_type, data);
+function logger(user_id, location, proc_type, data) {
+  AuditLogs.info({ user_id: user_id, location: location, proc_type: proc_type, log: { ...data } });
 }
 
 module.exports = { logger };

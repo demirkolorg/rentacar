@@ -1,6 +1,9 @@
-module.exports = {
-  basarili: "İşlem Başarılı",
-  dogrulamaHatasiBaslik:"Doğrulama Hatası",
-  hatali: "İşlem Hatalı",
-  create_basarili: "Rol ekleme işlemi başarılı",
+const baseMessages = require('@base/messages');
+
+const name = 'Rol';
+
+const messages = {
+  ...baseMessages(name),
 };
+
+module.exports = messages;

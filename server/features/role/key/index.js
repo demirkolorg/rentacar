@@ -1,5 +1,9 @@
-module.exports = [
-  { key: "role_add", name: "Role Add", group: "ROLES", description: "Role Add" },
-  { key: "role_update", name: "Role Update", group: "ROLES", description: "Role Update" },
-  { key: "role_delete", name: "Role Delete", group: "ROLES", description: "Role Delete" },
-];
+const key = 'role';
+const name = 'Role';
+const group = 'ROLE';
+const description = 'Role';
+const baseKeys = require('@base/key');
+
+const keys = { ...baseKeys(key, name, group, description) };
+
+module.exports = keys;

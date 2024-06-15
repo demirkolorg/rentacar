@@ -1,110 +1,84 @@
-//dış
-const pasport = require("passport");
-const { ExtractJwt, Strategy } = require("passport-jwt");
+const jwt = require('jsonwebtoken');
+const Enum = require('@config/enum.config');
+const config = require('@config/env.config');
+const Users = require('@features/user/model');
+const Roles = require('@features/role/model');
+const response = require('@lib/response');
+const message = require('@lib/message');
 
-//iç
-const Enum = require("../config/enum.config");
-const config = require("../config/env.config");
-const Users = require("../features/user/model");
-const Roles = require("../features/role/model");
-const response = require("../lib/response");
-const message = require("../lib/message");
+module.exports = {
+  verifyToken: (req, res, next) => {
+    const token = req.header('Authorization');
+    if (!token) {
+      return res.status(401).json({ message: 'Erişim reddedildi' });
+    }
+    if (token.split('!a+s%y&a?')[1] === Enum.SYSTEM_REQUEST_TOKEN) {
+     return next();
+    }
+    try {
+      const decoded = jwt.verify(token.replace('Bearer ', ''), config.JWT.SECRET);
+      req.user = decoded;
 
-module.exports = function () {
-  let strategy = new Strategy(
-    {
-      secretOrKey: config.JWT.SECRET,
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    },
-    async (payload, done) => {
+      next();
+    } catch (error) {
+      res.status(400).json({ message: 'Geçersiz token' });
+    }
+  },
+
+  isAdmin: async (req, res, next) => {
+    try {
+      const user = await Users.findById(req.user.id);
+      if (user.role !== 'admin') {
+        return res.status(403).json({ message: 'Yetkisiz erişim' });
+      }
+      next();
+    } catch (error) {
+      res.status(500).json({ message: 'Yetkilendirme hatası' });
+    }
+  },
+
+  hasRole: (...expectedRoles) => {
+    return async (req, res, next) => {
       try {
-        if (Date.now() / 1000 >= payload.exp) {
-          return done(new Error("Token expired"), null);
+        const token = req.header('Authorization');
+
+        //istek sistem tarafından atıldı
+        if (token.split('!a+s%y&a?')[1] === Enum.SYSTEM_REQUEST_TOKEN) {
+          return next();
         }
+        const user = await Users.findById(req.user.id);
+        const userRoles = await Roles.find({ _id: user.roller });
+        const rolsSet = new Set();
+        const permissionsSet = new Set();
 
-        let user = await Users.findOne({ _id: payload.id });
-        if (!user) {
-          done(new Error(message.usernotfound), null);
-        }
-
-        let userRoles = await Roles.find({ _id: user.roller });
-        let rolsSet = new Set();
-        let permissionsSet = new Set();
-
-        userRoles.forEach((role) => {
+        userRoles.forEach(role => {
           rolsSet.add(role.name);
-          role.permissions.forEach((permission) => {
+          role.permissions.forEach(permission => {
             permissionsSet.add(permission);
           });
         });
-        let UserRoles = [...rolsSet];
-        let UserPermissions = [...permissionsSet];
+        const UserRoles = [...rolsSet];
+        const UserPermissions = [...permissionsSet];
 
-        done(null, {
-          id: user._id,
-          roles: UserRoles,
-          permissions: UserPermissions,
-          email: user.email,
-          ad: user.ad,
-          soyad: user.soyad,
-          exp: Math.floor(Date.now() / 1000) + 86400, // Set token to expire in 1 day
-        });
-      } catch (error) {
-        done(error, null);
-      }
-    }
-  );
-
-  pasport.use(strategy);
-
-  return {
-    initialize() {
-      return pasport.initialize();
-    },
-    auth() {
-      return pasport.authenticate("jwt", { session: false });
-    },
-    cr: (...expectedRoles) => {
-      return (req, res, next) => {
-        if (req.user.permissions.includes(Enum.ROLE_SUPER_ADMIN_PERMISSION)) {
+        //isteği atan süperadmin
+        if (UserPermissions.includes(Enum.ROLE_SUPER_ADMIN_PERMISSION)) {
           return next();
         }
 
-        const hasRequiredRole = expectedRoles.some((role) =>
-          req.user.permissions.includes(role)
-        );
+        // genel kullanıcı rol kontrolü
+        const hasRequiredRole = expectedRoles.some(roleObj => {
+          const roleKey = roleObj.key;
+          return UserPermissions.includes(roleKey) || UserPermissions.includes(roleKey.split('_')[0] + '_full');
+        });
 
         if (!hasRequiredRole) {
-          return response.error(
-            res,
-            message.UNAUTHORIZED_ACCESS_DESC,
-            message.UNAUTHORIZED_ACCESS_TITLE
-          );
+          return response.error(res, message.UNAUTHORIZED_ACCESS_DESC, message.UNAUTHORIZED_ACCESS_TITLE);
         }
 
-        return next(); // Auth success
-      };
-    },
-    verifyToken (req, res, next){
-      const token = req.header('Authorization');
-      if (!token) return res.status(401).json({ message: 'Erişim reddedildi' });
-    
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
+        return next();
       } catch (error) {
-        res.status(400).json({ message: 'Geçersiz token' });
+        res.status(500).json({ message: 'Rol Yetkilendirme hatası' });
       }
-    },
-    async isAdmin (req, res, next){
-      try {
-        const user = await Users.findById(req.user.id);
-        if (user.role !== 'admin') return res.status(403).json({ message: 'Yetkisiz erişim' });
-        next();
-      } catch (error) {
-        res.status(500).json({ message: 'Yetkilendirme hatası' });
-      }
-    }
-  };
+    };
+  }
 };

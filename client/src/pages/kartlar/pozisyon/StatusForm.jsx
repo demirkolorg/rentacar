@@ -5,14 +5,9 @@ import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 
-import {
-  useStatusPozisyonModalState,
-  setStatusPozisyonModalState,
-  usePozisyon,
-  fetchPozisyonlar
-} from '@/store/kartlar/pozisyon/hooks';
+import { useStatusPozisyonModalState, setStatusPozisyonModalState, usePozisyon, fetchPozisyonlar } from '@/store/kartlar/pozisyon/hooks';
 import { useUser } from '@/store/auth/hooks';
-import { pozisyonDurumDegistir } from '@/api/kartlar/pozisyon';
+import { pozisyonActive, pozisyonPassive } from '@/api/kartlar/pozisyon';
 
 const StatusForm = ({ getData }) => {
   const pozisyonData = usePozisyon();
@@ -22,12 +17,14 @@ const StatusForm = ({ getData }) => {
   const dataUpdate = async () => {
     setBtnLoading(true);
     try {
-      const response = await pozisyonDurumDegistir({
-        _id: pozisyonData._id,
-        is_active: pozisyonData.is_active === true ? false : true
-      });
+      let response = '';
+      if (pozisyonData.is_active) {
+        response = await pozisyonPassive({ _id: pozisyonData._id, is_active: false });
+      } else {
+        response = await pozisyonActive({ _id: pozisyonData._id, is_active: true });
+      }
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
         getData();
         setStatusPozisyonModalState(false);
       } else {
@@ -72,17 +69,8 @@ const StatusForm = ({ getData }) => {
       >
         <p>
           Merhaba {user.ad} {user.soyad}, <strong>{pozisyonData.ad}</strong> isimli pozisyonun
-          {pozisyonData.is_active ? (
-            <Badge label="Aktif" className="bg-success-500 text-white mx-1" />
-          ) : (
-            <Badge label="Pasif" className="bg-danger-500 text-white mx-1" />
-          )}{' '}
-          olan durumunu
-          {!pozisyonData.is_active ? (
-            <Badge label="Aktif" className="bg-success-500 text-white mx-1" />
-          ) : (
-            <Badge label="Pasif" className="bg-danger-500 text-white mx-1" />
-          )}
+          {pozisyonData.is_active ? <Badge label="Aktif" className="bg-success-500 text-white mx-1" /> : <Badge label="Pasif" className="bg-danger-500 text-white mx-1" />} olan durumunu
+          {!pozisyonData.is_active ? <Badge label="Aktif" className="bg-success-500 text-white mx-1" /> : <Badge label="Pasif" className="bg-danger-500 text-white mx-1" />}
           olarak değiştirmek istediğinize emin misiniz?
         </p>
       </Modal>

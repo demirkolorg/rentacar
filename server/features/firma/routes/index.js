@@ -1,51 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const auth = require('@middlewares/auth');
+const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@lib/defineRoute');
+const controller = require('../controller');
+const role = require('../key');
 
-const controller = require("../controller");
-const auth = require("../../../middlewares/auth")();
-
-
-router.use(auth.initialize());
-router.use(auth.auth()); 
-
-
-router.post(
-  "/get",
-  auth.cr("firma_full", "firma_full_list", "firma_get"),
-  controller.get
-);
-router.post(
-  "/getIds",
-  auth.cr("firma_full", "firma_full_list", "firma_getIds"),
-  controller.getIds
-);
-router.post(
-  "/getAll",
-  auth.cr("firma_full", "firma_full_list", "firma_getall"),
-  controller.getAll
-);
-
-router.post(
-  "/add",
-  auth.cr("firma_full", "firma_full_add", "firma_add"),
-  controller.add
-);
-router.post(
-  "/update",
-  auth.cr("firma_full", "firma_full_update", "firma_update"),
-  controller.update
-);
-router.post(
-  "/delete",
-  auth.cr("firma_full", "firma_full_delete", "firma_delete"),
-  controller.delete
-);
-
-
-router.post(
-  "/durumDegistir",
-  auth.cr("firma_full", "firma_full_update", "firma_durumDegistir"),
-  controller.durumDegistir
-);
+TokenRoleRoute(router, auth, 'post', '/get', controller.get, role.get);
+TokenRoleRoute(router, auth, 'post', '/getIds', controller.getIds, role.list);
+TokenRoleRoute(router, auth, 'post', '/getAll', controller.getAll, role.list);
+TokenRoleRoute(router, auth, 'post', '/add', controller.add, role.add);
+TokenRoleRoute(router, auth, 'post', '/update', controller.update, role.update);
+TokenRoleRoute(router, auth, 'post', '/delete', controller.delete, role.hardDelete);
+TokenRoleRoute(router, auth, 'post', '/durumDegistir', controller.durumDegistir, role.update);
 
 module.exports = router;

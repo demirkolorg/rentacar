@@ -1,11 +1,12 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const auth = require('@middlewares/auth');
+const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@lib/defineRoute');
+const controller = require('../controller');
+const role = require('../key');
 
-// const controller = require("../controllers/auth");
-// const authMiddleware = require("../../../middlewares/auth");
+// TokenRoleRoute(router, auth, 'post', '/get', controller.get, role.get);
+// TokenRoute(router, auth, 'post', '/getAll', controller.getAll);
+// PublicRoute(router, 'post', '/getAll', controller.getAll);
 
-// router.post("/login", controller.login);
-// router.post("/register", controller.register);
-// router.get("/getCurrentUser", authMiddleware, controller.getCurrentUser);
-
-// module.exports = { auth: router };
+module.exports = router;

@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import SidebarLogo from './Logo';
 import Navmenu from './Navmenu';
-import { leftMenu as menuItems } from '@/routes/menu';
+import { leftMenu } from '@/routes/menu';
 import useSidebar from '@/hooks/useSidebar';
 import useSemiDark from '@/hooks/useSemiDark';
 import useSkin from '@/hooks/useSkin';
 import SimpleBar from 'simplebar-react';
 import svgRabitImage from '@/assets/images/svg/rabit.svg';
-import Sube from '../header/Tools/Sube';
+import { useFilteredMenu } from '@/helper/filterMenu';
 
 const Sidebar = () => {
   const scrollableNodeRef = useRef();
@@ -26,11 +26,10 @@ const Sidebar = () => {
 
   const [collapsed, setMenuCollapsed] = useSidebar();
   const [menuHover, setMenuHover] = useState(false);
-
-  // semi dark option
   const [isSemiDark] = useSemiDark();
-  // skin
   const [skin] = useSkin();
+  const filteredMenu = useFilteredMenu();
+
   return (
     <div className={isSemiDark ? 'dark' : ''}>
       <div
@@ -46,14 +45,10 @@ const Sidebar = () => {
         }}
       >
         <SidebarLogo menuHover={menuHover} />
-        <div
-          className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${
-            scroll ? ' opacity-100' : ' opacity-0'
-          }`}
-        ></div>
+        <div className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${scroll ? ' opacity-100' : ' opacity-0'}`}></div>
 
         <SimpleBar className="sidebar-menu px-4 h-[calc(100%-80px)]" scrollableNodeProps={{ ref: scrollableNodeRef }}>
-          <Navmenu menus={menuItems} />
+          <Navmenu menus={filteredMenu} />
           {/* {!collapsed && (
             <div className="bg-slate-900 mb-16 mt-24 p-4 relative text-center rounded-2xl text-white">
               <img

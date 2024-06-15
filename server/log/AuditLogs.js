@@ -1,4 +1,4 @@
-const AuditLogsModel = require("../features/AuditLogs/model");
+const AuditLogsModel = require('../features/AuditLogs/model');
 const Enum = require("../config/enum.config");
 
 let instance = null;
@@ -11,65 +11,65 @@ class AuditLogs {
     return instance;
   }
 
-  info({ email, location, proc_type, log }) {
+  info({ user_id, location, proc_type, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.INFO,
-      email,
+      user_id,
       location,
       proc_type,
       log,
     });
   }
-  error({ email, location, proc_type, log }) {
+  error({ user_id, location, proc_type, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.ERROR,
-      email,
+      user_id,
       location,
       proc_type,
       log,
     });
   }
-  warn({ email, location, proc_type, log }) {
+  warn({ user_id, location, proc_type, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.WARN,
-      email,
+      user_id,
       location,
       proc_type,
       log,
     });
   }
-  debug({ email, location, proc_type, log }) {
+  debug({ user_id, location, proc_type, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.DEBUG,
-      email,
+      user_id,
       location,
       proc_type,
       log,
     });
   }
-  verbose({ email, location, proc_type, log }) {
+  verbose({ user_id, location, proc_type, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.VERBOSE,
-      email,
+      user_id,
       location,
       proc_type,
       log,
     });
   }
-  http({ email, location, proc_type, log }) {
+  http({ user_id, location, proc_type, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.HTTP,
-      email,
+      user_id,
       location,
       proc_type,
       log,
     });
   }
 
-  #saveToDb({ level, email, location, proc_type, log }) {
+  #saveToDb({ level, user_id, location, proc_type, log }) {
     AuditLogsModel.create({
       level,
-      email,
+      user_id,
       location,
       proc_type,
       log,

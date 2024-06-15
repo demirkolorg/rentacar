@@ -1,5 +1,5 @@
-const message = require("./message");
-const { logger } = require("../log");
+const message = require('./message');
+const { logger } = require('../log');
 
 class Response {
   constructor() {}
@@ -8,32 +8,13 @@ class Response {
     logger(email, point, type, data);
   }
 
-  static success(res, data, email, point, type, title, desc) {
-    logger(email, point, type, data);
-    res.status(200).json({
-      success: true,
-      message: {
-        title,
-        desc,
-      },
-      data,
-    });
+  static success(res, data, user_id, point, type, message) {
+    logger(user_id, point, type, data);
+    res.status(200).json({ success: true, message, data });
   }
 
-  static error(
-    res,
-    desc = message.beklenmedikhata,
-    title = message.hata,
-    code = 400
-  ) {
-    res.status(code).json({
-      success: false,
-      code,
-      message: {
-        title,
-        desc,
-      },
-    });
+  static error(res, message, code = 400) {
+    res.status(code).json({ success: false, message });
   }
 }
 

@@ -1,59 +1,15 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const auth = require('@middlewares/auth');
+const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@lib/defineRoute');
+const controller = require('../controller');
+const role = require('../key');
 
-const controller = require("../controller");
-const auth = require("@middlewares/auth")();
-
-router.use(auth.initialize());
-router.use(auth.auth());
-
-router.post(
-  "/get",
-  auth.cr("firmaPersonel_full", "firmaPersonel_full_list", "firmaPersonel_get"),
-  controller.get
-);
-router.post(
-  "/getAll",
-  auth.cr(
-    "firmaPersonel_full",
-    "firmaPersonel_full_list",
-    "firmaPersonel_getall"
-  ),
-  controller.getAll
-);
-
-router.post(
-  "/add",
-  auth.cr("firmaPersonel_full", "firmaPersonel_full_add", "firmaPersonel_add"),
-  controller.add
-);
-router.post(
-  "/update",
-  auth.cr(
-    "firmaPersonel_full",
-    "firmaPersonel_full_update",
-    "firmaPersonel_update"
-  ),
-  controller.update
-);
-router.post(
-  "/delete",
-  auth.cr(
-    "firmaPersonel_full",
-    "firmaPersonel_full_delete",
-    "firmaPersonel_delete"
-  ),
-  controller.delete
-);
-
-router.post(
-  "/durumDegistir",
-  auth.cr(
-    "firmaPersonel_full",
-    "firmaPersonel_full_update",
-    "firmaPersonel_durumDegistir"
-  ),
-  controller.durumDegistir
-);
+TokenRoleRoute(router, auth, 'post', '/get', controller.get, role.get);
+TokenRoleRoute(router, auth, 'post', '/getAll', controller.getAll, role.list);
+TokenRoleRoute(router, auth, 'post', '/add', controller.add, role.add);
+TokenRoleRoute(router, auth, 'post', '/update', controller.update, role.update);
+TokenRoleRoute(router, auth, 'post', '/delete', controller.delete, role.hardDelete);
+TokenRoleRoute(router, auth, 'post', '/durumDegistir', controller.durumDegistir, role.update);
 
 module.exports = router;

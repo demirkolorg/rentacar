@@ -1,8 +1,10 @@
 const FirmaPersoneller = require('../model');
 const response = require('../../../lib/response');
-const pt = require('../../../lib/pointtype');
 const messages = require('../messages');
 
+const transactions = require('../../../lib/transactions');
+
+const { pointname } = require('../model');
 exports.get = async (req, res) => {
   let body = req.body;
   try {
@@ -11,15 +13,7 @@ exports.get = async (req, res) => {
       return response.error(res, messages.Yok);
     }
 
-    return response.success(
-      res,
-      firmaPersonel,
-      req.user?.email,
-      pt.points.firmaPersonel,
-      pt.types.get,
-      messages.basarili,
-      messages.get_basarili
-    );
+    return response.success(res, firmaPersonel, req.user?.id, pointname, transactions.get, messages.get_basarili);
   } catch (err) {
     return response.error(res);
   }
@@ -34,10 +28,10 @@ exports.getAll = async (req, res) => {
     return response.success(
       res,
       firmaPersonellar,
-      req.user?.email,
-      pt.points.firmaPersonel,
-      pt.types.get,
-      messages.basarili,
+      req.user?.id,
+      pointname,
+      transactions.list,
+
       messages.getall_basarili
     );
   } catch (err) {
@@ -62,9 +56,9 @@ exports.add = async (req, res) => {
       res,
       createdFirmaPersonel,
       req.user.email,
-      pt.points.firmaPersonel,
-      pt.types.create,
-      messages.basarili,
+      pointname,
+      transactions.create,
+
       messages.create_basarili
     );
   } catch (err) {
@@ -94,10 +88,10 @@ exports.update = async (req, res) => {
     return response.success(
       res,
       firmaPersonel,
-      req.user?.email,
-      pt.points.firmaPersonel,
-      pt.types.update,
-      messages.basarili,
+      req.user?.id,
+      pointname,
+      transactions.update,
+
       messages.update_basarili
     );
   } catch (err) {
@@ -118,10 +112,10 @@ exports.delete = async (req, res) => {
     return response.success(
       res,
       {},
-      req.user?.email,
-      pt.points.firmaPersonel,
-      pt.types.delete,
-      messages.basarili,
+      req.user?.id,
+      pointname,
+      transactions.harddelete,
+
       messages.delete_basarili
     );
   } catch (err) {
@@ -147,10 +141,10 @@ exports.durumDegistir = async (req, res) => {
     return response.success(
       res,
       firmaPersonel,
-      req.user?.email,
-      pt.points.firmaPersonel,
-      pt.types.update,
-      messages.basarili,
+      req.user?.id,
+      pointname,
+      transactions.update,
+
       messages.durum_basarili
     );
   } catch (err) {

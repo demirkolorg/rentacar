@@ -1,15 +1,16 @@
 //dış
-const bcrypt = require("bcrypt");
-const jwt = require("jwt-simple");
-const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 //iç
-const Users = require("../../user/model");
-const Roles = require("../../../features/role/model");
-const response = require("../../../lib/response");
-const pt = require("../../../lib/pointtype");
-const EnvConfig = require("../../../config/env.config");
-const messages = require("../messages");
+const Users = require('../../user/model');
+const Roles = require('../../../features/role/model');
+const response = require('../../../lib/response');
+const transactions = require('../../../lib/transactions');
+const { pointname } = require('../model');
+const EnvConfig = require('../../../config/env.config');
+const messages = require('../messages');
 
 exports.login = async (req, res) => {
   let { email, password } = req.body;
@@ -25,9 +26,9 @@ exports.login = async (req, res) => {
     const rolsSet = new Set();
     const permissionsSet = new Set();
 
-    userRoles.forEach((role) => {
+    userRoles.forEach(role => {
       rolsSet.add(role.name);
-      role.permissions.forEach((permission) => {
+      role.permissions.forEach(permission => {
         permissionsSet.add(permission);
       });
     });
@@ -36,27 +37,21 @@ exports.login = async (req, res) => {
 
     let payload = {
       id: user._id,
-      exp: Math.floor(Date.now() / 1000) + 86400, // Set token to expire in 1 day
+      exp: Math.floor(Date.now() / 1000) + 86400 // Set token to expire in 1 day
     };
-    let token = jwt.encode(payload, EnvConfig.JWT.SECRET);
+
+    let token = jwt.sign(payload, EnvConfig.JWT.SECRET);
     let userData = {
       _id: user._id,
       ad: user.ad,
       soyad: user.soyad,
       email: user.email,
       roller: UserRoles,
-      izinler: UserPermissions,
+      izinler: UserPermissions
     };
+    data = { token: token, user: userData };
 
-    return response.success(
-      res,
-      { token: token, user: userData },
-      req.body.email,
-      pt.points.auth,
-      pt.types.login,
-      messages.basarili,
-      messages.AUTH_SUCCESSFUL_DESC
-    );
+    return response.success(res, data, user._id, pointname, transactions.login, messages.AUTH_SUCCESSFUL_DESC);
   } catch (err) {
     return response.error(res);
   }
@@ -67,7 +62,7 @@ exports.register = async (req, res) => {
   try {
     if (body.roller && Array.isArray(body.roller) && body.roller.length > 0) {
       const bulunanRoller = await Roles.find({
-        _id: { $in: body.roller },
+        _id: { $in: body.roller }
       });
 
       if (bulunanRoller.length !== body.roller.length) {
@@ -84,18 +79,12 @@ exports.register = async (req, res) => {
       email: body.email,
       password: password,
       roller: body.roller,
-      is_active: body.is_active,
+      tip: body.tip,
+      sube: body.sube,
+      created_by: '000000000000000000000000'
     });
 
-    return response.success(
-      res,
-      createdUser,
-      body.email,
-      pt.points.auth,
-      pt.types.register,
-      messages.basarili,
-      messages.AUTH_SUCCESSFUL_DESC
-    );
+    return response.success(res, createdUser, createdUser._id, pointname, transactions.register, messages.AUTH_SUCCESSFUL_DESC);
   } catch (err) {
     return response.error(res);
   }

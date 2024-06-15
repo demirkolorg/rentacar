@@ -26,3 +26,4 @@ const schema = new mongoose.Schema(
 
 schema.add(base);
 module.exports = mongoose.model('Firmalar', schema);
+module.exports.pointname = 'Firmalar';

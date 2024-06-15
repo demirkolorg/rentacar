@@ -22,7 +22,7 @@ const StatusForm = ({ getData }) => {
         is_active: firmaData.is_active === true ? false : true
       });
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
         getData();
         setStatusFirmaModalState(false);
       } else {

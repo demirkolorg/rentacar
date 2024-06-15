@@ -41,32 +41,13 @@ const LoginForm = () => {
       const response = await login(data);
       setLoading(false);
       if (response.data.success) {
-        toast.success(response.data.message.desc);
+        toast.success(response.data.message);
         setLogin(response.data.data.token);
         // setCurrentUser(response.data.data.user);
         navigate('/');
       } else {
         throw new Error(response.data.message);
       }
-
-      // const response = await login(data);
-
-      // if (response.error) {
-      //   throw new Error(response.error.message);
-      // }
-
-      // if (response.data.error) {
-      //   throw new Error(response.data.error);
-      // }
-
-      // if (!response.data.token) {
-      //   throw new Error("Invalid credentials");
-      // }
-
-      // dispatch(setUser(data));
-      // navigate("/dashboard");
-      // localStorage.setItem("user", JSON.stringify(response.data.user));
-      // toast.success("Login Successful");
     } catch (error) {
       toast.error(error.message);
     }

@@ -4,14 +4,9 @@ import { toast as message } from 'react-toastify';
 import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
 
-import {
-  useDeletePozisyonModalState,
-  setDeletePozisyonModalState,
-  usePozisyon,
-  fetchPozisyonlar
-} from '@/store/kartlar/pozisyon/hooks';
+import { useDeletePozisyonModalState, setDeletePozisyonModalState, usePozisyon,  } from '@/store/kartlar/pozisyon/hooks';
 import { useUser } from '@/store/auth/hooks';
-import { pozisyonDelete } from '@/api/kartlar/pozisyon';
+import { pozisyonSoftDelete } from '@/api/kartlar/pozisyon';
 
 const DeleteForm = ({ getData }) => {
   const pozisyonData = usePozisyon();
@@ -21,9 +16,9 @@ const DeleteForm = ({ getData }) => {
   const deleteData = async () => {
     setBtnLoading(true);
     try {
-      const response = await pozisyonDelete({ _id: pozisyonData._id });
+      const response = await pozisyonSoftDelete({ _id: pozisyonData._id });
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
 
         getData();
         setDeletePozisyonModalState(false);
@@ -68,8 +63,7 @@ const DeleteForm = ({ getData }) => {
         }
       >
         <p>
-          Merhaba {user.ad} {user.soyad}, <strong>{pozisyonData.ad}</strong> isimli pozisyonu silmek istediğinize emin
-          misiniz?
+          Merhaba {user.ad} {user.soyad}, <strong>{pozisyonData.ad}</strong> isimli pozisyonu silmek istediğinize emin misiniz?
         </p>
       </Modal>
     </div>

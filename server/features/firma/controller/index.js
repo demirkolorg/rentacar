@@ -1,10 +1,8 @@
-//dış
-//iç
-const Firmalar = require('../model');
-const Subeler = require('../../sube/model'); // Şube modeli
-
 const response = require('../../../lib/response');
-const pt = require('../../../lib/pointtype');
+const transactions = require('../../../lib/transactions');
+const Firmalar = require('../model');
+const { pointname } = require('../model');
+const Subeler = require('../../sube/model'); // Şube modeli
 const messages = require('../messages');
 
 exports.get = async (req, res) => {
@@ -15,7 +13,7 @@ exports.get = async (req, res) => {
       return response.error(res, messages.firmaYok);
     }
 
-    return response.success(res, firma, req.user?.email, pt.points.firma, pt.types.get, messages.basarili, messages.firma_get_basarili);
+    return response.success(res, firma, req.user?.id, pointname, transactions.get,  messages.firma_get_basarili);
   } catch (err) {
     return response.error(res);
   }
@@ -30,7 +28,7 @@ exports.getIds = async (req, res) => {
     if (!firmalar || firmalar.length === 0) {
       return response.error(res, messages.firmaYok);
     }
-    return response.success(res, firmalar, req.user?.email, pt.points.firma, pt.types.get, messages.basarili, messages.firma_get_basarili);
+    return response.success(res, firmalar, req.user?.id, pointname, transactions.get,  messages.firma_get_basarili);
   } catch (err) {
     return response.error(res);
   }
@@ -42,7 +40,7 @@ exports.getAll = async (req, res) => {
   try {
     let firmalar = await Firmalar.find({ sube: body.sube }).find(query);
 
-    return response.success(res, firmalar, req.user?.email, pt.points.firma, pt.types.get, messages.basarili, messages.firma_getall_basarili);
+    return response.success(res, firmalar, req.user?.id, pointname, transactions.list,  messages.firma_getall_basarili);
   } catch (err) {
     return response.error(res);
   }
@@ -79,11 +77,8 @@ exports.add = async (req, res) => {
       });
     }
 
-    return response.success(res, createdFirma, req.user.email, pt.points.firma, pt.types.create, messages.basarili, messages.firma_create_basarili);
+    return response.success(res, createdFirma, req.user.email, pointname, transactions.create,  messages.firma_create_basarili);
   } catch (err) {
-    console.log('====================================');
-    console.log('err', err);
-    console.log('====================================');
     return response.error(res);
   }
 };
@@ -109,7 +104,7 @@ exports.update = async (req, res) => {
 
     firma = await Firmalar.findOne({ _id: body._id });
 
-    return response.success(res, firma, req.user?.email, pt.points.firma, pt.types.update, messages.basarili, messages.firma_update_basarili);
+    return response.success(res, firma, req.user?.id, pointname, transactions.update,  messages.firma_update_basarili);
   } catch (err) {
     return response.error(res);
   }
@@ -125,7 +120,7 @@ exports.delete = async (req, res) => {
 
     await Firmalar.deleteOne({ _id: body._id });
 
-    return response.success(res, {}, req.user?.email, pt.points.firma, pt.types.delete, messages.basarili, messages.firma_delete_basarili);
+    return response.success(res, {}, req.user?.id, pointname, transactions.harddelete,  messages.firma_delete_basarili);
   } catch (err) {
     return response.error(res);
   }
@@ -146,7 +141,7 @@ exports.durumDegistir = async (req, res) => {
 
     firma = await Firmalar.findOne({ _id: body._id });
 
-    return response.success(res, firma, req.user?.email, pt.points.firma, pt.types.update, messages.basarili, messages.firma_durum_basarili);
+    return response.success(res, firma, req.user?.id, pointname, transactions.update,  messages.firma_durum_basarili);
   } catch (err) {
     return response.error(res);
   }

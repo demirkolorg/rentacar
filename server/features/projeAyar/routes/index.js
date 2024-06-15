@@ -1,18 +1,10 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const auth = require('@middlewares/auth');
+const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@lib/defineRoute');
+const controller = require('../controller');
+const role = require('../key');
 
-const controller = require("../controller");
-const auth = require("../../../middlewares/auth")();
-
-
-router.use(auth.initialize());
-router.use(auth.auth()); 
-
-
-router.get(
-  "/superAdminMail",
-  auth.cr("projeAyar_full", "projeAyar_full_list", "projeAyar_get"),
-  controller.superAdminMail
-);
+TokenRoleRoute(router, auth, 'get', '/superAdminMail', controller.superAdminMail, role.get);
 
 module.exports = router;

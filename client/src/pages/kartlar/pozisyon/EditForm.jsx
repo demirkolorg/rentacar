@@ -50,7 +50,7 @@ const EditForm = ({ getData }) => {
 
       const response = await pozisyonUpdate(updatePozisyon);
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
         setEditPozisyonModalState(false);
         getData();
         reset();

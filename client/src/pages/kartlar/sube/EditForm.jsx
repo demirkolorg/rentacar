@@ -133,7 +133,7 @@ const EditForm = ({ getData }) => {
 
       const response = await subeUpdate(updateSube);
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
         setEditSubeModalState(false);
         getData();
         reset();

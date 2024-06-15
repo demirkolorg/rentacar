@@ -1,6 +1,8 @@
-const response = require("../../../lib/response");
-const pt = require("../../../lib/pointtype");
-const messages = require("../messages");
+const response = require('../../../lib/response');
+const messages = require('../messages');
+
+const { pointname } = require('../model');
+const transactions = require('../../../lib/transactions');
 
 exports.image = async (req, res) => {
   try {
@@ -8,15 +10,7 @@ exports.image = async (req, res) => {
       return response.error(res, messages.dosyaYok);
     }
 
-    return response.success(
-      res,
-      req.file.filename,
-      req.user?.email,
-      pt.points.upload,
-      pt.types.upload,
-      messages.basarili,
-      messages.image_basarili
-    );
+    return response.success(res, req.file.filename, req.user?.id, pointname, transactions.upload,  messages.image_basarili);
   } catch (err) {
     return response.error(res);
   }
@@ -28,15 +22,7 @@ exports.document = async (req, res) => {
       return response.error(res, messages.dosyaYok);
     }
 
-    return response.success(
-      res,
-      req.file.filename,
-      req.user?.email,
-      pt.points.upload,
-      pt.types.upload,
-      messages.basarili,
-      messages.document_basarili
-    );
+    return response.success(res, req.file.filename, req.user?.id, pointname, transactions.upload,  messages.document_basarili);
   } catch (err) {
     return response.error(res);
   }
@@ -48,15 +34,7 @@ exports.other = async (req, res) => {
       return response.error(res, messages.dosyaYok);
     }
 
-    return response.success(
-      res,
-      req.file.filename,
-      req.user?.email,
-      pt.points.upload,
-      pt.types.upload,
-      messages.basarili,
-      messages.other_basarili
-    );
+    return response.success(res, req.file.filename, req.user?.id, pointname, transactions.upload,  messages.other_basarili);
   } catch (err) {
     return response.error(res);
   }

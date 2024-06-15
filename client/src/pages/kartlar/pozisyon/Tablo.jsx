@@ -18,21 +18,7 @@ import GosterilecekKayit from '@/components/app/GosterilecekKayit';
 import Sayfalama from '@/components/app/Sayfalama';
 import SayfaKayitSayisi from '@/components/app/SayfaKayitSayisi';
 
-import {
-  setAddPozisyonModalState,
-  setEditPozisyonModalState,
-  setDeletePozisyonModalState,
-  setStatusPozisyonModalState,
-  setPozisyonlar,
-  setPozisyon,
-  useAddPozisyonModalState,
-  useEditPozisyonModalState,
-  useDeletePozisyonModalState,
-  useStatusPozisyonModalState,
-  usePozisyonlar,
-  usePozisyon,
-  fetchPozisyonlar
-} from '@/store/kartlar/pozisyon/hooks';
+import { setAddPozisyonModalState, setEditPozisyonModalState, setDeletePozisyonModalState, setStatusPozisyonModalState, setPozisyonlar, setPozisyon, useAddPozisyonModalState, useEditPozisyonModalState, useDeletePozisyonModalState, useStatusPozisyonModalState, usePozisyonlar, usePozisyon, fetchPozisyonlar } from '@/store/kartlar/pozisyon/hooks';
 
 import AddForm from './AddForm';
 import EditForm from './EditForm';
@@ -92,9 +78,7 @@ const Tablo = () => {
         return (
           <span className="block w-full">
             <span
-              className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
-                row?.cell?.value === true ? 'text-success-500 bg-success-500' : ''
-              }
+              className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${row?.cell?.value === true ? 'text-success-500 bg-success-500' : ''}
               ${row?.cell?.value === false ? 'text-danger-500 bg-danger-500' : ''}
   
                `}
@@ -221,12 +205,21 @@ const Tablo = () => {
         </div>
       </Card>
 
-      <Card bodyClass className="flex-1 overflow-auto my-5">
+      <Card
+        onClick={() => {
+          setMenuAyar({ visible: false });
+        }}
+        bodyClass
+        className="flex-1 overflow-auto my-5"
+      >
         {loading ? (
           <Loading />
         ) : (
           <>
             <table
+              onClick={() => {
+                setMenuAyar({ visible: false });
+              }}
               className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700"
               {...getTableProps}
             >
@@ -234,11 +227,7 @@ const Tablo = () => {
                 {headerGroups.map(headerGroup => (
                   <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map(column => (
-                      <th
-                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                        scope="col"
-                        className=" text-sm table-th  "
-                      >
+                      <th {...column.getHeaderProps(column.getSortByToggleProps())} scope="col" className=" text-sm table-th  ">
                         {column.render('Header')}
                         <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                       </th>
@@ -246,10 +235,7 @@ const Tablo = () => {
                   </tr>
                 ))}
               </thead>
-              <tbody
-                className="overflow-y-scroll bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700"
-                {...getTableBodyProps}
-              >
+              <tbody className="overflow-y-scroll bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700" {...getTableBodyProps}>
                 {page.map(row => {
                   prepareRow(row);
                   return (
@@ -258,14 +244,15 @@ const Tablo = () => {
                       onClick={() => {
                         setMenuAyar({ visible: false });
                       }}
-                      className={`${
-                        menuAyar?.rowIndex === row.index ? 'bg-slate-100 dark:bg-slate-900' : ''
-                      } hover:bg-slate-100 dark:hover:bg-slate-900`}
+                      className={`${menuAyar?.rowIndex === row.index ? 'bg-slate-100 dark:bg-slate-900' : ''} hover:bg-slate-100 dark:hover:bg-slate-900`}
                     >
                       {row.cells.map(cell => {
                         return (
                           <td
                             {...cell.getCellProps()}
+                            onClick={() => {
+                              setMenuAyar({ visible: false });
+                            }}
                             // onDoubleClick={() => {
                             //   const actionToExecute = actions.find(
                             //     (action) => action.name === "Görüntüle"
@@ -279,13 +266,7 @@ const Tablo = () => {
                         
                           h-12 px-6 `}
                           >
-                            <p
-                              className={`m-0 p-0 inline  ${
-                                String(cell.value).includes(globalFilter) ? 'bg-yellow-300 text-lg' : ''
-                              }`}
-                            >
-                              {cell.render('Cell')}
-                            </p>
+                            <p className={`m-0 p-0 inline  ${String(cell.value).includes(globalFilter) ? 'bg-yellow-300 text-lg' : ''}`}>{cell.render('Cell')}</p>
 
                             {/* <p className="m-0 p-0 inline">                             
                             {highlightText(String(cell.value), globalFilter)}

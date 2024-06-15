@@ -1,19 +1,17 @@
-//dış
-const bcrypt = require("bcrypt");
-//iç
-const mongoose = require("mongoose");
-const Users = require("../model");
-const Roles = require("../../../features/role/model");
-const response = require("../../../lib/response");
-const pt = require("../../../lib/pointtype");
-const { logger } = require("../../../log");
-const messages = require("../messages");
+const bcrypt = require('bcrypt');
+const Roles = require('@features/role/model');
+const response = require('@lib/response');
+const Users = require('../model');
+const messages = require('../messages');
+
+const { pointname } = require('../model');
+const transactions = require('../../../lib/transactions');
 
 exports.add = async (req, res) => {
   let body = req.body;
   try {
     let user = await Users.findOne({
-      $or: [{ email: body.email }, { tc: body.tc }],
+      $or: [{ email: body.email }, { tc: body.tc }]
     });
 
     if (user) {
@@ -21,7 +19,7 @@ exports.add = async (req, res) => {
     }
     if (body.roller && Array.isArray(body.roller) && body.roller.length > 0) {
       const bulunanRoller = await Roles.find({
-        _id: { $in: body.roller },
+        _id: { $in: body.roller }
       });
 
       if (bulunanRoller.length !== body.roller.length) {
@@ -38,28 +36,20 @@ exports.add = async (req, res) => {
       email: body.email,
       password: password,
       roller: body.roller,
-      is_active: body.is_active,
+      tip: body.tip,
+      is_active: body.is_active
     });
 
-    return response.success(
-      res,
-      createdUser,
-      body.email,
-      pt.points.users,
-      pt.types.create,
-      messages.basarili,
-      messages.user_create_basarili
-    );
+    return response.success(res, createdUser, body.email, pointname, transactions.create,  messages.create_basarili);
   } catch (err) {
     return response.error(res);
   }
 };
-// Id, tc ya da email bilgileri verilen kullanıcının bilgilerini günceller,
 exports.update = async (req, res) => {
   let body = req.body;
   try {
     let user = await Users.findOne({
-      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
     });
 
     if (!user) {
@@ -68,48 +58,34 @@ exports.update = async (req, res) => {
 
     let updates = {};
     if (body.password) {
-      updates.password = bcrypt.hashSync(
-        body.password,
-        bcrypt.genSaltSync(8),
-        null
-      );
+      updates.password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
     }
 
     if (body.ad) updates.ad = body.ad;
     if (body.soyad) updates.soyad = body.soyad;
     if (body.roller && Array.isArray(body.roller)) updates.roller = body.roller;
-    if (typeof body.is_active === "boolean") updates.is_active = body.is_active;
+    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
 
     await Users.updateOne(
       {
-        $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+        $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
       },
       updates
     );
     user = await Users.findOne({
-      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
     });
 
-    return response.success(
-      res,
-      user,
-      req.user?.email,
-      pt.points.users,
-      pt.types.update,
-      messages.basarili,
-      messages.user_update_basarili
-    );
+    return response.success(res, user, req.user?.id, pointname, transactions.update,  messages.update_basarili);
   } catch (err) {
     return response.error(res);
   }
 };
-
-// Id, tc ya da email bilgileri verilen kullanıcıyı siler,
 exports.delete = async (req, res) => {
   let body = req.body;
   try {
     let user = await Users.findOne({
-      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
     });
 
     if (!user) {
@@ -117,24 +93,59 @@ exports.delete = async (req, res) => {
     }
 
     await Users.deleteOne({
-      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }],
+      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
     });
 
-    
-    return response.success(
-      res,
-      user,
-      req.user?.email,
-      pt.points.users,
-      pt.types.delete,
-      messages.basarili,
-      messages.user_delete_basarili
-    );
+    return response.success(res, user, req.user?.id, pointname, transactions.harddelete,  messages.delete_basarili);
   } catch (err) {
     return response.error(res);
   }
 };
+exports.durumDegistir = async (req, res) => {
+  let body = req.body;
+  try {
+    let user = await Users.findOne({ _id: body._id });
 
+    if (!user) {
+      return response.error(res, messages.kullaniciYok);
+    }
+
+    let updates = {};
+    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
+
+    await Users.updateOne({ _id: body._id }, updates);
+
+    user = await Users.findOne({ _id: body._id });
+
+    return response.success(res, user, req.user?.id, pt.points.user, transactions.update,  messages.durum_basarili);
+  } catch (err) {
+    return response.error(res);
+  }
+};
+exports.get = async (req, res) => {
+  let body = req.body;
+  try {
+    let user = await Users.findOne({ _id: body._id });
+    if (!user) {
+      return response.error(res, messages.kullaniciYok);
+    }
+
+    return response.success(res, user, req.user?.id, pt.points.user, transactions.get,  messages.pozisyon_get_basarili);
+  } catch (err) {
+    return response.error(res);
+  }
+};
+exports.getAll = async (req, res) => {
+  let body = req.body;
+  let query = req.query;
+  try {
+    let users = await Users.find({ sube: body.sube }).find(query);
+
+    return response.success(res, users, req.user?.id, pt.points.user, transactions.list,  messages.getall_basarili);
+  } catch (err) {
+    return response.error(res);
+  }
+};
 exports.getUser = async (req, res) => {
   let body = req.body;
   try {
@@ -144,27 +155,18 @@ exports.getUser = async (req, res) => {
     }
 
     let user = await Users.findOne({
-      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }],
+      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }]
     });
 
     if (!user) {
       return response.error(res, messages.kullaniciYok);
     }
 
-    return response.success(
-      res,
-      user,
-      req.user?.email,
-      pt.points.users,
-      pt.types.list,
-      messages.basarili,
-      messages.getUser
-    );
+    return response.success(res, user, req.user?.id, pointname, transactions.get,  messages.getUser);
   } catch (err) {
     return response.error(res);
   }
 };
-
 exports.getUserRoles = async (req, res) => {
   let body = req.body;
   try {
@@ -174,7 +176,7 @@ exports.getUserRoles = async (req, res) => {
     }
 
     let user = await Users.findOne({
-      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }],
+      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }]
     });
 
     if (!user) {
@@ -184,26 +186,17 @@ exports.getUserRoles = async (req, res) => {
     let userRoles = await Roles.find({ _id: user.roller });
 
     const rolsSet = new Set();
-    userRoles.forEach((role) => {
+    userRoles.forEach(role => {
       rolsSet.add(role.name);
     });
 
     const UserRoles = [...rolsSet];
 
-    return response.success(
-      res,
-      UserRoles,
-      req.user?.email,
-      pt.points.users,
-      pt.types.list,
-      messages.basarili,
-      messages.getUserRoles
-    );
+    return response.success(res, UserRoles, req.user?.id, pointname, transactions.list,  messages.getUserRoles);
   } catch (err) {
     return response.error(res);
   }
 };
-
 exports.getUserPermissions = async (req, res) => {
   let body = req.body;
   try {
@@ -213,7 +206,7 @@ exports.getUserPermissions = async (req, res) => {
     }
 
     let user = await Users.findOne({
-      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }],
+      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }]
     });
 
     if (!user) {
@@ -222,27 +215,18 @@ exports.getUserPermissions = async (req, res) => {
 
     let userRoles = await Roles.find({ _id: user.roller });
     const permissionsSet = new Set();
-    userRoles.forEach((role) => {
-      role.permissions.forEach((permission) => {
+    userRoles.forEach(role => {
+      role.permissions.forEach(permission => {
         permissionsSet.add(permission);
       });
     });
     const UserPermissions = [...permissionsSet];
 
-    return response.success(
-      res,
-      UserPermissions,
-      req.user?.email,
-      pt.points.users,
-      pt.types.list,
-      messages.basarili,
-      messages.getUserPermissions
-    );
+    return response.success(res, UserPermissions, req.user?.id, pointname, transactions.list,  messages.getUserPermissions);
   } catch (err) {
     return response.error(res);
   }
 };
-
 exports.getUserRolesAndPermissions = async (req, res) => {
   let body = req.body;
   try {
@@ -252,7 +236,7 @@ exports.getUserRolesAndPermissions = async (req, res) => {
     }
 
     let user = await Users.findOne({
-      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }],
+      $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }]
     });
 
     if (!user) {
@@ -264,9 +248,9 @@ exports.getUserRolesAndPermissions = async (req, res) => {
     const rolsSet = new Set();
     const permissionsSet = new Set();
 
-    userRoles.forEach((role) => {
+    userRoles.forEach(role => {
       rolsSet.add(role.name);
-      role.permissions.forEach((permission) => {
+      role.permissions.forEach(permission => {
         permissionsSet.add(permission);
       });
     });
@@ -277,16 +261,15 @@ exports.getUserRolesAndPermissions = async (req, res) => {
       res,
       {
         UserRoles,
-        UserPermissions,
+        UserPermissions
       },
-      req.user?.email,
-      pt.points.users,
-      pt.types.list,
-      messages.basarili,
+      req.user?.id,
+      pointname,
+      transactions.list,
+      
       messages.getUserRolesAndPermissions
     );
   } catch (err) {
     return response.error(res);
   }
 };
-

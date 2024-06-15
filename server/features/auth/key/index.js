@@ -1,6 +1,11 @@
-module.exports = [
-    // { key: "user_add", name: "User Add", group: "USERS", description: "User Add" },
-    // { key: "user_update", name: "User Update", group: "USERS", description: "User Update" },
-    // { key: "user_delete", name: "User Delete", group: "USERS", description: "User Delete" },
-  ];
-  
+const key = 'auth';
+const name = 'Auth';
+const group = 'AUTH';
+const description = 'Auth';
+const baseKeys = require('@base/key');
+
+const keys = {
+  ...baseKeys(key, name, group, description)
+};
+
+module.exports = keys;

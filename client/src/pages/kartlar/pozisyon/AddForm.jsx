@@ -50,7 +50,7 @@ const AddForm = ({ getData }) => {
 
       const response = await pozisyonAdd(newPozisyon);
       if (response.data.success) {
-        message.success(response.data.message.desc);
+        message.success(response.data.message);
         setAddPozisyonModalState(false);
         getData();
         reset();

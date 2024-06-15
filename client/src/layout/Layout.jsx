@@ -20,7 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useToken, useUser } from '../store/auth/hooks';
 import { jwtCheck } from '../helper/jtwKontrol';
 import { setCurrentUser, setLogout } from '../store/auth/actions';
-import { getUser } from '../api/user';
+import { XgetUser } from '@/api/user';
 import { tokenParseJwt } from '../helper/parseJwt';
 import { message } from 'antd';
 import { json } from 'is_js';
@@ -54,7 +54,7 @@ const Layout = () => {
     try {
       const decodedToken = tokenParseJwt(token);
       const data = { id: decodedToken.id };
-      const response = await getUser(data);
+      const response = await XgetUser(data);
       if (response.data.success) {
         const data = response.data.data;
         setCurrentUser(data);

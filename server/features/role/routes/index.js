@@ -1,10 +1,10 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const controller = require("../controller");
-const validation = require("../validation");
+const auth = require('@middlewares/auth');
+const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@lib/defineRoute');
+const controller = require('../controller');
+const role = require('../key');
 
-// const authMiddleware = require("../middlewares/auth");
-
-router.post("/add", validation.add, controller.add);
+TokenRoleRoute(router, auth, 'post', '/add', controller.add, role.add);
 
 module.exports = router;

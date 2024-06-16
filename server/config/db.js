@@ -3,7 +3,7 @@ const log = console.log;
 const mongoose = require("mongoose");
 const uri = process.env.MONGODB_URI;
 
-exports.DbConfigInstall = () => {
+exports.run = () => {
   mongoose
     .connect(uri)
     .then(() => log("✅", chalk.bgGreen("MongoDB'ye başarıyla bağlandı.")))

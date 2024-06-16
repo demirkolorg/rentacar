@@ -1,9 +1,8 @@
 const { add, update, get, getAll, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
-const response = require('@lib/response');
+const response = require('@helper/response');
 const { messages } = require('../messages');
 const Pozisyonlar = require('../model');
 const { pointname } = require('../model');
-
 const props = (req, res) => ({ Model: Pozisyonlar, req, res, messages, pointname });
 
 exports.add = async (req, res) => {

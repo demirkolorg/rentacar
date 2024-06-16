@@ -1,4 +1,4 @@
-const response = require('@lib/response');
+const response = require('@helper/response');
 const transactions = require('@lib/transactions');
 
 exports.add = async (data, props) => {

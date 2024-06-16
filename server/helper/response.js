@@ -1,4 +1,3 @@
-const message = require('./message');
 const { logger } = require('../log');
 
 class Response {

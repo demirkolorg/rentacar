@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('@middlewares/auth');
-const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@lib/defineRoute');
+const { TokenRoleRoute, TokenRoute, PublicRoute } = require('@helper/defineRoute');
 const controller = require('../controller');
 const role = require('../key');
 

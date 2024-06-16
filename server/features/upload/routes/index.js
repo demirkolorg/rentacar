@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const configs = require('@config');
+const ENV = require('../../../config').env;
+// const configs = require('@config').;
 const { formatDate } = require('@lib/fonksiyonlar');
 const auth = require('@middlewares/auth');
-const { UploadRoute } = require('@lib/defineRoute');
+const { UploadRoute } = require('@helper/defineRoute');
 const controller = require('../controller');
 const role = require('../key');
 
@@ -35,11 +36,11 @@ const documentFilter = (req, file, cb) => {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.mimetype === 'image/jpeg') {
-      cb(null, configs.envConfig.FILE_UPLOAD_PATH + 'images/');
+      cb(null, ENV.FILE_UPLOAD_PATH + 'images/');
     } else if (file.mimetype === 'application/json') {
-      cb(null, configs.envConfig.FILE_UPLOAD_PATH + 'document/');
+      cb(null, ENV.FILE_UPLOAD_PATH + 'document/');
     } else {
-      cb(null, configs.envConfig.FILE_UPLOAD_PATH + 'others/');
+      cb(null, ENV.FILE_UPLOAD_PATH + 'others/');
     }
   },
   filename: (req, file, cb) => {

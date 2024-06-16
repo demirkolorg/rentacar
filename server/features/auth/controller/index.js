@@ -6,10 +6,10 @@ const mongoose = require('mongoose');
 //iç
 const Users = require('../../user/model');
 const Roles = require('../../../features/role/model');
-const response = require('../../../lib/response');
+const response = require('../../../helper/response');
 const transactions = require('../../../lib/transactions');
 const { pointname } = require('../model');
-const EnvConfig = require('../../../config/env.config');
+const ENV = require('../../../config').env;
 const messages = require('../messages');
 
 exports.login = async (req, res) => {
@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
       exp: Math.floor(Date.now() / 1000) + 86400 // Set token to expire in 1 day
     };
 
-    let token = jwt.sign(payload, EnvConfig.JWT.SECRET);
+    let token = jwt.sign(payload, ENV.JWT.SECRET);
     let userData = {
       _id: user._id,
       ad: user.ad,

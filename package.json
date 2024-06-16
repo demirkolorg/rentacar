@@ -54,6 +54,7 @@
     "@middlewares": "server/middlewares",
     "@uploads": "server/uploads",
     "@log": "server/log",
-    "@lib": "server/lib"
+    "@lib": "server/lib",
+    "@helper": "server/helper"
   }
 }

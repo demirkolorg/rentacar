@@ -1,5 +1,5 @@
 const joi = require("joi");
-const response = require("../../../lib/response");
+const response = require("../../../helper/response");
 const messages = require("../messages");
 
 class validation {

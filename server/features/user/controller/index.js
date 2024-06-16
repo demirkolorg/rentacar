@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const Roles = require('@features/role/model');
-const response = require('@lib/response');
+const response = require('@helper/response');
 const Users = require('../model');
 const messages = require('../messages');
 

@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
-const Enum = require('@config/enum.config');
-const config = require('@config/env.config');
+const ENUM = require('../config').ENUM;
+const ENV = require('../config').env;
+
 const Users = require('@features/user/model');
 const Roles = require('@features/role/model');
-const response = require('@lib/response');
+const response = require('@helper/response');
 const message = require('@lib/message');
 
 module.exports = {
@@ -12,11 +13,11 @@ module.exports = {
     if (!token) {
       return res.status(401).json({ message: 'Erişim reddedildi' });
     }
-    if (token.split('!a+s%y&a?')[1] === Enum.SYSTEM_REQUEST_TOKEN) {
-     return next();
+    if (token.split('!a+s%y&a?')[1] === ENUM.SYSTEM_REQUEST_TOKEN) {
+      return next();
     }
     try {
-      const decoded = jwt.verify(token.replace('Bearer ', ''), config.JWT.SECRET);
+      const decoded = jwt.verify(token.replace('Bearer ', ''), ENV.JWT.SECRET);
       req.user = decoded;
 
       next();
@@ -43,7 +44,7 @@ module.exports = {
         const token = req.header('Authorization');
 
         //istek sistem tarafından atıldı
-        if (token.split('!a+s%y&a?')[1] === Enum.SYSTEM_REQUEST_TOKEN) {
+        if (token.split('!a+s%y&a?')[1] === ENUM.SYSTEM_REQUEST_TOKEN) {
           return next();
         }
         const user = await Users.findById(req.user.id);
@@ -61,7 +62,7 @@ module.exports = {
         const UserPermissions = [...permissionsSet];
 
         //isteği atan süperadmin
-        if (UserPermissions.includes(Enum.ROLE_SUPER_ADMIN_PERMISSION)) {
+        if (UserPermissions.includes(ENUM.ROLE_SUPER_ADMIN_PERMISSION)) {
           return next();
         }
 

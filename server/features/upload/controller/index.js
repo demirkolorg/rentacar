@@ -1,4 +1,4 @@
-const response = require('../../../lib/response');
+const response = require('../../../helper/response');
 const messages = require('../messages');
 
 const { pointname } = require('../model');

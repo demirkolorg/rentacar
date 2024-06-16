@@ -1,7 +1,9 @@
-const dbConfig = require("./db.config");
-const envConfig = require("./env.config");
+const DB = require('./db');
+const env = require('./env');
+const ENUM = require('./enum');
 
 module.exports = {
-  dbConfig: dbConfig,
-  envConfig: envConfig,
+  DB,
+  env,
+  ENUM
 };

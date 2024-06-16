@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const ENUM = require('../config').ENUM;
 
 function loadKeys(directory) {
   const keys = [];
@@ -25,4 +26,16 @@ function loadKeys(directory) {
   return keys;
 }
 
-module.exports = loadKeys;
+// @features klasöründeki tüm key/index.js dosyalarını yükleyin
+const featuresPath = path.join(__dirname, '../features');
+const featureKeys = loadKeys(featuresPath);
+
+module.exports = [
+  ...featureKeys,
+  {
+    key: ENUM.ROLE_SUPER_ADMIN_PERMISSION,
+    name: 'SUPER ADMIN FULL',
+    group: 'ADMIN',
+    description: 'Tüm endpointlere full yetkilidir'
+  }
+];

@@ -1,4 +1,4 @@
-const response = require("../lib/response");
+const response = require("../helper/response");
 
 // errorMiddleware.js
 const errorHandler = (err, req, res, next) => {

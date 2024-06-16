@@ -1,5 +1,5 @@
 const AuditLogsModel = require('../features/AuditLogs/model');
-const Enum = require("../config/enum.config");
+const Enum = require("../config/enum");
 
 let instance = null;
 

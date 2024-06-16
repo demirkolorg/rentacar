@@ -1,4 +1,4 @@
-const response = require('../../../lib/response');
+const response = require('../../../helper/response');
 const transactions = require('../../../lib/transactions');
 const Firmalar = require('../model');
 const { pointname } = require('../model');

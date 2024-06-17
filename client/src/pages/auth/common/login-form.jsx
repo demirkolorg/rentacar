@@ -41,7 +41,9 @@ const LoginForm = () => {
       const response = await login(data);
       setLoading(false);
       if (response.data.success) {
-        toast.success(response.data.message);
+        setTimeout(() => {
+          toast.success(response.data.message);
+        }, 100);
         setLogin(response.data.data.token);
         // setCurrentUser(response.data.data.user);
         navigate('/');
@@ -62,30 +64,10 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
-      <Textinput
-        name="email"
-        label="email"
-        defaultValue="SUPER_ADMIN@EMAIL.COM.TR"
-        type="email"
-        register={register}
-        error={errors.email}
-        className="h-[48px]"
-      />
-      <Textinput
-        name="password"
-        label="passwrod"
-        type="password"
-        defaultValue="SUPER_ADMIN_PASSWORD_172729"
-        register={register}
-        error={errors.password}
-        className="h-[48px]"
-      />
+      <Textinput name="email" label="email" defaultValue="SUPER_ADMIN@EMAIL.COM.TR" type="email" register={register} error={errors.email} className="h-[48px]" />
+      <Textinput name="password" label="passwrod" type="password" defaultValue="SUPER_ADMIN_PASSWORD_172729" register={register} error={errors.password} className="h-[48px]" />
       <div className="flex justify-between">
-      <Checkbox
-          value={checked}
-          onChange={() => setChecked(!checked)}
-          label="Oturumumu açık tut"
-        />
+        <Checkbox value={checked} onChange={() => setChecked(!checked)} label="Oturumumu açık tut" />
         <Link to="/forgot-password" className="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium">
           Parolamı unuttum
         </Link>

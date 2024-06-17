@@ -1,18 +1,15 @@
-const { logger } = require('../log');
+const { infoLogger, errorLogger } = require('../features/AuditLogs/log');
 
 class Response {
   constructor() {}
 
-  static logger(data, email, point, type) {
-    logger(email, point, type, data);
-  }
-
   static success(res, data, user_id, point, type, message) {
-    logger(user_id, point, type, data);
+    infoLogger(user_id, point, type, data);
     res.status(200).json({ success: true, message, data });
   }
 
-  static error(res, message, code = 400) {
+  static error(res, error, user_id, point, type, message, code = 400) {
+    errorLogger(user_id, point, type, error);
     res.status(code).json({ success: false, message });
   }
 }

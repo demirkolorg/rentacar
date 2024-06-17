@@ -28,7 +28,10 @@ const getKeys = (key, name, group, description) => {
     monitor: { key: `${key}_monitor`, name: `${name} İzle`, group: `${group}`, description: `${description} ile ilgili izleme işlemlerine yetkilidir` },
     validate: { key: `${key}_validate`, name: `${name} Doğrula`, group: `${group}`, description: `${description} ile ilgili doğrulama işlemlerine yetkilidir` },
     sync: { key: `${key}_sync`, name: `${name} Senkronize Et`, group: `${group}`, description: `${description} ile ilgili senkronizasyon işlemlerine yetkilidir` },
-    schedule: { key: `${key}_schedule`, name: `${name} Zamanla`, group: `${group}`, description: `${description} ile ilgili zamanlama işlemlerine yetkilidir` }
+    schedule: { key: `${key}_schedule`, name: `${name} Zamanla`, group: `${group}`, description: `${description} ile ilgili zamanlama işlemlerine yetkilidir` },
+    mail: { key: `${key}_mail`, name: `${name} Mail`, group: `${group}`, description: `${description} ile ilgili mail işlemlerine yetkilidir` },
+    notification: { key: `${key}_notification`, name: `${name} Bildirim`, group: `${group}`, description: `${description} ile ilgili bildirim işlemlerine yetkilidir` },
+    log: { key: `${key}_log`, name: `${name} Log`, group: `${group}`, description: `${description} ile ilgili loglama işlemlerine yetkilidir` }
   };
 };
 

@@ -7,7 +7,7 @@ import {
   fetchFirmalar
 } from '@/store/kartlar/firma/hooks';
 import { useUser } from '@/store/auth/hooks';
-import { firmaDelete } from '@/api/kartlar/firma';
+import { firmaSoftDelete } from '@/api/kartlar/firma';
 import { useState } from 'react';
 import { toast as message } from 'react-toastify';
 
@@ -19,7 +19,7 @@ const DeleteForm = ({ getData }) => {
   const deleteData = async () => {
     setBtnLoading(true);
     try {
-      const response = await firmaDelete({ _id: firmaData._id });
+      const response = await firmaSoftDelete({ _id: firmaData._id });
       if (response.data.success) {
         message.success(response.data.message);
 

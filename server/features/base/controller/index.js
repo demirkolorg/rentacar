@@ -1,178 +1,285 @@
 const response = require('@helper/response');
 const transactions = require('@lib/transactions');
 
-exports.add = async (data, props) => {
-  let { Model, req, res, messages, pointname } = props;
-  try {
-    let createdDocument = await Model.create(data);
-    return response.success(res, createdDocument, req.user?.id, pointname, transactions.add, messages.add.ok);
-  } catch (err) {
-    if (err.code === 11000) {
-      return response.error(res, messages.name_already, messages.data_error, 409);
-    }
-    return response.error(res, messages.add.error);
-  }
-};
-exports.update = async (data, props) => {
-  let { Model, req, res, messages, pointname } = props;
-  try {
-    let document = await Model.findOneAndUpdate({ _id: req.body._id }, data, { new: true });
-    if (!document) {
-      return response.error(res, messages.update.not_found);
-    }
-
-    return response.success(res, document, req.user?.id, pointname, transactions.update, messages.update.ok);
-  } catch (err) {
-    if (err.code === 11000) {
-      return response.error(res, messages.name_already, messages.data_error, 409);
-    }
-    return response.error(res, messages.update.error);
-  }
-};
 exports.get = async props => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   let body = req.body;
-  let { Model, req, res, messages, pointname } = props;
   try {
-    let document = await Model.findOne({ _id: body._id });
+    let document = await model.findOne({ _id: body._id });
     if (!document) {
-      return response.error(res, messages.get.not_found);
+      return response.error(res, err, userId, pointname, transactions.get, messages.get.not_found);
     }
 
-    return response.success(res, document, req.user?.id, pointname, transactions.get, messages.get.ok);
+    return response.success(res, document, userId, pointname, transactions.get, messages.get.ok);
   } catch (err) {
-    return response.error(res, messages.get.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.get.error);
   }
 };
-exports.getAll = async (filter, props) => {
-  let { Model, req, res, messages, pointname } = props;
+exports.getWithPopulate = async props => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  let body = req.body;
+  try {
+    let document = await model.findOne({ _id: body._id }).populate();
+    if (!document) {
+      return response.error(res, err, userId, pointname, transactions.get, messages.get.not_found);
+    }
+
+    return response.success(res, document, userId, pointname, transactions.get, messages.get.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.add, messages.get.error);
+  }
+};
+exports.getIds = async props => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  let body = req.body;
+  let ids = body.ids;
+  let query = req.query;
+  try {
+    let document = await model.find({ _id: { $in: ids, sube: body.sube } }).find(query);
+    if (!document || document.length === 0) {
+      return response.error(res, err, userId, pointname, transactions.list, messages.list.not_found);
+    }
+    return response.success(res, document, userId, pointname, transactions.get, messages.list.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.list, messages.list.error);
+  }
+};
+exports.getIdsWithPopulate = async props => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  let body = req.body;
+  let ids = body.ids;
+  let query = req.query;
+  try {
+    let document = await model
+      .find({ _id: { $in: ids, sube: body.sube } })
+      .find(query)
+      .populate();
+    if (!document || document.length === 0) {
+      return response.error(res, err, userId, pointname, transactions.list, messages.list.not_found);
+    }
+    return response.success(res, document, userId, pointname, transactions.get, messages.list.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.list, messages.list.error);
+  }
+};
+exports.list = async (filter, props) => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   let body = req.body;
   let query = req.query;
   try {
-    let documents = await Model.find(filter).find(query);
-    return response.success(res, documents, req.user?.id, pointname, transactions.list, messages.list.ok);
+    let documents = await model.find(filter).find(query);
+    return response.success(res, documents, userId, pointname, transactions.list, messages.list.ok);
   } catch (err) {
-    return response.error(res, messages.list.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.list.error);
+  }
+};
+exports.listWithPopulate = async (filter, props) => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  let body = req.body;
+  let query = req.query;
+  try {
+    let documents = await model.find(filter).find(query).populate();
+    return response.success(res, documents, userId, pointname, transactions.list, messages.list.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.add, messages.list.error);
+  }
+};
+exports.add = async (data, props) => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  try {
+    let createdDocument = await model.create(data);
+    return response.success(res, createdDocument, userId, pointname, transactions.add, messages.add.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.add, messages.add.error);
+  }
+};
+exports.update = async (data, props) => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  data.updated_by = userId;
+
+  try {
+    let document = await model.findOneAndUpdate({ _id: req.body._id }, data, { new: true });
+    if (!document) {
+      return response.error(res, err, userId, pointname, transactions.update, messages.update.not_found);
+    }
+
+    return response.success(res, document, userId, pointname, transactions.update, messages.update.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.add, messages.update.error);
   }
 };
 exports.active = async props => {
-  let { Model, req, res, messages, pointname } = props;
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   try {
     let updates = {};
-    updates.updated_by = req.user?.id;
+    updates.updated_by = userId;
     updates.is_active = true;
 
-    let document = await Model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
+    let document = await model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
 
     if (!document) {
-      return response.error(res, messages.active.not_found);
+      return response.error(res, err, userId, pointname, transactions.active, messages.active.not_found);
     }
 
-    return response.success(res, document, req.user?.id, pointname, transactions.active, messages.active.ok);
+    return response.success(res, document, userId, pointname, transactions.active, messages.active.ok);
   } catch (err) {
-    return response.error(res, messages.active.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.active.error);
   }
 };
 exports.passive = async props => {
-  let { Model, req, res, messages, pointname } = props;
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   try {
     let updates = {};
-    updates.updated_by = req.user?.id;
+    updates.updated_by = userId;
     updates.is_active = false;
 
-    let document = await Model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
+    let document = await model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
 
     if (!document) {
-      return response.error(res, messages.passive.not_found);
+      return response.error(res, err, userId, pointname, transactions.passive, messages.passive.not_found);
     }
 
-    return response.success(res, document, req.user?.id, pointname, transactions.passive, messages.passive.ok);
+    return response.success(res, document, userId, pointname, transactions.passive, messages.passive.ok);
   } catch (err) {
-    return response.error(res, messages.passive.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.passive.error);
   }
 };
 exports.archive = async props => {
-  let { Model, req, res, messages, pointname } = props;
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   try {
     let updates = {};
-    updates.updated_by = req.user?.id;
+    updates.updated_by = userId;
     updates.is_archive = true;
 
-    let document = await Model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
+    let document = await model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
 
     if (!document) {
-      return response.error(res, messages.archive.not_found);
+      return response.error(res, err, userId, pointname, transactions.archive, messages.archive.not_found);
     }
 
-    return response.success(res, document, req.user?.id, pointname, transactions.archive, messages.archive.ok);
+    return response.success(res, document, userId, pointname, transactions.archive, messages.archive.ok);
   } catch (err) {
-    return response.error(res, messages.archive.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.archive.error);
   }
 };
 exports.unarchive = async props => {
-  let { Model, req, res, messages, pointname } = props;
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   try {
     let updates = {};
-    updates.updated_by = req.user?.id;
+    updates.updated_by = userId;
     updates.is_archive = false;
 
-    let document = await Model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
+    let document = await model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
 
     if (!document) {
-      return response.error(res, messages.unarchive.not_found);
+      return response.error(res, err, userId, pointname, transactions.unarchive, messages.unarchive.not_found);
     }
 
-    return response.success(res, document, req.user?.id, pointname, transactions.unarchive, messages.unarchive.ok);
+    return response.success(res, document, userId, pointname, transactions.unarchive, messages.unarchive.ok);
   } catch (err) {
-    return response.error(res, messages.unarchive.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.unarchive.error);
   }
 };
 exports.softDelete = async props => {
-  let { Model, req, res, messages, pointname } = props;
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   try {
     let updates = {};
-    updates.updated_by = req.user?.id;
+    updates.updated_by = userId;
     updates.is_delete = true;
 
-    let document = await Model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
+    let document = await model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
 
     if (!document) {
-      return response.error(res, messages.softDelete.not_found);
+      return response.error(res, err, userId, pointname, transactions.softdelete, messages.softdelete.not_found);
     }
 
-    return response.success(res, document, req.user?.id, pointname, transactions.softFelete, messages.softdelete.ok);
+    return response.success(res, document, userId, pointname, transactions.softFelete, messages.softdelete.ok);
   } catch (err) {
-    return response.error(res, messages.softDelete.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.softdelete.error);
   }
 };
 exports.restore = async props => {
-  let { Model, req, res, messages, pointname } = props;
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   try {
     let updates = {};
-    updates.updated_by = req.user?.id;
+    updates.updated_by = userId;
     updates.is_delete = false;
-
-    let document = await Model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
-
+    let document = await model.findOneAndUpdate({ _id: req.body._id }, updates, { new: true });
     if (!document) {
-      return response.error(res, messages.restore.not_found);
+      return response.error(res, err, userId, pointname, transactions.restore, messages.restore.not_found);
     }
-
-    return response.success(res, document, req.user?.id, pointname, transactions.restore, messages.restore.ok);
+    return response.success(res, document, userId, pointname, transactions.restore, messages.restore.ok);
   } catch (err) {
-    return response.error(res, messages.restore.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.restore.error);
   }
 };
 exports.hardDelete = async props => {
-  let { Model, req, res, messages, pointname } = props;
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
   try {
-    let document = await Model.findOneAndDelete({ _id: req.body._id });
-
+    let document = await model.findOneAndDelete({ _id: req.body._id });
     if (!document) {
-      return response.error(res, messages.hardDelete.not_found);
+      return response.error(res, err, userId, pointname, transactions.hardDelete, messages.hardDelete.not_found);
     }
-
-    return response.success(res, document, req.user?.id, pointname, transactions.hardDelete, messages.harddelete.ok);
+    return response.success(res, document, userId, pointname, transactions.hardDelete, messages.harddelete.ok);
   } catch (err) {
-    return response.error(res, messages.hardDelete.error);
+    return response.error(res, err, userId, pointname, transactions.add, messages.harddelete.error);
   }
 };
+exports.imageUpload = async props => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  let body = req.body;
+  try {
+    if (!req.file) {
+      return response.error(res, err, userId, pointname, transactions.upload, messages.imageUpload.not_found);
+    }
+
+    return response.success(res, req.file.filename, userId, pointname, transactions.upload, messages.imageUpload.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.upload, messages.imageUpload.error);
+  }
+};
+exports.documentUpload = async props => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  let body = req.body;
+  try {
+    if (!req.file) {
+      return response.error(res, err, userId, pointname, transactions.upload, messages.documentUpload.not_found);
+    }
+
+    return response.success(res, req.file.filename, userId, pointname, transactions.upload, messages.documentUpload.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.upload, messages.documentUpload.error);
+  }
+};
+exports.otherUpload = async props => {
+  let { model, req, res, messages, pointname } = props;
+  let userId = req.user?.id;
+  let body = req.body;
+  try {
+    if (!req.file) {
+      return response.error(res, err, userId, pointname, transactions.upload, messages.otherUpload.not_found);
+    }
+
+    return response.success(res, req.file.filename, userId, pointname, transactions.upload, messages.otherUpload.ok);
+  } catch (err) {
+    return response.error(res, err, userId, pointname, transactions.upload, messages.otherUpload.error);
+  }
+};
+ 

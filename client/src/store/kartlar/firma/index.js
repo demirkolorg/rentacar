@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { firmaGetAll, firmaAdd } from '@/api/kartlar/firma';
+import { firmaList } from '@/api/kartlar/firma';
 
 export const _fetchFirmalar = createAsyncThunk('firma/fetchFirmalar', async (params, { rejectWithValue }) => {
   try {
-    const response = await firmaGetAll(params);
+    const response = await firmaList(params);
     if (response.data.success) {
       return response.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     } else {

@@ -13,4 +13,3 @@ const schema = new mongoose.Schema(
 
 schema.add(base);
 module.exports = mongoose.model('FirmaPersonelleri', schema);
-module.exports.pointname = 'FirmaPersonelleri';

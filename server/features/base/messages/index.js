@@ -1,396 +1,113 @@
 const getMessages = name => {
+  const createMessages = (name, actionName) => {
+    const messages = {};
+    states.forEach(state => {
+      switch (state) {
+        case 'ok':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi başarılı.`;
+          break;
+        case 'error':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi hatalı.`;
+          break;
+        case 'failed':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi başarısız.`;
+          break;
+        case 'pending':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi beklemede.`;
+          break;
+        case 'in_progress':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi devam ediyor.`;
+          break;
+        case 'completed':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi tamamlandı.`;
+          break;
+        case 'cancelled':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi iptal edildi.`;
+          break;
+        case 'not_found':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi bulunamadı.`;
+          break;
+        case 'unauthorized':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi yetkisiz.`;
+          break;
+        case 'forbidden':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi yasak.`;
+          break;
+        case 'timeout':
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi zaman aşımına uğradı.`;
+          break;
+        default:
+          messages[state] = `${name ? name + ' ' : ''}${actionName} işlemi bilinmeyen bir durumda.`;
+      }
+    });
+    return messages;
+  };
+
+  const states = ['ok', 'error', 'pending', 'in_progress', 'completed', 'failed', 'cancelled', 'not_found', 'unauthorized', 'forbidden', 'timeout'];
+
   return {
-    //İSİMSİZ
-    ok: `İşlem başarılı.`,
-    error: `İşlem başarısız.`,
-    pending: `İşlem beklemede.`,
-    in_progress: `İşlem devam ediyor.`,
-    completed: `İşlem tamamlandı.`,
-    failed: `İşlem başarısız.`,
-    cancelled: `İşlem iptal edildi.`,
-    not_found: `İşlem bulunamadı.`,
-    unauthorized: `işlem yetkisiz.`,
-    forbidden: `İşlem yasak.`,
-    timeout: `İşlemi zaman aşımına uğradı.`,
-    validation_error: 'Doğrulama İşlemi Hatası',
-    unexpected_error: 'Beklenmedik bir hata meydana geldi, lütfen daha sonra tekrar deneyiniz.',
-    imageUpload_ok: 'Resim yükleme İşlemi Başarılı',
-    imageUpload_error: 'Resim yükleme İşlemi Başarısız',
-    documentUpload_ok: 'Döküman yükleme İşlemi Başarılı',
-    documentUpload_error: 'Döküman yükleme İşlemi Başarısız',
-    otherUpload_ok: 'Dosya yükleme İşlemi Başarılı',
-    otherUpload_error: 'Dosya yükleme İşlemi Başarısız',
-    file_notfound: `Dosya bulunamadı.`,
-    data_error: 'Veri Hatası',
+    general: {
+      ok: `İşlem başarılı.`,
+      error: `İşlem başarısız.`,
+      pending: `İşlem beklemede.`,
+      in_progress: `İşlem devam ediyor.`,
+      completed: `İşlem tamamlandı.`,
+      failed: `İşlem başarısız.`,
+      cancelled: `İşlem iptal edildi.`,
+      not_found: `İşlem bulunamadı.`,
+      file_notfound: `Dosya bulunamadı.`,
+      unauthorized: `işlem yetkisiz.`,
+      forbidden: `İşlem yasak.`,
+      timeout: `İşlem zaman aşımına uğradı.`
+    },
+    error: {
+      unexpected: 'Beklenmedik bir hata meydana geldi, lütfen daha sonra tekrar deneyiniz.',
+      data: 'Veri Hatası'
+    },
+    warning: {
+      not_found: `${name} bulunamadı.`,
+      name_already: `${name} adı zaten kullanılmaktadır.`
+    },
 
-    //ÖZEL
-    name_already: `${name} adı zaten kullanılmaktadır.`,
-    not_found: `${name} bulunamadı.`,
-
-    //GENEL
-    get: {
-      ok: `${name} getirme işlemi başarılı.`,
-      error: `${name} getirme işlemi başarısız.`,
-      pending: `${name} getirme işlemi beklemede.`,
-      in_progress: `${name} getirme işlemi devam ediyor.`,
-      completed: `${name} getirme işlemi tamamlandı.`,
-      failed: `${name} getirme işlemi başarısız.`,
-      cancelled: `${name} getirme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} getirme işlemi yetkisiz.`,
-      forbidden: `${name} getirme işlemi yasak.`,
-      timeout: `${name} getirme işlemi zaman aşımına uğradı.`
-    },
-    list: {
-      ok: `${name} listeleme işlemi başarılı.`,
-      error: `${name} listeleme işlemi başarısız.`,
-      pending: `${name} listeleme işlemi beklemede.`,
-      in_progress: `${name} listeleme işlemi devam ediyor.`,
-      completed: `${name} listeleme işlemi tamamlandı.`,
-      failed: `${name} listeleme işlemi başarısız.`,
-      cancelled: `${name} listeleme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} listeleme işlemi yetkisiz.`,
-      forbidden: `${name} listeleme işlemi yasak.`,
-      timeout: `${name} listeleme işlemi zaman aşımına uğradı.`
-    },
-    add: {
-      ok: `${name} ekleme işlemi başarılı.`,
-      error: `${name} ekleme işlemi başarısız.`,
-      pending: `${name} ekleme işlemi beklemede.`,
-      in_progress: `${name} ekleme işlemi devam ediyor.`,
-      completed: `${name} ekleme işlemi tamamlandı.`,
-      failed: `${name} ekleme işlemi başarısız.`,
-      cancelled: `${name} ekleme işlemi iptal edildi.`,
-      unauthorized: `${name} ekleme işlemi yetkisiz.`,
-      forbidden: `${name} ekleme işlemi yasak.`,
-      timeout: `${name} ekleme işlemi zaman aşımına uğradı.`
-    },
-    update: {
-      ok: `${name} güncelleme işlemi başarılı.`,
-      error: `${name} güncelleme işlemi başarısız.`,
-      pending: `${name} güncelleme işlemi beklemede.`,
-      in_progress: `${name} güncelleme işlemi devam ediyor.`,
-      completed: `${name} güncelleme işlemi tamamlandı.`,
-      failed: `${name} güncelleme işlemi başarısız.`,
-      cancelled: `${name} güncelleme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} güncelleme işlemi yetkisiz.`,
-      forbidden: `${name} güncelleme işlemi yasak.`,
-      timeout: `${name} güncelleme işlemi zaman aşımına uğradı.`
-    },
-    softdelete: {
-      ok: `${name} silme işlemi başarılı.`,
-      error: `${name} silme işlemi başarısız.`,
-      pending: `${name} silme işlemi beklemede.`,
-      in_progress: `${name} silme işlemi devam ediyor.`,
-      completed: `${name} silme işlemi tamamlandı.`,
-      failed: `${name} silme işlemi başarısız.`,
-      cancelled: `${name} silme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} silme işlemi yetkisiz.`,
-      forbidden: `${name} silme işlemi yasak.`,
-      timeout: `${name} silme işlemi zaman aşımına uğradı.`
-    },
-    harddelete: {
-      ok: `${name} kalıcı silme işlemi başarılı.`,
-      error: `${name} kalıcı silme işlemi başarısız.`,
-      pending: `${name} kalıcı silme işlemi beklemede.`,
-      in_progress: `${name} kalıcı silme işlemi devam ediyor.`,
-      completed: `${name} kalıcı silme işlemi tamamlandı.`,
-      failed: `${name} kalıcı silme işlemi başarısız.`,
-      cancelled: `${name} kalıcı silme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} kalıcı silme işlemi yetkisiz.`,
-      forbidden: `${name} kalıcı silme işlemi yasak.`,
-      timeout: `${name} kalıcı silme işlemi zaman aşımına uğradı.`
-    },
-    restore: {
-      ok: `${name} geri yükleme işlemi başarılı.`,
-      error: `${name} geri yükleme işlemi başarısız.`,
-      pending: `${name} geri yükleme işlemi beklemede.`,
-      in_progress: `${name} geri yükleme işlemi devam ediyor.`,
-      completed: `${name} geri yükleme işlemi tamamlandı.`,
-      failed: `${name} geri yükleme işlemi başarısız.`,
-      cancelled: `${name} geri yükleme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} geri yükleme işlemi yetkisiz.`,
-      forbidden: `${name} geri yükleme işlemi yasak.`,
-      timeout: `${name} geri yükleme işlemi zaman aşımına uğradı.`
-    },
-    active: {
-      ok: `${name} durumu aktif edilme işlemi başarılı.`,
-      error: `${name} durumu aktif edilme işlemi başarısız.`,
-      pending: `${name} durumu aktif edilme işlemi beklemede.`,
-      in_progress: `${name} durumu aktif edilme işlemi devam ediyor.`,
-      completed: `${name} durumu aktif edilme işlemi tamamlandı.`,
-      failed: `${name} durumu aktif edilme işlemi başarısız.`,
-      cancelled: `${name} durumu aktif edilme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} durumu aktif edilme işlemi yetkisiz.`,
-      forbidden: `${name} durumu aktif edilme işlemi yasak.`,
-      timeout: `${name} durumu aktif edilme işlemi zaman aşımına uğradı.`
-    },
-    passive: {
-      ok: `${name} durumu pasif edilme işlemi başarılı.`,
-      error: `${name} durumu pasif edilme işlemi başarısız.`,
-      pending: `${name} durumu pasif edilme işlemi beklemede.`,
-      in_progress: `${name} durumu pasif edilme işlemi devam ediyor.`,
-      completed: `${name} durumu pasif edilme işlemi tamamlandı.`,
-      failed: `${name} durumu pasif edilme işlemi başarısız.`,
-      cancelled: `${name} durumu pasif edilme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} durumu pasif edilme işlemi yetkisiz.`,
-      forbidden: `${name} durumu pasif edilme işlemi yasak.`,
-      timeout: `${name} durumu pasif edilme işlemi zaman aşımına uğradı.`
-    },
-    archive: {
-      ok: `${name} arşivleme işlemi başarılı.`,
-      error: `${name} arşivleme işlemi başarısız.`,
-      pending: `${name} arşivleme işlemi beklemede.`,
-      in_progress: `${name} arşivleme işlemi devam ediyor.`,
-      completed: `${name} arşivleme işlemi tamamlandı.`,
-      failed: `${name} arşivleme işlemi başarısız.`,
-      cancelled: `${name} arşivleme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} arşivleme işlemi yetkisiz.`,
-      forbidden: `${name} arşivleme işlemi yasak.`,
-      timeout: `${name} arşivleme işlemi zaman aşımına uğradı.`
-    },
-    unarchive: {
-      ok: `${name} arşivden çıkarma işlemi başarılı.`,
-      error: `${name} arşivden çıkarma işlemi başarısız.`,
-      pending: `${name} arşivden çıkarma işlemi beklemede.`,
-      in_progress: `${name} arşivden çıkarma işlemi devam ediyor.`,
-      completed: `${name} arşivden çıkarma işlemi tamamlandı.`,
-      failed: `${name} arşivden çıkarma işlemi başarısız.`,
-      cancelled: `${name} arşivden çıkarma işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} arşivden çıkarma işlemi yetkisiz.`,
-      forbidden: `${name} arşivden çıkarma işlemi yasak.`,
-      timeout: `${name} arşivden çıkarma işlemi zaman aşımına uğradı.`
-    },
-    report: {
-      ok: `${name} raporlama işlemi başarılı.`,
-      error: `${name} raporlama işlemi başarısız.`,
-      pending: `${name} raporlama işlemi beklemede.`,
-      in_progress: `${name} raporlama işlemi devam ediyor.`,
-      completed: `${name} raporlama işlemi tamamlandı.`,
-      failed: `${name} raporlama işlemi başarısız.`,
-      cancelled: `${name} raporlama işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} raporlama işlemi yetkisiz.`,
-      forbidden: `${name} raporlama işlemi yasak.`,
-      timeout: `${name} raporlama işlemi zaman aşımına uğradı.`
-    },
-    statistic: {
-      ok: `${name} istatistik işlemi başarılı.`,
-      error: `${name} istatistik işlemi başarısız.`,
-      pending: `${name} istatistik işlemi beklemede.`,
-      in_progress: `${name} istatistik işlemi devam ediyor.`,
-      completed: `${name} istatistik işlemi tamamlandı.`,
-      failed: `${name} istatistik işlemi başarısız.`,
-      cancelled: `${name} istatistik işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} istatistik işlemi yetkisiz.`,
-      forbidden: `${name} istatistik işlemi yasak.`,
-      timeout: `${name} istatistik işlemi zaman aşımına uğradı.`
-    },
-    print: {
-      ok: `${name} yazdırma işlemi başarılı.`,
-      error: `${name} yazdırma işlemi başarısız.`,
-      pending: `${name} yazdırma işlemi beklemede.`,
-      in_progress: `${name} yazdırma işlemi devam ediyor.`,
-      completed: `${name} yazdırma işlemi tamamlandı.`,
-      failed: `${name} yazdırma işlemi başarısız.`,
-      cancelled: `${name} yazdırma işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} yazdırma işlemi yetkisiz.`,
-      forbidden: `${name} yazdırma işlemi yasak.`,
-      timeout: `${name} yazdırma işlemi zaman aşımına uğradı.`
-    },
-    import: {
-      ok: `${name} içe aktarma işlemi başarılı.`,
-      error: `${name} içe aktarma işlemi başarısız.`,
-      pending: `${name} içe aktarma işlemi beklemede.`,
-      in_progress: `${name} içe aktarma işlemi devam ediyor.`,
-      completed: `${name} içe aktarma işlemi tamamlandı.`,
-      failed: `${name} içe aktarma işlemi başarısız.`,
-      cancelled: `${name} içe aktarma işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} içe aktarma işlemi yetkisiz.`,
-      forbidden: `${name} içe aktarma işlemi yasak.`,
-      timeout: `${name} içe aktarma işlemi zaman aşımına uğradı.`
-    },
-    export: {
-      ok: `${name} dışa aktarma işlemi başarılı.`,
-      error: `${name} dışa aktarma işlemi başarısız.`,
-      pending: `${name} dışa aktarma işlemi beklemede.`,
-      in_progress: `${name} dışa aktarma işlemi devam ediyor.`,
-      completed: `${name} dışa aktarma işlemi tamamlandı.`,
-      failed: `${name} dışa aktarma işlemi başarısız.`,
-      cancelled: `${name} dışa aktarma işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} dışa aktarma işlemi yetkisiz.`,
-      forbidden: `${name} dışa aktarma işlemi yasak.`,
-      timeout: `${name} dışa aktarma işlemi zaman aşımına uğradı.`
-    },
-    approve: {
-      ok: `${name} onaylama işlemi başarılı.`,
-      error: `${name} onaylama işlemi başarısız.`,
-      pending: `${name} onaylama işlemi beklemede.`,
-      in_progress: `${name} onaylama işlemi devam ediyor.`,
-      completed: `${name} onaylama işlemi tamamlandı.`,
-      failed: `${name} onaylama işlemi başarısız.`,
-      cancelled: `${name} onaylama işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} onaylama işlemi yetkisiz.`,
-      forbidden: `${name} onaylama işlemi yasak.`,
-      timeout: `${name} onaylama işlemi zaman aşımına uğradı.`
-    },
-    reject: {
-      ok: `${name} reddetme işlemi başarılı.`,
-      error: `${name} reddetme işlemi başarısız.`,
-      pending: `${name} reddetme işlemi beklemede.`,
-      in_progress: `${name} reddetme işlemi devam ediyor.`,
-      completed: `${name} reddetme işlemi tamamlandı.`,
-      failed: `${name} reddetme işlemi başarısız.`,
-      cancelled: `${name} reddetme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} reddetme işlemi yetkisiz.`,
-      forbidden: `${name} reddetme işlemi yasak.`,
-      timeout: `${name} reddetme işlemi zaman aşımına uğradı.`
-    },
-    publish: {
-      ok: `${name} yayınlama işlemi başarılı.`,
-      error: `${name} yayınlama işlemi başarısız.`,
-      pending: `${name} yayınlama işlemi beklemede.`,
-      in_progress: `${name} yayınlama işlemi devam ediyor.`,
-      completed: `${name} yayınlama işlemi tamamlandı.`,
-      failed: `${name} yayınlama işlemi başarısız.`,
-      cancelled: `${name} yayınlama işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} yayınlama işlemi yetkisiz.`,
-      forbidden: `${name} yayınlama işlemi yasak.`,
-      timeout: `${name} yayınlama işlemi zaman aşımına uğradı.`
-    },
-    draft: {
-      ok: `${name} taslak işlemi başarılı.`,
-      error: `${name} taslak işlemi başarısız.`,
-      pending: `${name} taslak işlemi beklemede.`,
-      in_progress: `${name} taslak işlemi devam ediyor.`,
-      completed: `${name} taslak işlemi tamamlandı.`,
-      failed: `${name} taslak işlemi başarısız.`,
-      cancelled: `${name} taslak işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} taslak işlemi yetkisiz.`,
-      forbidden: `${name} taslak işlemi yasak.`,
-      timeout: `${name} taslak işlemi zaman aşımına uğradı.`
-    },
-    clone: {
-      ok: `${name} klonlama işlemi başarılı.`,
-      error: `${name} klonlama işlemi başarısız.`,
-      pending: `${name} klonlama işlemi beklemede.`,
-      in_progress: `${name} klonlama işlemi devam ediyor.`,
-      completed: `${name} klonlama işlemi tamamlandı.`,
-      failed: `${name} klonlama işlemi başarısız.`,
-      cancelled: `${name} klonlama işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} klonlama işlemi yetkisiz.`,
-      forbidden: `${name} klonlama işlemi yasak.`,
-      timeout: `${name} klonlama işlemi zaman aşımına uğradı.`
-    },
-    share: {
-      ok: `${name} paylaşma işlemi başarılı.`,
-      error: `${name} paylaşma işlemi başarısız.`,
-      pending: `${name} paylaşma işlemi beklemede.`,
-      in_progress: `${name} paylaşma işlemi devam ediyor.`,
-      completed: `${name} paylaşma işlemi tamamlandı.`,
-      failed: `${name} paylaşma işlemi başarısız.`,
-      cancelled: `${name} paylaşma işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} paylaşma işlemi yetkisiz.`,
-      forbidden: `${name} paylaşma işlemi yasak.`,
-      timeout: `${name} paylaşma işlemi zaman aşımına uğradı.`
-    },
-    transfer: {
-      ok: `${name} transfer işlemi başarılı.`,
-      error: `${name} transfer işlemi başarısız.`,
-      pending: `${name} transfer işlemi beklemede.`,
-      in_progress: `${name} transfer işlemi devam ediyor.`,
-      completed: `${name} transfer işlemi tamamlandı.`,
-      failed: `${name} transfer işlemi başarısız.`,
-      cancelled: `${name} transfer işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} transfer işlemi yetkisiz.`,
-      forbidden: `${name} transfer işlemi yasak.`,
-      timeout: `${name} transfer işlemi zaman aşımına uğradı.`
-    },
-    audit: {
-      ok: `${name} denetleme işlemi başarılı.`,
-      error: `${name} denetleme işlemi başarısız.`,
-      pending: `${name} denetleme işlemi beklemede.`,
-      in_progress: `${name} denetleme işlemi devam ediyor.`,
-      completed: `${name} denetleme işlemi tamamlandı.`,
-      failed: `${name} denetleme işlemi başarısız.`,
-      cancelled: `${name} denetleme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} denetleme işlemi yetkisiz.`,
-      forbidden: `${name} denetleme işlemi yasak.`,
-      timeout: `${name} denetleme işlemi zaman aşımına uğradı.`
-    },
-    monitor: {
-      ok: `${name} izleme işlemi başarılı.`,
-      error: `${name} izleme işlemi başarısız.`,
-      pending: `${name} izleme işlemi beklemede.`,
-      in_progress: `${name} izleme işlemi devam ediyor.`,
-      completed: `${name} izleme işlemi tamamlandı.`,
-      failed: `${name} izleme işlemi başarısız.`,
-      cancelled: `${name} izleme işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} izleme işlemi yetkisiz.`,
-      forbidden: `${name} izleme işlemi yasak.`,
-      timeout: `${name} izleme işlemi zaman aşımına uğradı.`
-    },
-    validate: {
-      ok: `${name} doğrulama işlemi başarılı.`,
-      error: `${name} doğrulama işlemi başarısız.`,
-      pending: `${name} doğrulama işlemi beklemede.`,
-      in_progress: `${name} doğrulama işlemi devam ediyor.`,
-      completed: `${name} doğrulama işlemi tamamlandı.`,
-      failed: `${name} doğrulama işlemi başarısız.`,
-      cancelled: `${name} doğrulama işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} doğrulama işlemi yetkisiz.`,
-      forbidden: `${name} doğrulama işlemi yasak.`,
-      timeout: `${name} doğrulama işlemi zaman aşımına uğradı.`
-    },
-    sync: {
-      ok: `${name} senkronizasyon işlemi başarılı.`,
-      error: `${name} senkronizasyon işlemi başarısız.`,
-      pending: `${name} senkronizasyon işlemi beklemede.`,
-      in_progress: `${name} senkronizasyon işlemi devam ediyor.`,
-      completed: `${name} senkronizasyon işlemi tamamlandı.`,
-      failed: `${name} senkronizasyon işlemi başarısız.`,
-      cancelled: `${name} senkronizasyon işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} senkronizasyon işlemi yetkisiz.`,
-      forbidden: `${name} senkronizasyon işlemi yasak.`,
-      timeout: `${name} senkronizasyon işlemi zaman aşımına uğradı.`
-    },
-    schedule: {
-      ok: `${name} zamanlama işlemi başarılı.`,
-      error: `${name} zamanlama işlemi başarısız.`,
-      pending: `${name} zamanlama işlemi beklemede.`,
-      in_progress: `${name} zamanlama işlemi devam ediyor.`,
-      completed: `${name} zamanlama işlemi tamamlandı.`,
-      failed: `${name} zamanlama işlemi başarısız.`,
-      cancelled: `${name} zamanlama işlemi iptal edildi.`,
-      not_found: `${name} bulunamadı.`,
-      unauthorized: `${name} zamanlama işlemi yetkisiz.`,
-      forbidden: `${name} zamanlama işlemi yasak.`,
-      timeout: `${name} zamanlama işlemi zaman aşımına uğradı.`
-    }
+    //!İSİMSİZ
+    imageUpload: createMessages(null, 'Resim yükleme'),
+    documentUpload: createMessages(null, 'Döküman yükleme'),
+    otherUpload: createMessages(null, 'Dosya yükleme'),
+    validation: createMessages(null, 'Doğrulama'),
+    login: createMessages(null, 'Giriş'),
+    logout: createMessages(null, 'Çıkış'),
+    register: createMessages(null, 'Kayıt'),
+ 
+    //*İSİMLİ
+    get: createMessages(name, 'getirme'),
+    list: createMessages(name, 'listeleme'),
+    add: createMessages(name, 'ekleme'),
+    update: createMessages(name, 'güncelleme'),
+    softdelete: createMessages(name, 'silme'),
+    harddelete: createMessages(name, 'kalıcı silme'),
+    restore: createMessages(name, 'geri yükleme'),
+    active: createMessages(name, 'durumu aktif etme'),
+    passive: createMessages(name, 'durumu pasif etme'),
+    archive: createMessages(name, 'arşivleme'),
+    unarchive: createMessages(name, 'arşivden çıkarma'),
+    report: createMessages(name, 'raporlama'),
+    statistic: createMessages(name, 'istatistik'),
+    print: createMessages(name, 'yazdırma'),
+    import: createMessages(name, 'içe aktarma'),
+    export: createMessages(name, 'dışa aktarma'),
+    approve: createMessages(name, 'onaylama'),
+    reject: createMessages(name, 'reddetme'),
+    publish: createMessages(name, 'yayınlama'),
+    draft: createMessages(name, 'taslak'),
+    clone: createMessages(name, 'klonlama'),
+    share: createMessages(name, 'paylaşma'),
+    transfer: createMessages(name, 'transfer'),
+    mail: createMessages(name, 'mail'),
+    audit: createMessages(name, 'denetleme'),
+    monitor: createMessages(name, 'izleme'),
+    validate: createMessages(name, 'doğrulama'),
+    sync: createMessages(name, 'senkronizasyon'),
+    schedule: createMessages(name, 'zamanlama')
   };
 };
 

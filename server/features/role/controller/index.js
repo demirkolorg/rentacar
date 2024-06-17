@@ -1,8 +1,8 @@
 const response = require('../../../helper/response');
-const messages = require('../messages');
+const { messages } = require('../messages');
 const Roles = require('../model');
-const { pointname } = require('../model');
 const transactions = require('../../../lib/transactions');
+const { pointname } = require('../admin');
 
 exports.add = async (req, res) => {
   let body = req.body;
@@ -15,8 +15,13 @@ exports.add = async (req, res) => {
       created_by: '000000000000000000000000'
     });
 
-    return response.success(res, createdRole, req.user?.id, pointname, transactions.create,  messages.create_basarili);
+    return response.success(res, createdRole, req.user?.id, pointname, transactions.add, messages.add.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, req.user?.id, pointname, transactions.add, messages.add.error);
   }
 };
+
+
+
+
+

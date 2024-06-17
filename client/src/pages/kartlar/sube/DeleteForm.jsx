@@ -6,7 +6,7 @@ import Button from '@/components/ui/Button';
 
 import { useDeleteSubeModalState, setDeleteSubeModalState, useSube, fetchSubeler } from '@/store/kartlar/sube/hooks';
 import { useUser } from '@/store/auth/hooks';
-import { subeDelete } from '@/api/kartlar/sube';
+import { subeSoftDelete } from '@/api/kartlar/sube';
 
 const DeleteForm = ({ getData }) => {
   const subeData = useSube();
@@ -16,7 +16,7 @@ const DeleteForm = ({ getData }) => {
   const deleteData = async () => {
     setBtnLoading(true);
     try {
-      const response = await subeDelete({ _id: subeData._id });
+      const response = await subeSoftDelete({ _id: subeData._id });
       if (response.data.success) {
         message.success(response.data.message);
 

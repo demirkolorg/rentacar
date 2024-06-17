@@ -1,5 +1,5 @@
-const AuditLogsModel = require('../features/AuditLogs/model');
-const Enum = require("../config/enum");
+const AuditLogsModel = require('../model');
+const Enum = require("../../../config").ENUM;
 
 let instance = null;
 
@@ -11,67 +11,67 @@ class AuditLogs {
     return instance;
   }
 
-  info({ user_id, location, proc_type, log }) {
+  info({ user_id, location, transaction, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.INFO,
       user_id,
       location,
-      proc_type,
+      transaction,
       log,
     });
   }
-  error({ user_id, location, proc_type, log }) {
+  error({ user_id, location, transaction, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.ERROR,
       user_id,
       location,
-      proc_type,
+      transaction,
       log,
     });
   }
-  warn({ user_id, location, proc_type, log }) {
+  warn({ user_id, location, transaction, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.WARN,
       user_id,
       location,
-      proc_type,
+      transaction,
       log,
     });
   }
-  debug({ user_id, location, proc_type, log }) {
+  debug({ user_id, location, transaction, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.DEBUG,
       user_id,
       location,
-      proc_type,
+      transaction,
       log,
     });
   }
-  verbose({ user_id, location, proc_type, log }) {
+  verbose({ user_id, location, transaction, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.VERBOSE,
       user_id,
       location,
-      proc_type,
+      transaction,
       log,
     });
   }
-  http({ user_id, location, proc_type, log }) {
+  http({ user_id, location, transaction, log }) {
     this.#saveToDb({
       level: Enum.LOG_LEVELS.HTTP,
       user_id,
       location,
-      proc_type,
+      transaction,
       log,
     });
   }
 
-  #saveToDb({ level, user_id, location, proc_type, log }) {
+  #saveToDb({ level, user_id, location, transaction, log }) {
     AuditLogsModel.create({
       level,
       user_id,
       location,
-      proc_type,
+      transaction,
       log,
     });
   }

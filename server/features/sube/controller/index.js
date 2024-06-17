@@ -1,130 +1,79 @@
-const Subeler = require('../model');
-const response = require('../../../helper/response');
-const messages = require('../messages');
+const model = require('../model');
+const { messages } = require('../messages');
+const { get, getWithPopulate, getIds, getIdsWithPopulate, list, listWithPopulate, add, update, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
+const { pointname } = require('../admin');
 
-const { pointname } = require('../model');
-const transactions = require('../../../lib/transactions');
+
+// #region Base Controller Tanımlamaları
+
+const props = (req, res) => ({ model, req, res, messages, pointname });
 
 exports.get = async (req, res) => {
-  let body = req.body;
-  try {
-    let sube = await Subeler.findOne({ _id: body._id }).populate('firmaId');
-    if (!sube) {
-      return response.error(res, messages.Yok);
-    }
-
-    return response.success(res, sube, req.user?.id, pointname, transactions.get,  messages.get_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+  return get(props(req, res));
 };
-
+exports.getWithPopulate = async (req, res) => {
+  return getWithPopulate(props(req, res));
+};
 exports.getIds = async (req, res) => {
-  let body = req.body;
-  try {
-    const ids = body.ids;
-    let subeler = await Subeler.find({ _id: { $in: ids } });
-
-    if (!subeler || subeler.length === 0) {
-      return response.error(res, messages.Yok);
-    }
-    return response.success(res, subeler, req.user?.id, pointname, transactions.get,  messages.get_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+  return getIds(props(req, res));
 };
-exports.getAll = async (req, res) => {
-  let body = req.body;
-  let query = req.query;
-
-  try {
-    let subeler = await Subeler.find(query).populate('firmaId');
-
-    return response.success(res, subeler, req.user?.id, pointname, transactions.list,  messages.getall_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+exports.getIdsWithPopulate = async (req, res) => {
+  return getIdsWithPopulate(props(req, res));
+};
+exports.list = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return list(filter, props(req, res));
+};
+exports.listWithPopulate = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return listWithPopulate(filter, props(req, res));
 };
 
 exports.add = async (req, res) => {
   let body = req.body;
-
-  try {
-    let createdSube = await Subeler.create({
-      ad: body.ad,
-      firmaId: body.firmaId,
-      logoUrl: body.logoUrl,
-      adres: body.adres,
-      iletisim: body.iletisim,
-      ekBilgiler: body.ekBilgiler
-    });
-
-    return response.success(res, createdSube, req.user.email, pointname, transactions.create,  messages.create_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+  let data = {
+    ad: body.ad,
+    firmaId: body.firmaId,
+    logoUrl: body.logoUrl,
+    adres: body.adres,
+    iletisim: body.iletisim,
+    ekBilgiler: body.ekBilgiler
+  };
+  return add(data, props(req, res));
 };
 exports.update = async (req, res) => {
   let body = req.body;
-  try {
-    let sube = await Subeler.findOne({ _id: body._id });
-
-    if (!sube) {
-      return response.error(res, messages.Yok);
-    }
-
-    let updates = {};
-    if (body.firmaId) updates.firmaId = body.firmaId;
-    if (body.ad) updates.ad = body.ad;
-    if (body.adres) updates.adres = body.adres;
-    if (body.iletisim) updates.iletisim = body.iletisim;
-    if (body.ekBilgiler) updates.ekBilgiler = body.ekBilgiler;
-    if (body.logoUrl) updates.logoUrl = body.logoUrl;
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-
-    await Subeler.updateOne({ _id: body._id }, updates);
-
-    sube = await Subeler.findOne({ _id: body._id });
-
-    return response.success(res, sube, req.user?.id, pointname, transactions.update,  messages.update_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+  let data = {};
+  if (body.firmaId) data.firmaId = body.firmaId;
+  if (body.ad) data.ad = body.ad;
+  if (body.adres) data.adres = body.adres;
+  if (body.iletisim) data.iletisim = body.iletisim;
+  if (body.ekBilgiler) data.ekBilgiler = body.ekBilgiler;
+  if (body.logoUrl) data.logoUrl = body.logoUrl;
+  if (typeof body.is_active === 'boolean') data.is_active = body.is_active;
+  return update(data, props(req, res));
 };
-exports.delete = async (req, res) => {
-  let body = req.body;
-  try {
-    let sube = await Subeler.findOne({ _id: body._id });
 
-    if (!sube) {
-      return response.error(res, messages.Yok);
-    }
-
-    await Subeler.deleteOne({ _id: body._id });
-
-    return response.success(res, {}, req.user?.id, pointname, transactions.harddelete,  messages.delete_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+exports.active = async (req, res) => {
+  return active(props(req, res));
 };
-exports.durumDegistir = async (req, res) => {
-  let body = req.body;
-  try {
-    let sube = await Subeler.findOne({ _id: body._id });
-
-    if (!sube) {
-      return response.error(res, messages.Yok);
-    }
-
-    let updates = {};
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-
-    await Subeler.updateOne({ _id: body._id }, updates);
-
-    sube = await Subeler.findOne({ _id: body._id });
-
-    return response.success(res, sube, req.user?.id, pointname, transactions.update,  messages.durum_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+exports.passive = async (req, res) => {
+  return passive(props(req, res));
 };
+exports.archive = async (req, res) => {
+  return archive(props(req, res));
+};
+exports.unarchive = async (req, res) => {
+  return unarchive(props(req, res));
+};
+exports.softDelete = async (req, res) => {
+  return softDelete(props(req, res));
+};
+exports.restore = async (req, res) => {
+  return restore(props(req, res));
+};
+exports.hardDelete = async (req, res) => {
+  return hardDelete(props(req, res));
+};
+
+// #endregion

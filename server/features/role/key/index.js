@@ -1,9 +1,4 @@
-const key = 'role';
-const name = 'Role';
-const group = 'ROLE';
-const description = 'Role';
+const { key, name, group, description } = require('../admin');
 const baseKeys = require('@base/key');
-
 const keys = { ...baseKeys(key, name, group, description) };
-
 module.exports = keys;

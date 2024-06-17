@@ -1,153 +1,65 @@
-const FirmaPersoneller = require('../model');
-const response = require('../../../helper/response');
-const messages = require('../messages');
+const model = require('../model');
+const { messages } = require('../messages');
+const { get, getIds, list, add, update, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
+const { pointname } = require('../admin');
 
-const transactions = require('../../../lib/transactions');
+const props = (req, res) => ({ model, req, res, messages, pointname });
 
-const { pointname } = require('../model');
 exports.get = async (req, res) => {
-  let body = req.body;
-  try {
-    let firmaPersonel = await FirmaPersoneller.findOne({ _id: body._id });
-    if (!firmaPersonel) {
-      return response.error(res, messages.Yok);
-    }
-
-    return response.success(res, firmaPersonel, req.user?.id, pointname, transactions.get, messages.get_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+  return get(props(req, res));
 };
-exports.getAll = async (req, res) => {
-  let body = req.body;
-  let query = req.query;
-
-  try {
-    let firmaPersonellar = await FirmaPersoneller.find(query);
-
-    return response.success(
-      res,
-      firmaPersonellar,
-      req.user?.id,
-      pointname,
-      transactions.list,
-
-      messages.getall_basarili
-    );
-  } catch (err) {
-    return response.error(res);
-  }
+exports.getIds = async (req, res) => {
+  return getIds(props(req, res));
+};
+exports.list = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return list(filter, props(req, res));
 };
 
 exports.add = async (req, res) => {
   let body = req.body;
-
-  try {
-    let createdFirmaPersonel = await FirmaPersoneller.create({
-      firma: body.firma, // Firma ID'si
-      pozisyon: body.pozisyon, // Pozisyon ID'si
-      user: body.user, // Kullanıcı ID'si
-      is_active: body.is_active !== undefined ? body.is_active : true, // Aktiflik durumu
-      baslangicTarihi: body.baslangicTarihi, // Başlangıç tarihi
-      bitisTarihi: body.bitisTarihi // Bitiş tarihi (opsiyonel)
-    });
-
-    return response.success(
-      res,
-      createdFirmaPersonel,
-      req.user.email,
-      pointname,
-      transactions.create,
-
-      messages.create_basarili
-    );
-  } catch (err) {
-    return response.error(res);
-  }
+  let data = {
+    firma: body.firma, // Firma ID'si
+    pozisyon: body.pozisyon, // Pozisyon ID'si
+    user: body.user, // Kullanıcı ID'si
+    is_active: body.is_active !== undefined ? body.is_active : true, // Aktiflik durumu
+    baslangicTarihi: body.baslangicTarihi, // Başlangıç tarihi
+    bitisTarihi: body.bitisTarihi // Bitiş tarihi (opsiyonel)
+  };
+  return add(data, props(req, res));
 };
 exports.update = async (req, res) => {
   let body = req.body;
-  try {
-    let firmaPersonel = await FirmaPersoneller.findOne({ _id: body._id });
-
-    if (!firmaPersonel) {
-      return response.error(res, messages.Yok);
-    }
-
-    let updates = {};
-    if (body.firma) updates.firma = body.firma;
-    if (body.pozisyon) updates.pozisyon = body.pozisyon;
-    if (body.user) updates.user = body.user;
-    if (body.baslangicTarihi) updates.baslangicTarihi = body.baslangicTarihi;
-    if (body.bitisTarihi) updates.bitisTarihi = body.bitisTarihi;
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-
-    await FirmaPersonelleri.updateOne({ _id: body._id }, updates);
-
-    firmaPersonel = await FirmaPersonelleri.findOne({ _id: body._id });
-    return response.success(
-      res,
-      firmaPersonel,
-      req.user?.id,
-      pointname,
-      transactions.update,
-
-      messages.update_basarili
-    );
-  } catch (err) {
-    return response.error(res);
-  }
+  let data = {};
+  if (body.firma) data.firma = body.firma;
+  if (body.pozisyon) data.pozisyon = body.pozisyon;
+  if (body.user) data.user = body.user;
+  if (body.baslangicTarihi) data.baslangicTarihi = body.baslangicTarihi;
+  if (body.bitisTarihi) data.bitisTarihi = body.bitisTarihi;
+  if (typeof body.is_active === 'boolean') data.is_active = body.is_active;
+  return update(data, props(req, res));
 };
-exports.delete = async (req, res) => {
-  let body = req.body;
-  try {
-    let firmaPersonel = await FirmaPersoneller.findOne({ _id: body._id });
 
-    if (!firmaPersonel) {
-      return response.error(res, messages.Yok);
-    }
-
-    await FirmaPersoneller.deleteOne({ _id: body._id });
-
-    return response.success(
-      res,
-      {},
-      req.user?.id,
-      pointname,
-      transactions.harddelete,
-
-      messages.delete_basarili
-    );
-  } catch (err) {
-    return response.error(res);
-  }
+exports.active = async (req, res) => {
+  return active(props(req, res));
 };
-exports.durumDegistir = async (req, res) => {
-  let body = req.body;
-  try {
-    let firmaPersonel = await FirmaPersoneller.findOne({ _id: body._id });
-
-    if (!firmaPersonel) {
-      return response.error(res, messages.Yok);
-    }
-
-    let updates = {};
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-
-    await FirmaPersoneller.updateOne({ _id: body._id }, updates);
-
-    firmaPersonel = await FirmaPersoneller.findOne({ _id: body._id });
-
-    return response.success(
-      res,
-      firmaPersonel,
-      req.user?.id,
-      pointname,
-      transactions.update,
-
-      messages.durum_basarili
-    );
-  } catch (err) {
-    return response.error(res);
-  }
+exports.passive = async (req, res) => {
+  return passive(props(req, res));
 };
+exports.archive = async (req, res) => {
+  return archive(props(req, res));
+};
+exports.unarchive = async (req, res) => {
+  return unarchive(props(req, res));
+};
+exports.softDelete = async (req, res) => {
+  return softDelete(props(req, res));
+};
+exports.restore = async (req, res) => {
+  return restore(props(req, res));
+};
+exports.hardDelete = async (req, res) => {
+  return hardDelete(props(req, res));
+};
+
+// #endregion

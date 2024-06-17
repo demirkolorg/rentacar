@@ -1,16 +1,17 @@
 const bcrypt = require('bcrypt');
 const Roles = require('@features/role/model');
 const response = require('@helper/response');
-const Users = require('../model');
-const messages = require('../messages');
-
-const { pointname } = require('../model');
 const transactions = require('../../../lib/transactions');
+const model = require('../model');
+const { messages } = require('../messages');
+const { get, getWithPopulate, getIds, getIdsWithPopulate, list, listWithPopulate, add, update, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
+const { pointname } = require('../admin');
+
 
 exports.add = async (req, res) => {
   let body = req.body;
   try {
-    let user = await Users.findOne({
+    let user = await model.findOne({
       $or: [{ email: body.email }, { tc: body.tc }]
     });
 
@@ -29,7 +30,7 @@ exports.add = async (req, res) => {
 
     let password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
 
-    let createdUser = await Users.create({
+    let createdUser = await model.create({
       tc: body.tc,
       ad: body.ad,
       soyad: body.soyad,
@@ -40,15 +41,15 @@ exports.add = async (req, res) => {
       is_active: body.is_active
     });
 
-    return response.success(res, createdUser, body.email, pointname, transactions.create,  messages.create_basarili);
+    return response.success(res, createdUser, req.user?.id, pointname, transactions.add, messages.add.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, req.user?.id, pointname, transactions.add, messages.add.error);
   }
 };
 exports.update = async (req, res) => {
   let body = req.body;
   try {
-    let user = await Users.findOne({
+    let user = await model.findOne({
       $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
     });
 
@@ -66,84 +67,19 @@ exports.update = async (req, res) => {
     if (body.roller && Array.isArray(body.roller)) updates.roller = body.roller;
     if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
 
-    await Users.updateOne(
+    await model.updateOne(
       {
         $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
       },
       updates
     );
-    user = await Users.findOne({
+    user = await model.findOne({
       $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
     });
 
-    return response.success(res, user, req.user?.id, pointname, transactions.update,  messages.update_basarili);
+    return response.success(res, user, req.user?.id, pointname, transactions.update, messages.update.ok);
   } catch (err) {
-    return response.error(res);
-  }
-};
-exports.delete = async (req, res) => {
-  let body = req.body;
-  try {
-    let user = await Users.findOne({
-      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
-    });
-
-    if (!user) {
-      return response.error(res, messages.kullaniciYok);
-    }
-
-    await Users.deleteOne({
-      $or: [{ _id: body._id }, { email: body.email }, { tc: body.tc }]
-    });
-
-    return response.success(res, user, req.user?.id, pointname, transactions.harddelete,  messages.delete_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
-};
-exports.durumDegistir = async (req, res) => {
-  let body = req.body;
-  try {
-    let user = await Users.findOne({ _id: body._id });
-
-    if (!user) {
-      return response.error(res, messages.kullaniciYok);
-    }
-
-    let updates = {};
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-
-    await Users.updateOne({ _id: body._id }, updates);
-
-    user = await Users.findOne({ _id: body._id });
-
-    return response.success(res, user, req.user?.id, pt.points.user, transactions.update,  messages.durum_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
-};
-exports.get = async (req, res) => {
-  let body = req.body;
-  try {
-    let user = await Users.findOne({ _id: body._id });
-    if (!user) {
-      return response.error(res, messages.kullaniciYok);
-    }
-
-    return response.success(res, user, req.user?.id, pt.points.user, transactions.get,  messages.pozisyon_get_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
-};
-exports.getAll = async (req, res) => {
-  let body = req.body;
-  let query = req.query;
-  try {
-    let users = await Users.find({ sube: body.sube }).find(query);
-
-    return response.success(res, users, req.user?.id, pt.points.user, transactions.list,  messages.getall_basarili);
-  } catch (err) {
-    return response.error(res);
+    return response.error(res, err, req.user?.id, pointname, transactions.update, messages.update.error);
   }
 };
 exports.getUser = async (req, res) => {
@@ -154,7 +90,7 @@ exports.getUser = async (req, res) => {
       return response.error(res, messages.birdenfazlakosul);
     }
 
-    let user = await Users.findOne({
+    let user = await model.findOne({
       $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }]
     });
 
@@ -162,9 +98,9 @@ exports.getUser = async (req, res) => {
       return response.error(res, messages.kullaniciYok);
     }
 
-    return response.success(res, user, req.user?.id, pointname, transactions.get,  messages.getUser);
+    return response.success(res, user, req.user?.id, pointname, transactions.get, messages.get.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, req.user?.id, pointname, transactions.get, messages.get.error);
   }
 };
 exports.getUserRoles = async (req, res) => {
@@ -175,7 +111,7 @@ exports.getUserRoles = async (req, res) => {
       return response.error(res, messages.birdenfazlakosul);
     }
 
-    let user = await Users.findOne({
+    let user = await model.findOne({
       $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }]
     });
 
@@ -192,9 +128,9 @@ exports.getUserRoles = async (req, res) => {
 
     const UserRoles = [...rolsSet];
 
-    return response.success(res, UserRoles, req.user?.id, pointname, transactions.list,  messages.getUserRoles);
+    return response.success(res, UserRoles, req.user?.id, pointname, transactions.list, messages.list.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, req.user?.id, pointname, transactions.list, messages.list.error);
   }
 };
 exports.getUserPermissions = async (req, res) => {
@@ -205,7 +141,7 @@ exports.getUserPermissions = async (req, res) => {
       return response.error(res, messages.birdenfazlakosul);
     }
 
-    let user = await Users.findOne({
+    let user = await model.findOne({
       $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }]
     });
 
@@ -222,9 +158,9 @@ exports.getUserPermissions = async (req, res) => {
     });
     const UserPermissions = [...permissionsSet];
 
-    return response.success(res, UserPermissions, req.user?.id, pointname, transactions.list,  messages.getUserPermissions);
+    return response.success(res, UserPermissions, req.user?.id, pointname, transactions.list, messages.list.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, req.user?.id, pointname, transactions.list, messages.list.error);
   }
 };
 exports.getUserRolesAndPermissions = async (req, res) => {
@@ -235,7 +171,7 @@ exports.getUserRolesAndPermissions = async (req, res) => {
       return response.error(res, messages.birdenfazlakosul);
     }
 
-    let user = await Users.findOne({
+    let user = await model.findOne({
       $or: [{ _id: body.id }, { email: body.email }, { tc: body.tc }]
     });
 
@@ -257,19 +193,59 @@ exports.getUserRolesAndPermissions = async (req, res) => {
     const UserRoles = [...rolsSet];
     const UserPermissions = [...permissionsSet];
 
-    return response.success(
-      res,
-      {
-        UserRoles,
-        UserPermissions
-      },
-      req.user?.id,
-      pointname,
-      transactions.list,
-      
-      messages.getUserRolesAndPermissions
-    );
+    let data = { UserRoles, UserPermissions };
+    return response.success(res, data, req.user?.id, pointname, transactions.list, messages.list.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, req.user?.id, pointname, transactions.list, messages.list.error);
   }
 };
+
+
+// #region Base Controller Tanımlamaları
+
+const props = (req, res) => ({ model, req, res, messages, pointname });
+
+exports.get = async (req, res) => {
+  return get(props(req, res));
+};
+exports.getWithPopulate = async (req, res) => {
+  return getWithPopulate(props(req, res));
+};
+exports.getIds = async (req, res) => {
+  return getIds(props(req, res));
+};
+exports.getIdsWithPopulate = async (req, res) => {
+  return getIdsWithPopulate(props(req, res));
+};
+exports.list = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return list(filter, props(req, res));
+};
+exports.listWithPopulate = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return listWithPopulate(filter, props(req, res));
+};
+
+exports.active = async (req, res) => {
+  return active(props(req, res));
+};
+exports.passive = async (req, res) => {
+  return passive(props(req, res));
+};
+exports.archive = async (req, res) => {
+  return archive(props(req, res));
+};
+exports.unarchive = async (req, res) => {
+  return unarchive(props(req, res));
+};
+exports.softDelete = async (req, res) => {
+  return softDelete(props(req, res));
+};
+exports.restore = async (req, res) => {
+  return restore(props(req, res));
+};
+exports.hardDelete = async (req, res) => {
+  return hardDelete(props(req, res));
+};
+
+// #endregion

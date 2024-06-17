@@ -7,7 +7,7 @@ import Badge from '@/components/ui/Badge';
 
 import { useStatusFirmaModalState, useFirma, setStatusFirmaModalState } from '@/store/kartlar/firma/hooks';
 import { useUser } from '@/store/auth/hooks';
-import { firmaDurumDegistir } from '@/api/kartlar/firma';
+import { firmaActive,firmaPassive } from '@/api/kartlar/firma';
 
 const StatusForm = ({ getData }) => {
   const firmaData = useFirma();
@@ -17,10 +17,12 @@ const StatusForm = ({ getData }) => {
   const dataUpdate = async () => {
     setBtnLoading(true);
     try {
-      const response = await firmaDurumDegistir({
-        _id: firmaData._id,
-        is_active: firmaData.is_active === true ? false : true
-      });
+      let response = '';
+      if (firmaData.is_active) {
+        response = await firmaPassive({ _id: firmaData._id, is_active: false });
+      } else {
+        response = await firmaActive({ _id: firmaData._id, is_active: true });
+      }
       if (response.data.success) {
         message.success(response.data.message);
         getData();

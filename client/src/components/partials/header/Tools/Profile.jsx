@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import UserAvatar from '@/assets/images/all-img/user.png';
 import { setLogout } from '@/store/auth/actions';
 import { useUser } from '@/store/auth/hooks';
+import { logout } from '../../../../api/auth';
+import { toast } from 'react-toastify';
 
 // Boş bağımlılık dizisi
 
@@ -30,6 +32,23 @@ const profileLabel = name => {
 const Profile = () => {
   const navigate = useNavigate();
   const currentUser = useUser();
+
+  const onLogout = async () => {
+    try {
+      const response = await logout();
+      if (response.data.success) {
+        setLogout();
+        navigate('/login');
+        setTimeout(() => {
+          toast.success(response.data.message);
+        }, 100);
+      } else {
+        throw new Error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const ProfileMenu = [
     {
@@ -86,8 +105,9 @@ const Profile = () => {
       label: 'Logout',
       icon: 'heroicons-outline:login',
       action: () => {
-        setLogout();
-        navigate('/login');
+        // setLogout();
+        // navigate('/login');
+        onLogout();
       }
     }
   ];
@@ -97,14 +117,7 @@ const Profile = () => {
       {ProfileMenu.map((item, index) => (
         <Menu.Item key={index}>
           {({ active }) => (
-            <div
-              onClick={() => item.action()}
-              className={`${
-                active
-                  ? 'bg-slate-100 text-slate-900 dark:bg-slate-600 dark:text-slate-300 dark:bg-opacity-50'
-                  : 'text-slate-600 dark:text-slate-300'
-              } block     ${item.hasDivider ? 'border-t border-slate-100 dark:border-slate-700' : ''}`}
-            >
+            <div onClick={() => item.action()} className={`${active ? 'bg-slate-100 text-slate-900 dark:bg-slate-600 dark:text-slate-300 dark:bg-opacity-50' : 'text-slate-600 dark:text-slate-300'} block     ${item.hasDivider ? 'border-t border-slate-100 dark:border-slate-700' : ''}`}>
               <div className={`block cursor-pointer px-4 py-2`}>
                 <div className="flex items-center">
                   <span className="block text-xl ltr:mr-3 rtl:ml-3">

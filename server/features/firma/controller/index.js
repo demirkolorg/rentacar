@@ -1,56 +1,17 @@
 const response = require('../../../helper/response');
 const transactions = require('../../../lib/transactions');
-const Firmalar = require('../model');
-const { pointname } = require('../model');
 const Subeler = require('../../sube/model'); // Şube modeli
-const messages = require('../messages');
 
-exports.get = async (req, res) => {
-  let body = req.body;
-  try {
-    let firma = await Firmalar.findOne({ _id: body._id });
-    if (!firma) {
-      return response.error(res, messages.firmaYok);
-    }
-
-    return response.success(res, firma, req.user?.id, pointname, transactions.get,  messages.firma_get_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
-};
-exports.getIds = async (req, res) => {
-  let body = req.body;
-  let query = req.query;
-  try {
-    const ids = body.ids;
-    let firmalar = await Firmalar.find({ _id: { $in: ids, sube: body.sube } }).find(query);
-
-    if (!firmalar || firmalar.length === 0) {
-      return response.error(res, messages.firmaYok);
-    }
-    return response.success(res, firmalar, req.user?.id, pointname, transactions.get,  messages.firma_get_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
-};
-exports.getAll = async (req, res) => {
-  let body = req.body;
-  let query = req.query;
-
-  try {
-    let firmalar = await Firmalar.find({ sube: body.sube }).find(query);
-
-    return response.success(res, firmalar, req.user?.id, pointname, transactions.list,  messages.firma_getall_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
-};
+const model = require('../model');
+const { messages } = require('../messages');
+const { get, getIds, list, add, update, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
+const { pointname } = require('../admin');
 
 exports.add = async (req, res) => {
   let body = req.body;
 
   try {
-    let createdFirma = await Firmalar.create({
+    let createdFirma = await model.create({
       ad: body.ad,
       logoUrl: body.logoUrl,
       adres: body.adres,
@@ -60,9 +21,7 @@ exports.add = async (req, res) => {
     });
 
     // Şube kontrolü: Firma için şube sayısını kontrol et
-    const subeCount = await Subeler.countDocuments({
-      firmaId: createdFirma._id
-    });
+    const subeCount = await Subeler.countDocuments({ firmaId: createdFirma._id });
     if (subeCount === 0) {
       // Hiç şube yoksa, Merkez Şube oluştur
       await Subeler.create({
@@ -77,72 +36,58 @@ exports.add = async (req, res) => {
       });
     }
 
-    return response.success(res, createdFirma, req.user.email, pointname, transactions.create,  messages.firma_create_basarili);
+    return response.success(res, createdFirma, req.user?.id, pointname, transactions.add, messages.add.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, req.user?.id, pointname, transactions.add, messages.add.error);
   }
+};
+
+
+// #region Base Controller Tanımlamaları
+
+const props = (req, res) => ({ model, req, res, messages, pointname });
+
+exports.get = async (req, res) => {
+  return get(props(req, res));
+};
+exports.getIds = async (req, res) => {
+  return getIds(props(req, res));
+};
+exports.list = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return list(filter, props(req, res));
 };
 exports.update = async (req, res) => {
-  let body = req.body;
-  try {
-    let firma = await Firmalar.findOne({ _id: body._id });
+  let data = {};
+  if (body.ad) data.ad = body.ad;
+  if (body.adres) data.adres = body.adres;
+  if (body.iletisim) data.iletisim = body.iletisim;
+  if (body.ekBilgiler) data.ekBilgiler = body.ekBilgiler;
+  if (body.logoUrl) data.logoUrl = body.logoUrl;
+  if (typeof body.is_active === 'boolean') data.is_active = body.is_active;
 
-    if (!firma) {
-      return response.error(res, messages.firmaYok);
-    }
-
-    let updates = {};
-    if (body.ad) updates.ad = body.ad;
-    if (body.adres) updates.adres = body.adres;
-    if (body.iletisim) updates.iletisim = body.iletisim;
-    if (body.ekBilgiler) updates.ekBilgiler = body.ekBilgiler;
-    if (body.logoUrl) updates.logoUrl = body.logoUrl;
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-    updates.updated_by = req.user?.id;
-
-    await Firmalar.updateOne({ _id: body._id }, updates);
-
-    firma = await Firmalar.findOne({ _id: body._id });
-
-    return response.success(res, firma, req.user?.id, pointname, transactions.update,  messages.firma_update_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+  return update(data, props(req, res));
 };
-exports.delete = async (req, res) => {
-  let body = req.body;
-  try {
-    let firma = await Firmalar.findOne({ _id: body._id });
-
-    if (!firma) {
-      return response.error(res, messages.firmaYok);
-    }
-
-    await Firmalar.deleteOne({ _id: body._id });
-
-    return response.success(res, {}, req.user?.id, pointname, transactions.harddelete,  messages.firma_delete_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+exports.active = async (req, res) => {
+  return active(props(req, res));
 };
-exports.durumDegistir = async (req, res) => {
-  let body = req.body;
-  try {
-    let firma = await Firmalar.findOne({ _id: body._id });
-
-    if (!firma) {
-      return response.error(res, messages.firmaYok);
-    }
-
-    let updates = {};
-    if (typeof body.is_active === 'boolean') updates.is_active = body.is_active;
-
-    await Firmalar.updateOne({ _id: body._id }, updates);
-
-    firma = await Firmalar.findOne({ _id: body._id });
-
-    return response.success(res, firma, req.user?.id, pointname, transactions.update,  messages.firma_durum_basarili);
-  } catch (err) {
-    return response.error(res);
-  }
+exports.passive = async (req, res) => {
+  return passive(props(req, res));
 };
+exports.archive = async (req, res) => {
+  return archive(props(req, res));
+};
+exports.unarchive = async (req, res) => {
+  return unarchive(props(req, res));
+};
+exports.softDelete = async (req, res) => {
+  return softDelete(props(req, res));
+};
+exports.restore = async (req, res) => {
+  return restore(props(req, res));
+};
+exports.hardDelete = async (req, res) => {
+  return hardDelete(props(req, res));
+};
+
+// #endregion

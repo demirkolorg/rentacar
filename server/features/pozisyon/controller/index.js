@@ -1,9 +1,34 @@
-const { add, update, get, getAll, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
-const response = require('@helper/response');
+const model = require('../model');
 const { messages } = require('../messages');
-const Pozisyonlar = require('../model');
-const { pointname } = require('../model');
-const props = (req, res) => ({ Model: Pozisyonlar, req, res, messages, pointname });
+const { get, getIds, list, add, update, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
+const { pointname } = require('../admin');
+
+// #region Base Controller Tanımlamaları
+
+const props = (req, res) => ({ model, req, res, messages, pointname });
+
+
+exports.get = async (req, res) => {
+  return get(props(req, res));
+};
+exports.getWithPopulate = async (req, res) => {
+  return getWithPopulate(props(req, res));
+};
+exports.getIds = async (req, res) => {
+  return getIds(props(req, res));
+};
+exports.getIdsWithPopulate = async (req, res) => {
+  return getIdsWithPopulate(props(req, res));
+};
+exports.list = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return list(filter, props(req, res));
+};
+exports.listWithPopulate = async (req, res) => {
+  filter = { sube: req.body.sube, is_delete: false };
+  return listWithPopulate(filter, props(req, res));
+};
+
 
 exports.add = async (req, res) => {
   let body = req.body;
@@ -20,14 +45,6 @@ exports.update = async (req, res) => {
   if (body.ad) data.ad = body.ad;
   if (typeof body.is_active === 'boolean') data.is_active = body.is_active;
   return update(data, props(req, res));
-};
-
-exports.get = async (req, res) => {
-  return get(props(req, res));
-};
-exports.getAll = async (req, res) => {
-  filter = { sube: req.body.sube, is_delete: false };
-  return getAll(filter, props(req, res));
 };
 
 exports.active = async (req, res) => {
@@ -51,3 +68,5 @@ exports.restore = async (req, res) => {
 exports.hardDelete = async (req, res) => {
   return hardDelete(props(req, res));
 };
+
+// #endregion

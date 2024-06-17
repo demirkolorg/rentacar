@@ -22,4 +22,3 @@ schema.pre('save', function (next) {
 });
 
 module.exports = mongoose.model('Pozisyonlar', schema);
-module.exports.pointname = 'Pozisyonlar';

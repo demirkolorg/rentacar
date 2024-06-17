@@ -7,7 +7,7 @@ import Badge from '@/components/ui/Badge';
 
 import { useStatusSubeModalState, setStatusSubeModalState, useSube, fetchSubeler } from '@/store/kartlar/sube/hooks';
 import { useUser } from '@/store/auth/hooks';
-import { subeDurumDegistir } from '@/api/kartlar/sube';
+import { subeActive, subePassive } from '@/api/kartlar/sube';
 
 const StatusForm = ({ getData }) => {
   const subeData = useSube();
@@ -17,10 +17,12 @@ const StatusForm = ({ getData }) => {
   const dataUpdate = async () => {
     setBtnLoading(true);
     try {
-      const response = await subeDurumDegistir({
-        _id: subeData._id,
-        is_active: subeData.is_active === true ? false : true
-      });
+      let response = '';
+      if (subeData.is_active) {
+        response = await subePassive({ _id: subeData._id, is_active: false });
+      } else {
+        response = await subeActive({ _id: subeData._id, is_active: true });
+      }
       if (response.data.success) {
         message.success(response.data.message);
         getData();
@@ -67,17 +69,8 @@ const StatusForm = ({ getData }) => {
       >
         <p>
           Merhaba {user.ad} {user.soyad}, <strong>{subeData.ad}</strong> isimli şubenin
-          {subeData.is_active ? (
-            <Badge label="Aktif" className="bg-success-500 text-white mx-1" />
-          ) : (
-            <Badge label="Pasif" className="bg-danger-500 text-white mx-1" />
-          )}{' '}
-          olan durumunu
-          {!subeData.is_active ? (
-            <Badge label="Aktif" className="bg-success-500 text-white mx-1" />
-          ) : (
-            <Badge label="Pasif" className="bg-danger-500 text-white mx-1" />
-          )}
+          {subeData.is_active ? <Badge label="Aktif" className="bg-success-500 text-white mx-1" /> : <Badge label="Pasif" className="bg-danger-500 text-white mx-1" />} olan durumunu
+          {!subeData.is_active ? <Badge label="Aktif" className="bg-success-500 text-white mx-1" /> : <Badge label="Pasif" className="bg-danger-500 text-white mx-1" />}
           olarak değiştirmek istediğinize emin misiniz?
         </p>
       </Modal>

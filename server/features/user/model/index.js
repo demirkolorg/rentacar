@@ -32,4 +32,4 @@ class Users extends mongoose.Model {
 
 schema.loadClass(Users);
 module.exports = mongoose.model('Kullanicilar', schema);
-module.exports.pointname = 'Kullanicilar';
+

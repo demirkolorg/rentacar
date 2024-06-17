@@ -1,16 +1,13 @@
-//dış
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
-
-//iç
 const Users = require('../../user/model');
 const Roles = require('../../../features/role/model');
 const response = require('../../../helper/response');
 const transactions = require('../../../lib/transactions');
-const { pointname } = require('../model');
 const ENV = require('../../../config').env;
-const messages = require('../messages');
+const { messages } = require('../messages');
+const { blacklistedTokens } = require('../../../middlewares/auth');
+const { pointname } = require('../admin');
 
 exports.login = async (req, res) => {
   let { email, password } = req.body;
@@ -51,12 +48,22 @@ exports.login = async (req, res) => {
     };
     data = { token: token, user: userData };
 
-    return response.success(res, data, user._id, pointname, transactions.login, messages.AUTH_SUCCESSFUL_DESC);
+    return response.success(res, data, user._id, pointname, transactions.login, messages.login.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, user._id, pointname, transactions.login, messages.login.error);
   }
 };
 
+exports.logout = async (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]; // Bearer token'dan token'ı alın
+
+  try {
+    blacklistedTokens.add(token);
+    return response.success(res, messages.logout.ok, req.user?.id, pointname, transactions.logout, messages.logout.ok);
+  } catch (err) {
+    return response.error(res, err, req.user?.id, pointname, transactions.logout, messages.logout.error);
+  }
+};
 exports.register = async (req, res) => {
   let body = req.body;
   try {
@@ -84,8 +91,8 @@ exports.register = async (req, res) => {
       created_by: '000000000000000000000000'
     });
 
-    return response.success(res, createdUser, createdUser._id, pointname, transactions.register, messages.AUTH_SUCCESSFUL_DESC);
+    return response.success(res, data, createdUser._id, pointname, transactions.register, messages.register.ok);
   } catch (err) {
-    return response.error(res);
+    return response.error(res, err, createdUser._id, pointname, transactions.register, messages.register.error);
   }
 };

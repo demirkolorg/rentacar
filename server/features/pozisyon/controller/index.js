@@ -34,8 +34,6 @@ exports.add = async (req, res) => {
   let body = req.body;
   let data = {
     ad: body.ad,
-    created_by: req?.user?.id,
-    sube: body.sube
   };
   return add(data, props(req, res));
 };

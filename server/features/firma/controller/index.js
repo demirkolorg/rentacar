@@ -11,13 +11,20 @@ exports.add = async (req, res) => {
   let body = req.body;
 
   try {
+    let documentinfo = {
+      created_by: req?.user?.id,
+      sube: body.sube,
+      is_active: true,
+      is_delete: false,
+      is_archive: false
+    };
     let createdFirma = await model.create({
       ad: body.ad,
       logoUrl: body.logoUrl,
       adres: body.adres,
       iletisim: body.iletisim,
       ekBilgiler: body.ekBilgiler,
-      created_by: req?.user?.id
+      documentinfo: documentinfo
     });
 
     // Şube kontrolü: Firma için şube sayısını kontrol et
@@ -41,7 +48,6 @@ exports.add = async (req, res) => {
     return response.error(res, err, req.user?.id, pointname, transactions.add, messages.add.error);
   }
 };
-
 
 // #region Base Controller Tanımlamaları
 

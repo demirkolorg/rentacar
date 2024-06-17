@@ -93,7 +93,17 @@ exports.listWithPopulate = async (filter, props) => {
 exports.add = async (data, props) => {
   let { model, req, res, messages, pointname } = props;
   let userId = req.user?.id;
+  let body = req.body;
   try {
+    let documentinfo = {
+      created_by: userId,
+      sube: body.sube,
+      is_active: true,
+      is_delete: false,
+      is_archive: false
+    };
+    data.documentinfo = documentinfo;
+
     let createdDocument = await model.create(data);
     return response.success(res, createdDocument, userId, pointname, transactions.add, messages.add.ok);
   } catch (err) {
@@ -103,7 +113,7 @@ exports.add = async (data, props) => {
 exports.update = async (data, props) => {
   let { model, req, res, messages, pointname } = props;
   let userId = req.user?.id;
-  data.updated_by = userId;
+  data.documentinfo.updated_by = userId;
 
   try {
     let document = await model.findOneAndUpdate({ _id: req.body._id }, data, { new: true });
@@ -282,4 +292,3 @@ exports.otherUpload = async props => {
     return response.error(res, err, userId, pointname, transactions.upload, messages.otherUpload.error);
   }
 };
- 

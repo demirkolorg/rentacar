@@ -13,15 +13,12 @@ import { optionStyle } from '@/helper/optionStyle';
 
 import { pozisyonUpdate } from '@/api/kartlar/pozisyon';
 
-import {
-  setEditPozisyonModalState,
-  useEditPozisyonModalState,
-  usePozisyon,
-  fetchPozisyonlar
-} from '@/store/kartlar/pozisyon/hooks';
+import { setEditPozisyonModalState, useEditPozisyonModalState, usePozisyon, fetchPozisyonlar } from '../../../store/kartlar/pozisyon/hooks.js';
 
 const EditForm = ({ getData }) => {
+  const [btnLoading, setBtnLoading] = useState(false);
   const pozisyonData = usePozisyon();
+  const editPozisyonModalState = useEditPozisyonModalState();
 
   const FormValidationSchema = yup
     .object({
@@ -74,24 +71,11 @@ const EditForm = ({ getData }) => {
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
           <div className=" grid grid-cols-2 gap-5 items-end">
-            <Textinput
-              name="ad"
-              label="Şube Adı"
-              placeholder="Şube Adı"
-              register={register}
-              error={errors.ad}
-              defaultValue={pozisyonData?.ad}
-            />
+            <Textinput name="ad" label="Şube Adı" placeholder="Şube Adı" register={register} error={errors.ad} defaultValue={pozisyonData?.ad} />
           </div>
 
           <div className="ltr:text-right rtl:text-left">
-            <Button
-              type="submit"
-              text="Kaydet"
-              className=" btn-dark"
-              disabled={!isValid || btnLoading}
-              isLoading={btnLoading}
-            />
+            <Button type="submit" text="Kaydet" className=" btn-dark" disabled={!isValid || btnLoading} isLoading={btnLoading} />
           </div>
         </form>
       </Modal>

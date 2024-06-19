@@ -44,6 +44,9 @@ exports.getIds = async props => {
     }
     return response.success(res, document, userId, pointname, transactions.get, messages.list.ok);
   } catch (err) {
+    console.log('====================================');
+    console.log('getIds', err);
+    console.log('====================================');
     return response.error(res, err, userId, pointname, transactions.list, messages.list.error);
   }
 };
@@ -63,6 +66,9 @@ exports.getIdsWithPopulate = async props => {
     }
     return response.success(res, document, userId, pointname, transactions.get, messages.list.ok);
   } catch (err) {
+    console.log('====================================');
+    console.log('getIdsWithPopulate', err);
+    console.log('====================================');
     return response.error(res, err, userId, pointname, transactions.list, messages.list.error);
   }
 };
@@ -95,13 +101,16 @@ exports.add = async (data, props) => {
   let userId = req.user?.id;
   let body = req.body;
   try {
+    // Şemada sube alanının olup olmadığını kontrol et
+    const hasSubeField = model.schema.paths.hasOwnProperty('documentinfo.sube');
+
     let documentinfo = {
       created_by: userId,
-      sube: body.sube,
       is_active: true,
       is_delete: false,
       is_archive: false
     };
+    documentinfo.sube = hasSubeField ? body.sube : null;
     data.documentinfo = documentinfo;
 
     let createdDocument = await model.create(data);
@@ -113,17 +122,15 @@ exports.add = async (data, props) => {
 exports.update = async (data, props) => {
   let { model, req, res, messages, pointname } = props;
   let userId = req.user?.id;
-  data.documentinfo.updated_by = userId;
-
   try {
-    let document = await model.findOneAndUpdate({ _id: req.body._id }, data, { new: true });
+    let document = await model.findOneAndUpdate({ _id: req.body._id }, { $set: data }, { new: true, context: { userId } });
     if (!document) {
       return response.error(res, err, userId, pointname, transactions.update, messages.update.not_found);
     }
 
     return response.success(res, document, userId, pointname, transactions.update, messages.update.ok);
   } catch (err) {
-    return response.error(res, err, userId, pointname, transactions.add, messages.update.error);
+    return response.error(res, err, userId, pointname, transactions.update, messages.update.error);
   }
 };
 exports.active = async props => {

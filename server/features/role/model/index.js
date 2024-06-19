@@ -1,27 +1,16 @@
 const mongoose = require('mongoose');
 const RolAyricaliklari = require('@helper/permissions');
-const baseSube = require('@features/base/model/baseSube.js');
-
-// const rolIzinleriListesi = RolAyricaliklari.privileges.map(
-//   (privilege) => privilege.key
-// );
+const base = require('@features/base/model/base.js');
 
 const schema = mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
-    permissions: [
-      {
-        type: String,
-        required: true
-        // enum: rolIzinleriListesi,
-      }
-    ]
+    permissions: [{ type: String, required: true }]
   },
   {
     collection: 'Roller'
   }
 );
 
-schema.add(baseSube);
+schema.add(base);
 module.exports = mongoose.model('Roller', schema);
-

@@ -7,7 +7,6 @@ const { pointname } = require('../admin');
 
 const props = (req, res) => ({ model, req, res, messages, pointname });
 
-
 exports.get = async (req, res) => {
   return get(props(req, res));
 };
@@ -21,7 +20,7 @@ exports.getIdsWithPopulate = async (req, res) => {
   return getIdsWithPopulate(props(req, res));
 };
 exports.list = async (req, res) => {
-  filter = { sube: req.body.sube, is_delete: false };
+  filter = { 'documentinfo.sube': req.body.sube, 'documentinfo.is_delete': false };
   return list(filter, props(req, res));
 };
 exports.listWithPopulate = async (req, res) => {
@@ -29,11 +28,10 @@ exports.listWithPopulate = async (req, res) => {
   return listWithPopulate(filter, props(req, res));
 };
 
-
 exports.add = async (req, res) => {
   let body = req.body;
   let data = {
-    ad: body.ad,
+    ad: body.ad
   };
   return add(data, props(req, res));
 };

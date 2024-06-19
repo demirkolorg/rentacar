@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
     let user = await Users.findOne({ email });
 
     if (!user || !user.validPassword(password)) {
-      return response.error(res, messages.VALIDATE_FIELD_BEFORE_AUTH);
+      return response.error(res, null, null, pointname, transactions.login, messages.login.error);
     }
 
     let userRoles = await Roles.find({ _id: user.roller });

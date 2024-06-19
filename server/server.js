@@ -19,8 +19,9 @@ app.use(morgan('dev'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 DB.run();
-SUPER.run();
-
+(async () => {
+  await SUPER.run();
+})();
 const _PREFIX = process.env.APP_PREFIX;
 const _PORT = process.env.APP_PORT;
 

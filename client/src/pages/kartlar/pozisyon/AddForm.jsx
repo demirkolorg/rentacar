@@ -47,7 +47,9 @@ const AddForm = ({ getData }) => {
         ad: data.ad,
         sube: aktifSube.value
       };
-
+      console.log('====================================');
+      console.log('newPozisyon', newPozisyon);
+      console.log('====================================');
       const response = await pozisyonAdd(newPozisyon);
       if (response.data.success) {
         message.success(response.data.message);

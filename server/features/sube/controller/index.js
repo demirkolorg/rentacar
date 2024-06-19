@@ -21,11 +21,11 @@ exports.getIdsWithPopulate = async (req, res) => {
   return getIdsWithPopulate(props(req, res));
 };
 exports.list = async (req, res) => {
-  filter = { sube: req.body.sube, is_delete: false };
+  filter = { };
   return list(filter, props(req, res));
 };
 exports.listWithPopulate = async (req, res) => {
-  filter = { sube: req.body.sube, is_delete: false };
+  filter = {  };
   return listWithPopulate(filter, props(req, res));
 };
 

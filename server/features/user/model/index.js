@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const baseSube = require('@features/base/model/baseSube.js');
+const base = require('@features/base/model/base.js');
 
 // const USER_TYPES = {
 //   All: 'All',
@@ -22,7 +22,7 @@ const schema = new mongoose.Schema(
   { collection: 'Kullanicilar' }
 );
 
-schema.add(baseSube);
+schema.add(base);
 
 class Users extends mongoose.Model {
   validPassword(password) {

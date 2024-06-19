@@ -4,7 +4,9 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const base = require('@features/base/model/base.js');
 
 const baseSubeler = new mongoose.Schema({
-  subeler: [{ type: ObjectId, required: true, ref: Subeler }]
+  documentinfo: {
+    subeler: [{ type: ObjectId, required: true, ref: Subeler }]
+  }
 });
 baseSubeler.add(base);
 

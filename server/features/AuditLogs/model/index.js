@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Kullanicilar = require('../../user/model');
 
 const schema = mongoose.Schema(
   {

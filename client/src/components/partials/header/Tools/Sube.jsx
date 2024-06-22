@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { optionStyle } from '@/helper/optionStyle';
 import { useUser } from '@/store/auth/hooks';
 import { getSuperAdminMail } from '@/api/projeAyar';
-import { subeList,subeListWithPopulate, subeGetIds } from '@/api/kartlar/sube';
+import { subeList, subeGetIds } from '@/api/kartlar/sube';
 import { setAktifSube } from '@/store/genel/hooks';
 
 const Sube = () => {
@@ -39,7 +39,7 @@ const Sube = () => {
       try {
         const response = await getSuperAdminMail();
         if (response.data.success && response.data.data === currentUser.email) {
-          const responseSubeler = await subeListWithPopulate();
+          const responseSubeler = await subeList();
           if (responseSubeler.data.success) {
             const data = responseSubeler.data.data;
             const options = data.map(sube => ({

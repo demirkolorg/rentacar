@@ -18,21 +18,7 @@ import GosterilecekKayit from '@/components/app/GosterilecekKayit';
 import Sayfalama from '@/components/app/Sayfalama';
 import SayfaKayitSayisi from '@/components/app/SayfaKayitSayisi';
 
-import {
-  setAddSubeModalState,
-  setEditSubeModalState,
-  setDeleteSubeModalState,
-  setStatusSubeModalState,
-  setSubeler,
-  setSube,
-  useAddSubeModalState,
-  useEditSubeModalState,
-  useDeleteSubeModalState,
-  useStatusSubeModalState,
-  useSubeler,
-  useSube,
-  fetchSubeler
-} from '@/store/kartlar/sube/hooks';
+import { setAddSubeModalState, setEditSubeModalState, setDeleteSubeModalState, setStatusSubeModalState, setSubeler, setSube, useAddSubeModalState, useEditSubeModalState, useDeleteSubeModalState, useStatusSubeModalState, useSubeler, useSube, fetchSubeler } from '@/store/kartlar/sube/hooks';
 
 import AddForm from './AddForm';
 import EditForm from './EditForm';
@@ -170,14 +156,12 @@ const Tablo = () => {
     },
     {
       Header: 'Durum',
-      accessor: 'is_active',
+      accessor: 'documentinfo.is_active',
       Cell: row => {
         return (
           <span className="block w-full">
             <span
-              className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
-                row?.cell?.value === true ? 'text-success-500 bg-success-500' : ''
-              }
+              className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${row?.cell?.value === true ? 'text-success-500 bg-success-500' : ''}
               ${row?.cell?.value === false ? 'text-danger-500 bg-danger-500' : ''}
   
                `}
@@ -304,19 +288,12 @@ const Tablo = () => {
           <Loading />
         ) : (
           <>
-            <table
-              className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700"
-              {...getTableProps}
-            >
+            <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700" {...getTableProps}>
               <thead className="sticky top-0 bg-white dark:bg-slate-800 z-10">
                 {headerGroups.map(headerGroup => (
                   <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map(column => (
-                      <th
-                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                        scope="col"
-                        className=" text-sm table-th  "
-                      >
+                      <th {...column.getHeaderProps(column.getSortByToggleProps())} scope="col" className=" text-sm table-th  ">
                         {column.render('Header')}
                         <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                       </th>
@@ -324,10 +301,7 @@ const Tablo = () => {
                   </tr>
                 ))}
               </thead>
-              <tbody
-                className="overflow-y-scroll bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700"
-                {...getTableBodyProps}
-              >
+              <tbody className="overflow-y-scroll bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700" {...getTableBodyProps}>
                 {page.map(row => {
                   prepareRow(row);
                   return (
@@ -336,9 +310,7 @@ const Tablo = () => {
                       onClick={() => {
                         setMenuAyar({ visible: false });
                       }}
-                      className={`${
-                        menuAyar?.rowIndex === row.index ? 'bg-slate-100 dark:bg-slate-900' : ''
-                      } hover:bg-slate-100 dark:hover:bg-slate-900`}
+                      className={`${menuAyar?.rowIndex === row.index ? 'bg-slate-100 dark:bg-slate-900' : ''} hover:bg-slate-100 dark:hover:bg-slate-900`}
                     >
                       {row.cells.map(cell => {
                         return (
@@ -357,13 +329,7 @@ const Tablo = () => {
                         
                           h-12 px-6 `}
                           >
-                            <p
-                              className={`m-0 p-0 inline  ${
-                                String(cell.value).includes(globalFilter) ? 'bg-yellow-300 text-lg' : ''
-                              }`}
-                            >
-                              {cell.render('Cell')}
-                            </p>
+                            <p className={`m-0 p-0 inline  ${String(cell.value).includes(globalFilter) ? 'bg-yellow-300 text-lg' : ''}`}>{cell.render('Cell')}</p>
 
                             {/* <p className="m-0 p-0 inline">                             
                             {highlightText(String(cell.value), globalFilter)}

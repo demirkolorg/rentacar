@@ -84,13 +84,16 @@ exports.list = async (filter, props) => {
     return response.error(res, err, userId, pointname, transactions.add, messages.list.error);
   }
 };
-exports.listWithPopulate = async (filter, props) => {
+exports.listWithPopulate = async (filter, populate, props) => {
   let { model, req, res, messages, pointname } = props;
   let userId = req.user?.id;
   let body = req.body;
   let query = req.query;
+  //ÖRNEK populate içeriği tekil ve çoğul
+  // populate: [{ path: 'firmaId' }, { path: 'subeId' }, { path: 'userId' }];
+
   try {
-    let documents = await model.find(filter).find(query).populate();
+    let documents = await model.find(filter).find(query).populate(populate);
     return response.success(res, documents, userId, pointname, transactions.list, messages.list.ok);
   } catch (err) {
     return response.error(res, err, userId, pointname, transactions.add, messages.list.error);

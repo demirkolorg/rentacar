@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Firmalar = require('../../firma/model');
-const  base = require('@features/base/model/base.js');
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const schema = new mongoose.Schema(
   {
@@ -25,10 +25,19 @@ const schema = new mongoose.Schema(
     ekBilgiler: {
       acilisTarihi: { type: Number },
       calisanSayisi: { type: Number }
+    },
+    documentinfo: {
+      is_active: { type: Boolean, default: true },
+      is_archive: { type: Boolean, default: false },
+      is_delete: { type: Boolean, default: false },
+      created_by: { type: ObjectId, required: true },
+      created_at: { type: Date },
+      updated_by: { type: ObjectId },
+      updated_at: { type: Date },
+      versionKey: { type: Number, default: 0 }
     }
   },
   { collection: 'Subeler' }
 );
 
-schema.add(base);
 module.exports = mongoose.model('Subeler', schema);

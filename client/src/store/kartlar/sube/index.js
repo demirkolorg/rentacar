@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { subeList } from '@/api/kartlar/sube';
+import { subeListWithPopulate } from '@/api/kartlar/sube';
 
 export const _fetchSubeler = createAsyncThunk('firma/fetchSubeler', async (params, { rejectWithValue }) => {
   try {
-    const response = await subeList(params);
+    const response = await subeListWithPopulate(params);
     if (response.data.success) {
       return response.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     } else {

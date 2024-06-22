@@ -3,7 +3,6 @@ const { messages } = require('../messages');
 const { get, getWithPopulate, getIds, getIdsWithPopulate, list, listWithPopulate, add, update, active, passive, archive, unarchive, softDelete, restore, hardDelete } = require('@base/controller');
 const { pointname } = require('../admin');
 
-
 // #region Base Controller Tanımlamaları
 
 const props = (req, res) => ({ model, req, res, messages, pointname });
@@ -21,12 +20,13 @@ exports.getIdsWithPopulate = async (req, res) => {
   return getIdsWithPopulate(props(req, res));
 };
 exports.list = async (req, res) => {
-  filter = { };
+  filter = {};
   return list(filter, props(req, res));
 };
 exports.listWithPopulate = async (req, res) => {
-  filter = {  };
-  return listWithPopulate(filter, props(req, res));
+  let filter = {};
+  let populate = [{ path: 'firmaId', select: 'ad' }];
+  return listWithPopulate(filter, populate, props(req, res));
 };
 
 exports.add = async (req, res) => {
